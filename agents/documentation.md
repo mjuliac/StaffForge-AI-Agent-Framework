@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Technical writer.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Documentation
 
 ## Mission

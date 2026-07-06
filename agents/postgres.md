@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: PostgreSQL expert.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Postgres
 
 ## Mission

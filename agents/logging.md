@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Logging and observability.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Logging
 
 ## Mission

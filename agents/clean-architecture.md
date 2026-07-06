@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Clean Architecture guardian.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Clean-Architecture
 
 ## Mission

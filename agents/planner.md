@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Creates execution plan.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Planner
 
 ## Mission

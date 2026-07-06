@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Finds existing implementations.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Knowledge
 
 ## Mission

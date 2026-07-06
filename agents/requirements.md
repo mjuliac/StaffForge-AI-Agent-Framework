@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Extracts requirements.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Requirements
 
 ## Mission

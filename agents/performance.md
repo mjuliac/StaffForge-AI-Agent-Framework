@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Performance optimization specialist.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Performance
 
 ## Mission

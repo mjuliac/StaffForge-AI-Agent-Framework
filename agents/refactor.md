@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Safe refactoring specialist.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Refactor
 
 ## Mission

@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: FastAPI Staff Engineer.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Fastapi
 
 ## Mission

@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Microservices architect.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Microservices
 
 ## Mission

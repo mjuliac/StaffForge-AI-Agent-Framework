@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Analyzes change impact.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Impact-Analysis
 
 ## Mission

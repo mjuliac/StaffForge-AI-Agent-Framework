@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Dependency/CVE auditor.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Dependency-Audit
 
 ## Mission

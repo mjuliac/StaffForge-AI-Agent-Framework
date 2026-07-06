@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Database design specialist.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Database
 
 ## Mission

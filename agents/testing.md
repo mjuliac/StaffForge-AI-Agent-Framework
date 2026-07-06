@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Testing strategy specialist.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Testing
 
 ## Mission

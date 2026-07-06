@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: DDD specialist.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Ddd
 
 ## Mission

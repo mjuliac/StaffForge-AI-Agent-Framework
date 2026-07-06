@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Docker expert.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Docker
 
 ## Mission

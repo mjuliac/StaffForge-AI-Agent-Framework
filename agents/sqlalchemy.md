@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: SQLAlchemy expert.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Sqlalchemy
 
 ## Mission

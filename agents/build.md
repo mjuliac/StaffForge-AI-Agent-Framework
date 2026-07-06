@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Build systems expert.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Build
 
 ## Mission

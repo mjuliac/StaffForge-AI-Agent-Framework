@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: CQRS specialist.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Cqrs
 
 ## Mission

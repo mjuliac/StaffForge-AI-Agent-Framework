@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Linux specialist.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Linux
 
 ## Mission

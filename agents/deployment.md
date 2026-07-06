@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Deployment expert.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Deployment
 
 ## Mission

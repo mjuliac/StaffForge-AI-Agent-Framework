@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Coordinates all work, owns Git Flow, user communication, routing and final response.
+tools:
+  write: true
+  bash: true
+  edit: true
 ---
-
 # Orchestrator
 
 ## Mission

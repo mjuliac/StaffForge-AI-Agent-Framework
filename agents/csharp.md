@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: C# Staff Engineer.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Csharp
 
 ## Mission

@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Kubernetes expert.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Kubernetes
 
 ## Mission

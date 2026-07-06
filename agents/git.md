@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Git expert.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Git
 
 ## Mission

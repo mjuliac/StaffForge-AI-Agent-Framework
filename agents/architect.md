@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Protects architecture.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Architect
 
 ## Mission

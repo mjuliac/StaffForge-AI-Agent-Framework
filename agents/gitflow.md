@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Git Flow expert.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Gitflow
 
 ## Mission

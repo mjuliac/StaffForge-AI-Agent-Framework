@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: PySide6 Staff Engineer.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Pyside6
 
 ## Mission

@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Desktop UX specialist.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Ui-Ux
 
 ## Mission

@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Django Staff Engineer.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Django
 
 ## Mission

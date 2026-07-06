@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Final reviewer.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Code-Review
 
 ## Mission

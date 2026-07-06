@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Qt Designer specialist.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Qt-Designer
 
 ## Mission

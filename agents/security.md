@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: OWASP and secure coding reviewer.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Security
 
 ## Mission

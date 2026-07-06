@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Release manager.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Release
 
 ## Mission

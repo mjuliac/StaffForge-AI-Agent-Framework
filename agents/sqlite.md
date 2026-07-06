@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: SQLite expert.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Sqlite
 
 ## Mission

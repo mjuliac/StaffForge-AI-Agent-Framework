@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Root-cause analysis specialist.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Debugging
 
 ## Mission

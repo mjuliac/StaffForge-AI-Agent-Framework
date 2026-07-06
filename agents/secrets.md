@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Secrets scanner.
+tools:
+  write: false
+  bash: true
+  edit: false
 ---
-
 # Secrets
 
 ## Mission

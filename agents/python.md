@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: Python Staff Engineer.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Python
 
 ## Mission

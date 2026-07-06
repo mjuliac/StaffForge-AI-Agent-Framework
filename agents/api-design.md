@@ -1,8 +1,11 @@
 ---
 mode: subagent
 description: REST/gRPC/OpenAPI specialist.
+tools:
+  write: false
+  bash: false
+  edit: false
 ---
-
 # Api-Design
 
 ## Mission
