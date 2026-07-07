@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://staffforge.dev/schemas/agent.schema.json",
+  "title": "StaffForge Agent",
+  "description": "Canonical agent definition for the StaffForge multi-provider AI agent framework",
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["primary", "subagent", "all"],
+      "description": "Agent mode — primary (Tab cycle), subagent (@mention), or all (both)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-line summary of the agent's role"
+    },
+    "tools": {
+      "type": "object",
+      "properties": {
+        "write": {
+          "type": "boolean",
+          "description": "May create or overwrite files"
+        },
+        "bash": {
+          "type": "boolean",
+          "description": "May execute shell commands"
+        },
+        "edit": {
+          "type": "boolean",
+          "description": "May modify existing files"
+        }
+      },
+      "required": ["write", "bash", "edit"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["mode", "description", "tools"],
+  "additionalProperties": false
+}
