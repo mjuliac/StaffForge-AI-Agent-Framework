@@ -8,9 +8,16 @@
 set -euo pipefail
 
 # ── Ensure interactive stdin (works with curl | bash) ──
-# When piped via curl|bash, stdin is the pipe, not the terminal.
-# This restores terminal input for interactive prompts.
-{ exec < /dev/tty; } 2>/dev/null || true
+# curl|bash leaves stdin connected to the pipe, causing read to hang.
+# Try to redirect to terminal; fall back to timed reads if unavailable.
+READ_OPTS=""
+if ! [ -t 0 ]; then
+  if (exec < /dev/tty) 2>/dev/null; then
+    exec < /dev/tty
+  else
+    READ_OPTS="-t 3"
+  fi
+fi
 
 REPO="https://github.com/mjuliac/StaffForge-AI-Agent-Framework"
 BRANCH="develop"
@@ -38,7 +45,7 @@ echo "  5) aider         — Aider"
 echo "  6) gemini-cli    — Gemini CLI"
 echo "  7) all           — Todas las plataformas"
 echo ""
-read -rp "? Plataforma [1]: " platform_choice
+read $READ_OPTS -rp "? Plataforma [1]: " platform_choice
 
 case "$platform_choice" in
   2|claude-code) PLATFORM="claude-code" ;;
@@ -57,7 +64,7 @@ echo "  1) orchestrator  — coordina trabajo, crea ramas git flow, ejecuta pipe
 echo "  2) build         — acceso completo a herramientas"
 echo "  3) plan          — solo lectura (análisis y planificación)"
 echo ""
-read -rp "? Agente por defecto [1]: " agent_choice
+read $READ_OPTS -rp "? Agente por defecto [1]: " agent_choice
 
 case "$agent_choice" in
   2|build) DEFAULT_AGENT="build" ;;
@@ -71,7 +78,7 @@ echo "¿Dónde quieres instalar la configuración?"
 echo "  1) En este proyecto  (./staffforge/)"
 echo "  2) Global            (~/.config/staffforge/)"
 echo ""
-read -rp "? Ubicación [1]: " loc_choice
+read $READ_OPTS -rp "? Ubicación [1]: " loc_choice
 
 if [ "$loc_choice" = "2" ]; then
   INSTALL_DIR="$HOME/.config/staffforge"
