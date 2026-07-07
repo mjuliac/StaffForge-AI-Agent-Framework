@@ -11,18 +11,28 @@
 ┌─────────────────────────────────────────────────────────┐
 │                    agents/*.md                           │
 │  136 agent definitions (YAML frontmatter + Markdown body)│
-└────────────────────────┬────────────────────────────────┘
-                         │
-                         ▼
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│              tools/lib/agent-registry.mjs                 │
+│  AgentRegistry: load, query, search, resolveDependencies │
+└──────┬──────────────────────────────────────────┬────────┘
+       │                                          │
+       ▼                                          ▼
+┌──────────────────────────┐   ┌──────────────────────────┐
+│   tools/validate.mjs     │   │   tools/export.mjs       │
+│   validates frontmatter  │   │   delegates to adapters  │
+│   via AJV + JSON Schema  │   │   via AdapterRegistry    │
+└──────────────────────────┘   └──────────┬───────────────┘
+                                          │
+                                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│                    tools/export.mjs                      │
-│  1. Parse frontmatter + body from each agent             │
-│  2. Dynamic import of adapter (adapters/<platform>/index)│
-│  3. Call adapter.default(agents) → [{path, content}]     │
-│  4. Write files to adapters/<platform>/output/           │
-└────────────────────────┬────────────────────────────────┘
-                         │
-                         ▼
+│           tools/lib/adapter-registry.mjs                 │
+│  AdapterRegistry: lazy-load adapters, export(single/all)│
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
 ┌─────────────────────────────────────────────────────────┐
 │                   adapters/<platform>/                   │
 │  6 platform adapters (opencode, claude-code, cursor,     │
@@ -33,6 +43,31 @@
 ---
 
 ## 2. Core Components
+
+### 2.0 Libraries (`tools/lib/`)
+
+Shared programmatic APIs consumed by CLI tools and external consumers.
+
+| Module | File | Exports |
+|---|---|---|
+| Agent Registry | `tools/lib/agent-registry.mjs` | `AgentRegistry`, `getAgentRegistry()` |
+| Adapter Registry | `tools/lib/adapter-registry.mjs` | `AdapterRegistry`, `getAdapterRegistry()` |
+
+**Agent Registry** (`AgentRegistry`):
+- `load()` — parse all agents from disk
+- `all()` / `count()` — enumerate
+- `findById(id)` / `findByName(name)` — lookup
+- `findByMode(mode)` / `findByCategory(category)` — filter
+- `search(query)` — full-text across id, name, description, keywords, capabilities
+- `resolveDependencies(agentIds)` — topological sort with cycle detection
+- `getCategories()` / `getModes()` — distinct values
+- `toJSON()` — serialize all agents
+
+**Adapter Registry** (`AdapterRegistry`):
+- `listAdapters()` — auto-discover platform adapters
+- `getAdapter(name)` — lazy-load + cache adapter module
+- `export(agents, platform, outDir?)` — single-platform export
+- `exportToAll(agents)` — export to all platforms sequentially
 
 ### 2.1 Agent Definitions (`agents/`)
 
@@ -136,9 +171,13 @@ Defines 6 task types with DAG pipelines:
 ├── templates/
 │   └── agent.md
 ├── tools/
+│   ├── lib/
+│   │   ├── agent-registry.mjs   # Programmatic Agent Registry API
+│   │   └── adapter-registry.mjs # Programmatic Adapter Registry API
 │   ├── export.mjs          # Multi-platform exporter
 │   ├── validate.mjs        # JSON Schema validation
 │   ├── init-agent.mjs      # Scaffolding tool
+│   ├── migrate-frontmatter.mjs # Schema migration tool
 │   └── install.mjs         # OpenCode-specific installer
 ├── packages/
 │   └── cli/
@@ -192,15 +231,18 @@ Orchestrator (agents/orchestrator.md)
 | Check | Status |
 |---|---|
 | `node tools/validate.mjs` | ✅ 136/136 agents valid |
-| `node tools/export.mjs --platform opencode` | ✅ 1 file, 24KB |
+| `node tools/export.mjs --all` | ✅ 6 platforms, all pass |
+| `node tools/export.mjs --platform opencode` | ✅ 1 file |
 | `node tools/export.mjs --platform claude-code` | ✅ 136 files |
 | `node tools/export.mjs --platform cursor` | ✅ 136 files |
-| `node tools/export.mjs --platform copilot` | ✅ 1 file, 81KB |
-| `node tools/export.mjs --platform aider` | ✅ 1 file, 81KB |
+| `node tools/export.mjs --platform copilot` | ✅ 1 file |
+| `node tools/export.mjs --platform aider` | ✅ 1 file |
 | `node tools/export.mjs --platform gemini-cli` | ✅ 136 files |
-| Git working tree | ✅ Clean, on `feature/rfc-001-architecture` |
+| `tools/lib/agent-registry.mjs` | ✅ AgentRegistry API (load, query, search, resolveDependencies) |
+| `tools/lib/adapter-registry.mjs` | ✅ AdapterRegistry API (lazy-load, export, exportToAll) |
+| Git working tree | ✅ On `feature/rfc-001-architecture` |
 
 ---
 
-*Document generated at Sprint 0 of RFC-001 implementation.*
+*Generated at Phase 2 of RFC-001 implementation (Agent Registry + Adapter Registry).*
 *Last updated: 2026-07-07*
