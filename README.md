@@ -41,15 +41,17 @@ opencode
 
 The installer generates `opencode.json` in the project root. The **orchestrator** is the default agent — it detects the task type, creates a git flow branch, and executes the pipeline in parallel.
 
-### One-liner per platform
+### Export to other platforms (after clone)
+
+Once you have the repo cloned and dependencies installed (`npm install`), generate config for any platform:
 
 ```bash
-npm run setup              # OpenCode interactive
-npm run export:claude      # Claude Code
-npm run export:cursor      # Cursor
-npm run export:copilot     # GitHub Copilot
-npm run export:aider       # Aider
-npm run export:gemini      # Gemini CLI
+npm run setup              # OpenCode (opencode.json)
+npm run export:claude      # Claude Code (CLAUDE.md + .claude/rules/)
+npm run export:cursor      # Cursor (.cursor/rules/*.mdc)
+npm run export:copilot     # GitHub Copilot (.github/copilot-instructions.md)
+npm run export:aider       # Aider (.aider.rules.md)
+npm run export:gemini      # Gemini CLI (.gemini/*.md)
 ```
 
 ---
