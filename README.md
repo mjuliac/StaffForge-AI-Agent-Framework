@@ -211,22 +211,58 @@ node tools/install.mjs --agent build --out ~/my-project
 | **orchestrator** | ✓ default | ✓ | Full tools |
 | **build** | ✓ | ✓ | Full tools |
 | **plan** | ✓ | ✓ | Read-only |
-| 38 subagents | — | ✓ | Varies |
+| 133 subagents | — | ✓ | Varies |
 
 - **Tab** — Cycle: orchestrator → build → plan
-- **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@docker`)
-- Orchestrator is the default agent. It detects task type from your prompt, creates a git flow branch, then executes the pipeline.
+- **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@docker`, `@flask`, `@react`, `@postgres`)
+- Orchestrator is the default agent. It detects task type AND technologies from your prompt, then routes to the right specialist agents.
 
 ## Architecture
 
-- **Orchestrator** (default agent) — receives all requests, detects task type, creates git flow branches, routes pipelines, communicates with the user
-- **Subagents** (38) — specialized roles (architect, security, testing, docker, etc.)
+- **Orchestrator** (default agent) — receives all requests, detects task type and technologies, creates git flow branches, routes pipelines, communicates with the user
+- **Subagents** (133) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, etc.)
 - **Only the orchestrator** may talk to the user, write files, or manage git
 - Subagents run in **parallel** when they have no dependency on each other (DAG-based execution)
 
 ## Routing
 
 See `ORCHESTRATOR_MATRIX.md` for task → pipeline mapping with parallel execution groups.
+
+## Prompt examples
+
+The orchestrator detects **both the task type and the technologies** from your prompt, then invokes the relevant specialist agents. Mention the technologies explicitly for best results:
+
+```text
+# Python web — detects flask, sqlalchemy, postgres, pytest
+"Add a Flask REST API with SQLAlchemy models for users and products, store in PostgreSQL, cover with pytest tests"
+
+# .NET web — detects aspnet-core, entity-framework, sqlserver, xunit
+"Create an ASP.NET Core API with Entity Framework connecting to SQL Server, add xUnit tests"
+
+# Frontend — detects react, typescript, tailwind, vitest
+"Build a React dashboard with TypeScript, style with Tailwind, test with Vitest"
+
+# Full stack — detects react, fastapi, postgres, docker
+"Implement a todo app: React frontend, FastAPI backend, PostgreSQL database, Docker compose"
+
+# Mobile — detects react-native, typescript
+"Fix the login screen in our React Native app written in TypeScript"
+
+# DevOps — detects docker, github-actions, aws
+"Set up CI with GitHub Actions to build the Docker image and deploy to AWS ECS"
+
+# Database — detects postgres, redis, sqlalchemy
+"Optimize slow queries: Postgres with Redis caching, accessed via SQLAlchemy"
+
+# Mixed Python + .NET — both specialist agents are invoked
+"Port the authentication module from Python Flask to ASP.NET Core"
+```
+
+The orchestrator:
+1. Detects task type (feature, bugfix, refactor, security, deployment, hotfix)
+2. Scans for technology keywords (flask → `@flask`, react → `@react`, postgres → `@postgres`, etc.)
+3. Builds a pipeline mixing the base task flow with the detected technology agents
+4. Executes in DAG-based parallel levels
 
 ## Commands
 
