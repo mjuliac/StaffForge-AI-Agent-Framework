@@ -17,11 +17,14 @@ export default function opencodeAdapter(agents) {
     };
   }
 
-  const primaryAgent = agents.find(a => a.frontmatter.mode === "primary");
+  const orchestrator = agents.find(a => a.name === "orchestrator");
+  const defaultAgent = orchestrator?.name
+    || agents.find(a => a.frontmatter.mode === "primary")?.name
+    || "build";
 
   const opencodeJson = {
     $schema: "https://opencode.ai/config.json",
-    default_agent: primaryAgent?.name || "build",
+    default_agent: defaultAgent,
     instructions: ["AGENTS.md"],
     agent: agentEntries,
   };

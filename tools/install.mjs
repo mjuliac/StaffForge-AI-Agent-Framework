@@ -22,13 +22,14 @@ Usage: node tools/install.mjs [options]
 
 Options:
   --help, -h          Show this help message
-  --agent <name>      Set default agent (build or plan)
+  --agent <name>      Set default agent (orchestrator, build, or plan)
   --out <dir>         Output directory (default: project root)
 
 Interactive mode:
   node tools/install.mjs
 
 Non-interactive mode:
+  node tools/install.mjs --agent orchestrator
   node tools/install.mjs --agent build
   node tools/install.mjs --agent plan
 `);
@@ -55,11 +56,12 @@ function parseArgs() {
 async function promptDefaultAgent() {
   console.log('\nStaffForge AI Agent Framework - Installer\n');
   console.log('Select the default agent mode:\n');
-  console.log('  build  - Full tool access (edit, bash, write)');
-  console.log('  plan   - Read-only mode (analysis and planning)\n');
+  console.log('  orchestrator  - Default agent. Coordinates work, manages Git Flow, routes tasks (recommended)');
+  console.log('  build         - Full tool access (edit, bash, write)');
+  console.log('  plan          - Read-only mode (analysis and planning)\n');
 
-  const answer = await question('? Default agent (build/plan) [build]: ');
-  return (answer || 'build').trim().toLowerCase();
+  const answer = await question('? Default agent (orchestrator/build/plan) [orchestrator]: ');
+  return (answer || 'orchestrator').trim().toLowerCase();
 }
 
 async function main() {
@@ -70,8 +72,8 @@ async function main() {
     defaultAgent = await promptDefaultAgent();
   }
 
-  if (!['build', 'plan'].includes(defaultAgent)) {
-    console.error('Error: Invalid agent. Use "build" or "plan".');
+  if (!['orchestrator', 'build', 'plan'].includes(defaultAgent)) {
+    console.error('Error: Invalid agent. Use "orchestrator", "build", or "plan".');
     process.exit(1);
   }
 
@@ -105,7 +107,7 @@ async function main() {
 
   console.log(`\n✓ Exported to: ${targetPath}`);
   console.log(`✓ Default agent: ${defaultAgent}`);
-  console.log('\nUse Tab to switch between build and plan modes.\n');
+  console.log('\nUse Tab to switch between orchestrator, build, and plan modes.\n');
 
   rl.close();
 }

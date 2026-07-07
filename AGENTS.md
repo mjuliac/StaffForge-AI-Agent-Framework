@@ -29,7 +29,9 @@ See `ORCHESTRATOR_MATRIX.md`.
 
 ## Conventions
 
-- **Only the orchestrator** communicates with the user or creates Git branches/commits.
+- **Orchestrator is the default agent** (Tab key). It receives all user requests first.
+- **Orchestrator creates the git flow branch** as its very first action for every task.
+- Only the orchestrator communicates with the user or creates Git branches/commits.
 - No subagent may talk to the user or manage git.
 - Subagents get findings/risks/recommendations, never final output.
 - Tool permissions are explicit in frontmatter: `tools.write`, `tools.bash`, `tools.edit`.
