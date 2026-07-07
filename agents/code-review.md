@@ -1,4 +1,6 @@
 ---
+id: code-review
+name: Code Review
 mode: subagent
 description: Final reviewer.
 tools:

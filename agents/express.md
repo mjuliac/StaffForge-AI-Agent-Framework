@@ -1,4 +1,6 @@
 ---
+id: express
+name: Express
 mode: subagent
 description: Express Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: redux
+name: Redux
 mode: subagent
 description: Redux Staff Engineer.
 tools:

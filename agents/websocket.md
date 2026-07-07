@@ -1,4 +1,6 @@
 ---
+id: websocket
+name: Websocket
 mode: subagent
 description: Websocket Staff Engineer.
 tools:

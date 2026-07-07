@@ -1,4 +1,6 @@
 ---
+id: alembic
+name: Alembic
 mode: subagent
 description: Alembic Staff Engineer.
 tools:

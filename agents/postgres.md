@@ -1,4 +1,6 @@
 ---
+id: postgres
+name: Postgres
 mode: subagent
 description: PostgreSQL expert.
 tools:

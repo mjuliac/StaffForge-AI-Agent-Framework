@@ -1,4 +1,6 @@
 ---
+id: go
+name: Go
 mode: subagent
 description: Go Staff Engineer.
 tools:

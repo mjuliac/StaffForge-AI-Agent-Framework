@@ -1,4 +1,6 @@
 ---
+id: tkinter
+name: Tkinter
 mode: subagent
 description: Tkinter Staff Engineer.
 tools:

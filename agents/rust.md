@@ -1,4 +1,6 @@
 ---
+id: rust
+name: Rust
 mode: subagent
 description: Rust Staff Engineer.
 tools:

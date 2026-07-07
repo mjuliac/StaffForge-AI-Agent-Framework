@@ -1,4 +1,6 @@
 ---
+id: plan
+name: Plan
 mode: primary
 description: Creates execution plan. Read-only mode.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: java
+name: Java
 mode: subagent
 description: Java Staff Engineer.
 tools:

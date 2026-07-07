@@ -1,4 +1,6 @@
 ---
+id: release
+name: Release
 mode: subagent
 description: Release manager.
 tools:

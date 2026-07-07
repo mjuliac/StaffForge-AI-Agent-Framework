@@ -1,4 +1,6 @@
 ---
+id: tailwind
+name: Tailwind
 mode: subagent
 description: Tailwind CSS Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: remix
+name: Remix
 mode: subagent
 description: Remix Staff Engineer.
 tools:

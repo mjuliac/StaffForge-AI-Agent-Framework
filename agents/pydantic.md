@@ -1,4 +1,6 @@
 ---
+id: pydantic
+name: Pydantic
 mode: subagent
 description: Pydantic Staff Engineer.
 tools:

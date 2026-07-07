@@ -1,4 +1,6 @@
 ---
+id: redis
+name: Redis
 mode: subagent
 description: Redis Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: grpc
+name: Grpc
 mode: subagent
 description: Grpc Staff Engineer.
 tools:

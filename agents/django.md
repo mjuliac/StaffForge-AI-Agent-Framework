@@ -1,4 +1,6 @@
 ---
+id: django
+name: Django
 mode: subagent
 description: Django Staff Engineer.
 tools:

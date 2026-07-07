@@ -1,4 +1,6 @@
 ---
+id: cqrs
+name: Cqrs
 mode: subagent
 description: CQRS specialist.
 tools:

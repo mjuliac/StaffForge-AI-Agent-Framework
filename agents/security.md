@@ -1,4 +1,6 @@
 ---
+id: security
+name: Security
 mode: subagent
 description: OWASP and secure coding reviewer.
 tools:

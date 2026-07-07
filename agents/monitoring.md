@@ -1,4 +1,6 @@
 ---
+id: monitoring
+name: Monitoring
 mode: subagent
 description: Monitoring Staff Engineer.
 tools:

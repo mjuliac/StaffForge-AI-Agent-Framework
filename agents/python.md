@@ -1,4 +1,6 @@
 ---
+id: python
+name: Python
 mode: subagent
 description: Python Staff Engineer.
 tools:

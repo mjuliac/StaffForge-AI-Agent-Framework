@@ -1,4 +1,6 @@
 ---
+id: wpf
+name: Wpf
 mode: subagent
 description: WPF Staff Engineer.
 tools:

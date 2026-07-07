@@ -1,4 +1,6 @@
 ---
+id: astro
+name: Astro
 mode: subagent
 description: Astro Staff Engineer.
 tools:

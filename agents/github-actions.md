@@ -1,4 +1,6 @@
 ---
+id: github-actions
+name: Github Actions
 mode: subagent
 description: GitHub Actions Staff Engineer.
 tools:

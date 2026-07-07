@@ -1,4 +1,6 @@
 ---
+id: cassandra
+name: Cassandra
 mode: subagent
 description: Cassandra Staff Engineer.
 tools:

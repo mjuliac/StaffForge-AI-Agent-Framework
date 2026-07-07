@@ -1,4 +1,6 @@
 ---
+id: minimal-api
+name: Minimal Api
 mode: subagent
 description: Minimal API Staff Engineer.
 tools:

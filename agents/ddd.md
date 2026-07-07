@@ -1,4 +1,6 @@
 ---
+id: ddd
+name: Ddd
 mode: subagent
 description: DDD specialist.
 tools:

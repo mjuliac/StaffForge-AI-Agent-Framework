@@ -1,4 +1,6 @@
 ---
+id: sass
+name: Sass
 mode: subagent
 description: Sass Staff Engineer.
 tools:

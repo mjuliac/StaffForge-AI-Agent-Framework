@@ -1,4 +1,6 @@
 ---
+id: nuxt
+name: Nuxt
 mode: subagent
 description: Nuxt Staff Engineer.
 tools:

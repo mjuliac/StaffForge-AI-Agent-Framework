@@ -1,4 +1,6 @@
 ---
+id: docker
+name: Docker
 mode: subagent
 description: Docker expert.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: testing
+name: Testing
 mode: subagent
 description: Testing strategy specialist.
 tools:

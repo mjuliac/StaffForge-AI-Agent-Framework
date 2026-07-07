@@ -1,4 +1,6 @@
 ---
+id: bash
+name: Bash
 mode: subagent
 description: Bash Staff Engineer.
 tools:

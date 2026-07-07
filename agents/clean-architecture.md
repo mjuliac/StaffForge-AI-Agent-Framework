@@ -1,4 +1,6 @@
 ---
+id: clean-architecture
+name: Clean Architecture
 mode: subagent
 description: Clean Architecture guardian.
 tools:

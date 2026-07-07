@@ -1,4 +1,6 @@
 ---
+id: e2e
+name: E2e
 mode: subagent
 description: End-to-End Testing Staff Engineer.
 tools:

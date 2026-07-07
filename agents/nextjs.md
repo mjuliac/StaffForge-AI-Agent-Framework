@@ -1,4 +1,6 @@
 ---
+id: nextjs
+name: Nextjs
 mode: subagent
 description: Next.js Staff Engineer.
 tools:

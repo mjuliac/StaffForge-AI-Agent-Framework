@@ -1,4 +1,6 @@
 ---
+id: cypress
+name: Cypress
 mode: subagent
 description: Cypress Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: starlette
+name: Starlette
 mode: subagent
 description: Starlette Staff Engineer.
 tools:

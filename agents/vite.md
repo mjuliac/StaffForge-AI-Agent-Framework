@@ -1,4 +1,6 @@
 ---
+id: vite
+name: Vite
 mode: subagent
 description: Vite Staff Engineer.
 tools:

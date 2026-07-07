@@ -1,4 +1,6 @@
 ---
+id: microservices
+name: Microservices
 mode: subagent
 description: Microservices architect.
 tools:

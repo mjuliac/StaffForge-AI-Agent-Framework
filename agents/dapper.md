@@ -1,4 +1,6 @@
 ---
+id: dapper
+name: Dapper
 mode: subagent
 description: Dapper Staff Engineer.
 tools:

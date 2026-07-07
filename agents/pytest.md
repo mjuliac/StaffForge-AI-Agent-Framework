@@ -1,4 +1,6 @@
 ---
+id: pytest
+name: Pytest
 mode: subagent
 description: Pytest Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: logging
+name: Logging
 mode: subagent
 description: Logging and observability.
 tools:

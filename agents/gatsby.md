@@ -1,4 +1,6 @@
 ---
+id: gatsby
+name: Gatsby
 mode: subagent
 description: Gatsby Staff Engineer.
 tools:

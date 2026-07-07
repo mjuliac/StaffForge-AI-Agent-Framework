@@ -1,4 +1,6 @@
 ---
+id: vitest
+name: Vitest
 mode: subagent
 description: Vitest Staff Engineer.
 tools:

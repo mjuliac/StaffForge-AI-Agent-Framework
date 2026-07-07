@@ -1,4 +1,6 @@
 ---
+id: deployment
+name: Deployment
 mode: subagent
 description: Deployment expert.
 tools:

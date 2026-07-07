@@ -1,4 +1,6 @@
 ---
+id: entity-framework
+name: Entity Framework
 mode: subagent
 description: Entity Framework Staff Engineer.
 tools:

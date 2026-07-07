@@ -1,4 +1,6 @@
 ---
+id: react-router
+name: React Router
 mode: subagent
 description: React Router Staff Engineer.
 tools:

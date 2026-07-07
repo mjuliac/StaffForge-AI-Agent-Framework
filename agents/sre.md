@@ -1,4 +1,6 @@
 ---
+id: sre
+name: Sre
 mode: subagent
 description: Site Reliability Staff Engineer.
 tools:

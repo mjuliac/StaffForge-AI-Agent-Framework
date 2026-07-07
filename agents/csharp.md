@@ -1,4 +1,6 @@
 ---
+id: csharp
+name: Csharp
 mode: subagent
 description: C# Staff Engineer.
 tools:

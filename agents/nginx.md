@@ -1,4 +1,6 @@
 ---
+id: nginx
+name: Nginx
 mode: subagent
 description: Nginx Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: mysql
+name: Mysql
 mode: subagent
 description: Mysql Staff Engineer.
 tools:

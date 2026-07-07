@@ -1,4 +1,6 @@
 ---
+id: requirements
+name: Requirements
 mode: subagent
 description: Extracts requirements.
 tools:

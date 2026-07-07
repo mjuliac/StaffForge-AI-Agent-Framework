@@ -1,4 +1,6 @@
 ---
+id: javascript
+name: Javascript
 mode: subagent
 description: JavaScript Staff Engineer.
 tools:

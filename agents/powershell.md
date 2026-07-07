@@ -1,4 +1,6 @@
 ---
+id: powershell
+name: Powershell
 mode: subagent
 description: Powershell Staff Engineer.
 tools:

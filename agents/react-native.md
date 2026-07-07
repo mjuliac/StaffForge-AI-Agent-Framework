@@ -1,4 +1,6 @@
 ---
+id: react-native
+name: React Native
 mode: subagent
 description: React Native Staff Engineer.
 tools:

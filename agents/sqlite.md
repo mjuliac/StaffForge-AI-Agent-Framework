@@ -1,4 +1,6 @@
 ---
+id: sqlite
+name: Sqlite
 mode: subagent
 description: SQLite expert.
 tools:

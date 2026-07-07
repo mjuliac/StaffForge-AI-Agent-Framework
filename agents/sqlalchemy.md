@@ -1,4 +1,6 @@
 ---
+id: sqlalchemy
+name: Sqlalchemy
 mode: subagent
 description: SQLAlchemy expert.
 tools:

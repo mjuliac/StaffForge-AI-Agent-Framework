@@ -1,6 +1,11 @@
 ---
-mode: subagent
+id: __NAME__
+name: __TITLE__
 description: __NAME__ specialist.
+mode: subagent
+version: 0.1.0
+category: utility
+priority: 50
 tools:
   write: false
   bash: false
@@ -10,6 +15,7 @@ tools:
 # __TITLE__
 
 ## Mission
+Build, test, and maintain __NAME__ components with StaffForge best practices.
 
 ## Mandatory Rules
 - Work only inside your domain.

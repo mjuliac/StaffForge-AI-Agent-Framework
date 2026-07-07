@@ -1,4 +1,6 @@
 ---
+id: playwright
+name: Playwright
 mode: subagent
 description: Playwright Staff Engineer.
 tools:

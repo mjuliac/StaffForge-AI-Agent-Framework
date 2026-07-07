@@ -1,4 +1,6 @@
 ---
+id: angular
+name: Angular
 mode: subagent
 description: Angular Staff Engineer.
 tools:

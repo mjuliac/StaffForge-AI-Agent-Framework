@@ -1,4 +1,6 @@
 ---
+id: knowledge
+name: Knowledge
 mode: subagent
 description: Finds existing implementations.
 tools:

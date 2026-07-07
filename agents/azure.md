@@ -1,4 +1,6 @@
 ---
+id: azure
+name: Azure
 mode: subagent
 description: Azure Staff Engineer.
 tools:

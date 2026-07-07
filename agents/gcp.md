@@ -1,4 +1,6 @@
 ---
+id: gcp
+name: Gcp
 mode: subagent
 description: Gcp Staff Engineer.
 tools:

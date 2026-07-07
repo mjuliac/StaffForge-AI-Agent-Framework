@@ -1,4 +1,6 @@
 ---
+id: shadcn-ui
+name: Shadcn Ui
 mode: subagent
 description: shadcn/ui Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: sveltekit
+name: Sveltekit
 mode: subagent
 description: SvelteKit Staff Engineer.
 tools:

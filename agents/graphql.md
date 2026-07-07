@@ -1,4 +1,6 @@
 ---
+id: graphql
+name: Graphql
 mode: subagent
 description: Graphql Staff Engineer.
 tools:

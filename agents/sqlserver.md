@@ -1,4 +1,6 @@
 ---
+id: sqlserver
+name: Sqlserver
 mode: subagent
 description: Sqlserver Staff Engineer.
 tools:

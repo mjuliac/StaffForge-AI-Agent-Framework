@@ -1,4 +1,6 @@
 ---
+id: impact-analysis
+name: Impact Analysis
 mode: subagent
 description: Analyzes change impact.
 tools:

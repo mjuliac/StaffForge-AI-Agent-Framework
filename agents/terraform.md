@@ -1,4 +1,6 @@
 ---
+id: terraform
+name: Terraform
 mode: subagent
 description: Terraform Staff Engineer.
 tools:

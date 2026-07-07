@@ -1,4 +1,6 @@
 ---
+id: performance
+name: Performance
 mode: subagent
 description: Performance optimization specialist.
 tools:

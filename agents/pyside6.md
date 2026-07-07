@@ -1,4 +1,6 @@
 ---
+id: pyside6
+name: Pyside6
 mode: subagent
 description: PySide6 Staff Engineer.
 tools:

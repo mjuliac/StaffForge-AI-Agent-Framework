@@ -1,4 +1,6 @@
 ---
+id: css
+name: Css
 mode: subagent
 description: Css Staff Engineer.
 tools:

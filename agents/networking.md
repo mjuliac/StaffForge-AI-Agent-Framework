@@ -1,4 +1,6 @@
 ---
+id: networking
+name: Networking
 mode: subagent
 description: Networking Staff Engineer.
 tools:

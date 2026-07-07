@@ -1,4 +1,6 @@
 ---
+id: vue
+name: Vue
 mode: subagent
 description: Vue.js Staff Engineer.
 tools:

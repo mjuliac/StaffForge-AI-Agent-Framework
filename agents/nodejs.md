@@ -1,4 +1,6 @@
 ---
+id: nodejs
+name: Nodejs
 mode: subagent
 description: Node.js Staff Engineer.
 tools:

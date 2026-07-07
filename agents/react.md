@@ -1,4 +1,6 @@
 ---
+id: react
+name: React
 mode: subagent
 description: React Staff Engineer.
 tools:

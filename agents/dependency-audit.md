@@ -1,4 +1,6 @@
 ---
+id: dependency-audit
+name: Dependency Audit
 mode: subagent
 description: Dependency/CVE auditor.
 tools:

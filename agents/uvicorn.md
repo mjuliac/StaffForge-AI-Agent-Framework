@@ -1,4 +1,6 @@
 ---
+id: uvicorn
+name: Uvicorn
 mode: subagent
 description: Uvicorn Staff Engineer.
 tools:

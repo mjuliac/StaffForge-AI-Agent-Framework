@@ -1,4 +1,6 @@
 ---
+id: architect
+name: Architect
 mode: subagent
 description: Protects architecture.
 tools:

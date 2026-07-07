@@ -1,4 +1,6 @@
 ---
+id: ruby
+name: Ruby
 mode: subagent
 description: Ruby Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: blazor
+name: Blazor
 mode: subagent
 description: Blazor Staff Engineer.
 tools:

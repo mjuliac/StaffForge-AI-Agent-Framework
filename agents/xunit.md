@@ -1,4 +1,6 @@
 ---
+id: xunit
+name: Xunit
 mode: subagent
 description: xUnit Staff Engineer.
 tools:

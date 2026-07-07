@@ -1,4 +1,6 @@
 ---
+id: windows
+name: Windows
 mode: subagent
 description: Windows Staff Engineer.
 tools:

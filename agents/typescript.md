@@ -1,4 +1,6 @@
 ---
+id: typescript
+name: Typescript
 mode: subagent
 description: TypeScript Staff Engineer.
 tools:

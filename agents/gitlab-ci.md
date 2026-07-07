@@ -1,4 +1,6 @@
 ---
+id: gitlab-ci
+name: Gitlab Ci
 mode: subagent
 description: GitLab CI Staff Engineer.
 tools:

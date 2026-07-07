@@ -1,4 +1,6 @@
 ---
+id: mongodb
+name: Mongodb
 mode: subagent
 description: Mongodb Staff Engineer.
 tools:

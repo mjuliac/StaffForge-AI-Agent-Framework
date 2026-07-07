@@ -1,4 +1,6 @@
 ---
+id: integration
+name: Integration
 mode: subagent
 description: Integration Staff Engineer.
 tools:

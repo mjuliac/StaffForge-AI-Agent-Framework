@@ -1,4 +1,6 @@
 ---
+id: html
+name: Html
 mode: subagent
 description: HTML Staff Engineer.
 tools:

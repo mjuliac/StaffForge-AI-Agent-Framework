@@ -1,4 +1,6 @@
 ---
+id: macos
+name: Macos
 mode: subagent
 description: Macos Staff Engineer.
 tools:

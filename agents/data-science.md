@@ -1,4 +1,6 @@
 ---
+id: data-science
+name: Data Science
 mode: subagent
 description: Data Science Staff Engineer.
 tools:

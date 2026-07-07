@@ -1,4 +1,6 @@
 ---
+id: flutter
+name: Flutter
 mode: subagent
 description: Flutter Staff Engineer.
 tools:

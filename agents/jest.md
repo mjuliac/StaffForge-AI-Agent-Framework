@@ -1,4 +1,6 @@
 ---
+id: jest
+name: Jest
 mode: subagent
 description: Jest Staff Engineer.
 tools:

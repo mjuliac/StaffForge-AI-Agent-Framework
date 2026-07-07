@@ -1,4 +1,6 @@
 ---
+id: flask
+name: Flask
 mode: subagent
 description: Flask Staff Engineer.
 tools:

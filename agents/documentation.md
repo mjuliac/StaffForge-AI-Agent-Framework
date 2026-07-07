@@ -1,4 +1,6 @@
 ---
+id: documentation
+name: Documentation
 mode: subagent
 description: Technical writer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: ansible
+name: Ansible
 mode: subagent
 description: Ansible Staff Engineer.
 tools:

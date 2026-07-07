@@ -1,4 +1,6 @@
 ---
+id: php
+name: Php
 mode: subagent
 description: Php Staff Engineer.
 tools:

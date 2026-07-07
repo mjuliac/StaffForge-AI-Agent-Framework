@@ -1,4 +1,6 @@
 ---
+id: storybook
+name: Storybook
 mode: subagent
 description: Storybook Staff Engineer.
 tools:

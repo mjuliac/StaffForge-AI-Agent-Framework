@@ -1,4 +1,6 @@
 ---
+id: winforms
+name: Winforms
 mode: subagent
 description: Windows Forms Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: linux
+name: Linux
 mode: subagent
 description: Linux specialist.
 tools:

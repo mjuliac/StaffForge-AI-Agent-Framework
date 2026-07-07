@@ -1,4 +1,6 @@
 ---
+id: serilog
+name: Serilog
 mode: subagent
 description: Serilog Staff Engineer.
 tools:

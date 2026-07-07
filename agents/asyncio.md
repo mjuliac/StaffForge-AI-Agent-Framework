@@ -1,4 +1,6 @@
 ---
+id: asyncio
+name: Asyncio
 mode: subagent
 description: asyncio Staff Engineer.
 tools:

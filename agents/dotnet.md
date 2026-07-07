@@ -1,4 +1,6 @@
 ---
+id: dotnet
+name: Dotnet
 mode: subagent
 description: .NET Staff Engineer.
 tools:

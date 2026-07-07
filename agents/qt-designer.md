@@ -1,4 +1,6 @@
 ---
+id: qt-designer
+name: Qt Designer
 mode: subagent
 description: Qt Designer specialist.
 tools:

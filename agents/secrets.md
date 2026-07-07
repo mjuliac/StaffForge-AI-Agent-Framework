@@ -1,4 +1,6 @@
 ---
+id: secrets
+name: Secrets
 mode: subagent
 description: Secrets scanner.
 tools:

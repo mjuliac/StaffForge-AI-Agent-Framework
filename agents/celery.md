@@ -1,4 +1,6 @@
 ---
+id: celery
+name: Celery
 mode: subagent
 description: Celery Staff Engineer.
 tools:

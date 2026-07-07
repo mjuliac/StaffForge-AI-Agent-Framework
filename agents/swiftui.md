@@ -1,4 +1,6 @@
 ---
+id: swiftui
+name: Swiftui
 mode: subagent
 description: SwiftUI Staff Engineer.
 tools:

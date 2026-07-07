@@ -1,4 +1,6 @@
 ---
+id: fastapi
+name: Fastapi
 mode: subagent
 description: FastAPI Staff Engineer.
 tools:

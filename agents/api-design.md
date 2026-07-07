@@ -1,4 +1,6 @@
 ---
+id: api-design
+name: Api Design
 mode: subagent
 description: REST/gRPC/OpenAPI specialist.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: aspnet-core
+name: Aspnet Core
 mode: subagent
 description: ASP.NET Core Staff Engineer.
 tools:

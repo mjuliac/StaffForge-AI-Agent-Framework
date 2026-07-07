@@ -1,4 +1,6 @@
 ---
+id: refactor
+name: Refactor
 mode: subagent
 description: Safe refactoring specialist.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: android
+name: Android
 mode: subagent
 description: Android Staff Engineer.
 tools:

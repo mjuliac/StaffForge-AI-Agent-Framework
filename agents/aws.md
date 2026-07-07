@@ -1,4 +1,6 @@
 ---
+id: aws
+name: Aws
 mode: subagent
 description: Aws Staff Engineer.
 tools:

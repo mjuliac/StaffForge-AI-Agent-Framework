@@ -1,4 +1,6 @@
 ---
+id: jinja
+name: Jinja
 mode: subagent
 description: Jinja Staff Engineer.
 tools:

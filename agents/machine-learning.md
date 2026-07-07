@@ -1,4 +1,6 @@
 ---
+id: machine-learning
+name: Machine Learning
 mode: subagent
 description: Machine Learning Staff Engineer.
 tools:

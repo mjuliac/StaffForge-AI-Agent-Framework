@@ -1,4 +1,6 @@
 ---
+id: prisma
+name: Prisma
 mode: subagent
 description: Prisma Staff Engineer.
 tools:

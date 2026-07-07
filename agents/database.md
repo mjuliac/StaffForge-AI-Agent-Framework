@@ -1,4 +1,6 @@
 ---
+id: database
+name: Database
 mode: subagent
 description: Database design specialist.
 tools:

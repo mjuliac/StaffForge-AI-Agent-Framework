@@ -1,4 +1,6 @@
 ---
+id: react-query
+name: React Query
 mode: subagent
 description: React Query Staff Engineer.
 tools:

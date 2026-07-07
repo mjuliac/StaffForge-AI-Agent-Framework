@@ -1,4 +1,6 @@
 ---
+id: mui
+name: Mui
 mode: subagent
 description: Material UI Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: build
+name: Build
 mode: primary
 description: Build systems expert. Full tool access.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: signalr
+name: Signalr
 mode: subagent
 description: SignalR Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: zustand
+name: Zustand
 mode: subagent
 description: Zustand Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: elasticsearch
+name: Elasticsearch
 mode: subagent
 description: Elasticsearch Staff Engineer.
 tools:

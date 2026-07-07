@@ -1,4 +1,6 @@
 ---
+id: debugging
+name: Debugging
 mode: subagent
 description: Root-cause analysis specialist.
 tools:

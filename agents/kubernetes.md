@@ -1,4 +1,6 @@
 ---
+id: kubernetes
+name: Kubernetes
 mode: subagent
 description: Kubernetes expert.
 tools:

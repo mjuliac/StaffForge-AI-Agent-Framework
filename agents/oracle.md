@@ -1,4 +1,6 @@
 ---
+id: oracle
+name: Oracle
 mode: subagent
 description: Oracle Staff Engineer.
 tools:

@@ -1,4 +1,6 @@
 ---
+id: jenkins
+name: Jenkins
 mode: subagent
 description: Jenkins Staff Engineer.
 tools:

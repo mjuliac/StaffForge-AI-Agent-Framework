@@ -1,4 +1,6 @@
 ---
+id: maui
+name: Maui
 mode: subagent
 description: Maui Staff Engineer.
 tools:

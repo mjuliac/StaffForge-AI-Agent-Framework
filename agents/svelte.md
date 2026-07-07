@@ -1,4 +1,6 @@
 ---
+id: svelte
+name: Svelte
 mode: subagent
 description: Svelte Staff Engineer.
 tools:

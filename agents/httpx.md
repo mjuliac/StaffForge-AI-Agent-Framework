@@ -1,4 +1,6 @@
 ---
+id: httpx
+name: Httpx
 mode: subagent
 description: HTTPX Staff Engineer.
 tools:

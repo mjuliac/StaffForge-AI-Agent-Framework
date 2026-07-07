@@ -1,4 +1,6 @@
 ---
+id: gunicorn
+name: Gunicorn
 mode: subagent
 description: Gunicorn Staff Engineer.
 tools:

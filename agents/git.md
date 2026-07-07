@@ -1,4 +1,6 @@
 ---
+id: git
+name: Git
 mode: subagent
 description: Git expert. Sole executor of all git operations (branch, commit, merge, tag, push). Only invoked by @orchestrator.
 tools:
