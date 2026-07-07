@@ -118,6 +118,30 @@ Delegate the final merge to `@git`:
 
 > "Merge feature/{name} into develop with --no-ff and push"
 
+## Git Flow Rules for the Orchestrator
+
+### ⚠️ CRITICAL: Never bypass the release process
+
+- **NEVER** instruct `@git` to merge `develop` directly into `release` or `main`.
+- The ONLY way commits reach `main` is through a **release** branch or a **hotfix** branch.
+- Commits on `develop` are not automatically release-ready.
+
+### Proper release flow
+
+When the user asks to deploy, release, or tag a version:
+
+1. Create a `release/<version>` branch from `develop`
+2. Run the Deployment pipeline (Docker/Kubernetes → Build/Release → Documentation)
+3. The pipeline's final step (`Git tag`) handles: merge to `main` + tag + merge back to `develop` + branch cleanup
+
+### Proper hotfix flow
+
+When a production fix is needed:
+
+1. Create a `hotfix/<name>` branch from `main` (not develop)
+2. Run the Hotfix pipeline
+3. It handles: merge to `main` + tag + merge to `develop` + branch cleanup
+
 ## Pipeline Execution
 
 Consult `ORCHESTRATOR_MATRIX.md` for the base pipeline of the detected task type.
