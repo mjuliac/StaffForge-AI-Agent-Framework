@@ -12,59 +12,76 @@ $Repo = "https://github.com/mjuliac/StaffForge-AI-Agent-Framework"
 $Branch = "develop"
 $UserProject = Get-Location
 $TmpDir = Join-Path $env:TEMP "staffforge-$([System.IO.Path]::GetRandomFileName())"
+$ConfigFile = Join-Path $UserProject ".staffforge-install.json"
 
 Write-Host "StaffForge AI Agent Framework — Remote Installation (Windows)" -ForegroundColor White
 Write-Host ""
 
-# ── Platform ──────────────────────────────────────────
-Write-Host "Select the AI platform:"
-Write-Host "  1) opencode      — OpenCode (recommended)"
-Write-Host "  2) claude-code   — Claude Code"
-Write-Host "  3) cursor        — Cursor"
-Write-Host "  4) copilot       — GitHub Copilot"
-Write-Host "  5) aider         — Aider"
-Write-Host "  6) gemini-cli    — Gemini CLI"
-Write-Host "  7) all           — All platforms"
-Write-Host ""
-$platformChoice = Read-Host "? Platform [1]"
-
-switch -Wildcard ($platformChoice) {
-  "2*" { $Platform = "claude-code" }
-  "3*" { $Platform = "cursor" }
-  "4*" { $Platform = "copilot" }
-  "5*" { $Platform = "aider" }
-  "6*" { $Platform = "gemini-cli" }
-  "7*" { $Platform = "all" }
-  default { $Platform = "opencode" }
+# ── Detect previous installation ──────────────────────
+if (Test-Path $ConfigFile) {
+  $config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
+  Write-Host "→ Previous installation detected: $($config.platform) (agent: $($config.defaultAgent))" -ForegroundColor Cyan
+  $reinstall = Read-Host "  Reinstall with same settings? [Y/n]"
+  if ($reinstall -notin @("n","N","no")) {
+    Write-Host "→ Reusing previous configuration" -ForegroundColor Cyan
+    $Platform = $config.platform
+    $DefaultAgent = $config.defaultAgent
+    $InstallDir = $config.installDir
+    $SkipPrompts = $true
+  }
 }
 
-# ── Default agent ─────────────────────────────────────
-Write-Host ""
-Write-Host "Select the default agent:"
-Write-Host "  1) orchestrator  — coordinates work, creates git flow branches, executes pipelines"
-Write-Host "  2) build         — full tool access"
-Write-Host "  3) plan          — read-only (analysis and planning)"
-Write-Host ""
-$agentChoice = Read-Host "? Default agent [1]"
+if (-not $SkipPrompts) {
+  # ── Platform ──────────────────────────────────────────
+  Write-Host "Select the AI platform:"
+  Write-Host "  1) opencode      — OpenCode (recommended)"
+  Write-Host "  2) claude-code   — Claude Code"
+  Write-Host "  3) cursor        — Cursor"
+  Write-Host "  4) copilot       — GitHub Copilot"
+  Write-Host "  5) aider         — Aider"
+  Write-Host "  6) gemini-cli    — Gemini CLI"
+  Write-Host "  7) all           — All platforms"
+  Write-Host ""
+  $platformChoice = Read-Host "? Platform [1]"
 
-switch -Wildcard ($agentChoice) {
-  "2*" { $DefaultAgent = "build" }
-  "3*" { $DefaultAgent = "plan" }
-  default { $DefaultAgent = "orchestrator" }
-}
+  switch -Wildcard ($platformChoice) {
+    "2*" { $Platform = "claude-code" }
+    "3*" { $Platform = "cursor" }
+    "4*" { $Platform = "copilot" }
+    "5*" { $Platform = "aider" }
+    "6*" { $Platform = "gemini-cli" }
+    "7*" { $Platform = "all" }
+    default { $Platform = "opencode" }
+  }
 
-# ── Location ──────────────────────────────────────────
-Write-Host ""
-Write-Host "Where do you want to install the configuration?"
-Write-Host "  1) In this project  (.\staffforge\)"
-Write-Host "  2) Global           ($env:LOCALAPPDATA\staffforge\)"
-Write-Host ""
-$locChoice = Read-Host "? Location [1]"
+  # ── Default agent ─────────────────────────────────────
+  Write-Host ""
+  Write-Host "Select the default agent:"
+  Write-Host "  1) orchestrator  — coordinates work, creates git flow branches, executes pipelines"
+  Write-Host "  2) build         — full tool access"
+  Write-Host "  3) plan          — read-only (analysis and planning)"
+  Write-Host ""
+  $agentChoice = Read-Host "? Default agent [1]"
 
-if ($locChoice -eq "2") {
-  $InstallDir = "$env:LOCALAPPDATA\staffforge"
-} else {
-  $InstallDir = Join-Path $UserProject "staffforge"
+  switch -Wildcard ($agentChoice) {
+    "2*" { $DefaultAgent = "build" }
+    "3*" { $DefaultAgent = "plan" }
+    default { $DefaultAgent = "orchestrator" }
+  }
+
+  # ── Location ──────────────────────────────────────────
+  Write-Host ""
+  Write-Host "Where do you want to install the configuration?"
+  Write-Host "  1) In this project  (.\staffforge\)"
+  Write-Host "  2) Global           ($env:LOCALAPPDATA\staffforge\)"
+  Write-Host ""
+  $locChoice = Read-Host "? Location [1]"
+
+  if ($locChoice -eq "2") {
+    $InstallDir = "$env:LOCALAPPDATA\staffforge"
+  } else {
+    $InstallDir = Join-Path $UserProject "staffforge"
+  }
 }
 
 # ── Download ──────────────────────────────────────────
@@ -164,6 +181,14 @@ if ($Platform -eq "all") {
       Write-Host "  ✓ CLAUDE.md + .claude\rules\ copied" -ForegroundColor Green
     }
   }
+
+  # Save config for future updates
+  $config = @{
+    platform     = $Platform
+    defaultAgent = $DefaultAgent
+    installDir   = $InstallDir
+  } | ConvertTo-Json -Compress
+  Set-Content -Path $ConfigFile -Value $config -Force
 
   # Cleanup staffforge/ on project-level install
   if ($InstallDir.StartsWith($UserProject)) {

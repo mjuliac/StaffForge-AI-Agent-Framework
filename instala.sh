@@ -23,6 +23,7 @@ REPO="https://github.com/mjuliac/StaffForge-AI-Agent-Framework"
 BRANCH="develop"
 TMP_DIR="/tmp/staffforge-$$"
 USER_PROJECT="$(pwd)"
+CONFIG_FILE="${USER_PROJECT}/.staffforge-install.json"
 
 BOLD='\033[1m'
 GREEN='\033[0;32m'
@@ -35,55 +36,71 @@ trap cleanup EXIT
 echo -e "${BOLD}StaffForge AI Agent Framework — Remote Installation${NC}"
 echo ""
 
-# ── Platform ──────────────────────────────────────────
-echo "Select the AI platform:"
-echo "  1) opencode      — OpenCode (recommended)"
-echo "  2) claude-code   — Claude Code"
-echo "  3) cursor        — Cursor"
-echo "  4) copilot       — GitHub Copilot"
-echo "  5) aider         — Aider"
-echo "  6) gemini-cli    — Gemini CLI"
-echo "  7) all           — All platforms"
-echo ""
-read $READ_OPTS -rp "? Platform [1]: " platform_choice
+# ── Detect previous installation ──────────────────────
+if [ -f "$CONFIG_FILE" ]; then
+  . "$CONFIG_FILE"
+  echo -e "${BLUE}→ Previous installation detected:${NC} ${PLATFORM} (agent: ${DEFAULT_AGENT})"
+  read $READ_OPTS -rp "  Reinstall with same settings? [Y/n]: " reinstall
+  case "$reinstall" in
+    n|N|no) ;; # fall through to prompts below
+    *)
+      echo -e "${BLUE}→ Reusing previous configuration${NC}"
+      SKIP_PROMPTS=1
+      ;;
+  esac
+fi
 
-case "$platform_choice" in
-  2|claude-code) PLATFORM="claude-code" ;;
-  3|cursor)      PLATFORM="cursor" ;;
-  4|copilot)     PLATFORM="copilot" ;;
-  5|aider)       PLATFORM="aider" ;;
-  6|gemini-cli)  PLATFORM="gemini-cli" ;;
-  7|all)         PLATFORM="all" ;;
-  *)             PLATFORM="opencode" ;;
-esac
+if [ -z "${SKIP_PROMPTS:-}" ]; then
+  # ── Platform ──────────────────────────────────────────
+  echo "Select the AI platform:"
+  echo "  1) opencode      — OpenCode (recommended)"
+  echo "  2) claude-code   — Claude Code"
+  echo "  3) cursor        — Cursor"
+  echo "  4) copilot       — GitHub Copilot"
+  echo "  5) aider         — Aider"
+  echo "  6) gemini-cli    — Gemini CLI"
+  echo "  7) all           — All platforms"
+  echo ""
+  read $READ_OPTS -rp "? Platform [1]: " platform_choice
 
-# ── Default agent ─────────────────────────────────────
-echo ""
-echo "Select the default agent:"
-echo "  1) orchestrator  — coordinates work, creates git flow branches, executes pipelines"
-echo "  2) build         — full tool access"
-echo "  3) plan          — read-only (analysis and planning)"
-echo ""
-read $READ_OPTS -rp "? Default agent [1]: " agent_choice
+  case "$platform_choice" in
+    2|claude-code) PLATFORM="claude-code" ;;
+    3|cursor)      PLATFORM="cursor" ;;
+    4|copilot)     PLATFORM="copilot" ;;
+    5|aider)       PLATFORM="aider" ;;
+    6|gemini-cli)  PLATFORM="gemini-cli" ;;
+    7|all)         PLATFORM="all" ;;
+    *)             PLATFORM="opencode" ;;
+  esac
 
-case "$agent_choice" in
-  2|build) DEFAULT_AGENT="build" ;;
-  3|plan)  DEFAULT_AGENT="plan" ;;
-  *)       DEFAULT_AGENT="orchestrator" ;;
-esac
+  # ── Default agent ─────────────────────────────────────
+  echo ""
+  echo "Select the default agent:"
+  echo "  1) orchestrator  — coordinates work, creates git flow branches, executes pipelines"
+  echo "  2) build         — full tool access"
+  echo "  3) plan          — read-only (analysis and planning)"
+  echo ""
+  read $READ_OPTS -rp "? Default agent [1]: " agent_choice
 
-# ── Location ──────────────────────────────────────────
-echo ""
-echo "Where do you want to install the configuration?"
-echo "  1) In this project  (./staffforge/)"
-echo "  2) Global           (~/.config/staffforge/)"
-echo ""
-read $READ_OPTS -rp "? Location [1]: " loc_choice
+  case "$agent_choice" in
+    2|build) DEFAULT_AGENT="build" ;;
+    3|plan)  DEFAULT_AGENT="plan" ;;
+    *)       DEFAULT_AGENT="orchestrator" ;;
+  esac
 
-if [ "$loc_choice" = "2" ]; then
-  INSTALL_DIR="$HOME/.config/staffforge"
-else
-  INSTALL_DIR="${USER_PROJECT}/staffforge"
+  # ── Location ──────────────────────────────────────────
+  echo ""
+  echo "Where do you want to install the configuration?"
+  echo "  1) In this project  (./staffforge/)"
+  echo "  2) Global           (~/.config/staffforge/)"
+  echo ""
+  read $READ_OPTS -rp "? Location [1]: " loc_choice
+
+  if [ "$loc_choice" = "2" ]; then
+    INSTALL_DIR="$HOME/.config/staffforge"
+  else
+    INSTALL_DIR="${USER_PROJECT}/staffforge"
+  fi
 fi
 
 # ── Obtain framework code ─────────────────────────────
@@ -176,6 +193,13 @@ else
       echo -e "  ${GREEN}✓${NC} CLAUDE.md + .claude/rules/ copied"
       ;;
   esac
+
+  # ── Save config for future updates ──
+  cat > "$CONFIG_FILE" <<EOF
+PLATFORM='${PLATFORM}'
+DEFAULT_AGENT='${DEFAULT_AGENT}'
+INSTALL_DIR='${INSTALL_DIR}'
+EOF
 
   # ── Cleanup: remove staffforge/ and instala.sh on project-level install ──
   if [[ "$INSTALL_DIR" == "$USER_PROJECT"* ]]; then
