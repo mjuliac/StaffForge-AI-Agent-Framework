@@ -8,7 +8,9 @@
 set -euo pipefail
 
 # ── Ensure interactive stdin (works with curl | bash) ──
-exec < /dev/tty
+# When piped via curl|bash, stdin is the pipe, not the terminal.
+# This restores terminal input for interactive prompts.
+{ exec < /dev/tty; } 2>/dev/null || true
 
 REPO="https://github.com/mjuliac/StaffForge-AI-Agent-Framework"
 BRANCH="develop"
