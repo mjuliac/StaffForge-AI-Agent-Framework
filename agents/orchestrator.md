@@ -104,6 +104,9 @@ Before ANY implementation, planning, or analysis:
 Use `@git` with a prompt like:
 > "Create a {type} branch named {branch-name} using git flow"
 
+For hotfix branches, the prompt must specify the source branch:
+> "Create a hotfix branch named hotfix/{name} from main"
+
 ### Throughout: commits during pipeline execution
 
 When a subagent produces code that needs to be committed, do NOT run `git add`/`git commit` yourself.
@@ -111,36 +114,25 @@ Instead delegate to `@git`:
 
 > "Stage all changes and commit with message 'feat: add user authentication'"
 
-### End: merge and tag on completion
+### End: merge and tag per task type
 
-When the pipeline finishes successfully, do NOT run `git merge` or `git push` yourself.
-Delegate the final merge to `@git`:
+When the pipeline finishes, delegate the final git operation to `@git`.
+The prompt MUST use the correct template for each task type:
 
-> "Merge feature/{name} into develop with --no-ff and push"
+| Task Type    | Prompt Template |
+|--------------|----------------|
+| Feature      | `"Merge feature/{name} into develop with --no-ff and push"` |
+| Bug Fix      | `"Merge bugfix/{name} into develop with --no-ff and push"` |
+| Refactor     | `"Merge feature/{name} into develop with --no-ff and push"` |
+| Security     | `"Merge feature/{name} into develop with --no-ff and push"` |
+| Hotfix       | `"Finalize hotfix/{name}: merge to main, tag v{version}, merge to develop, push"` |
+| Deployment   | `"Finalize release/{version}: merge to main, tag v{version}, merge back to develop, push and delete branch"` |
 
-## Git Flow Rules for the Orchestrator
-
-### ⚠️ CRITICAL: Never bypass the release process
-
-- **NEVER** instruct `@git` to merge `develop` directly into `release` or `main`.
-- The ONLY way commits reach `main` is through a **release** branch or a **hotfix** branch.
+⚠️ **CRITICAL — Never bypass the release process:**
+- **NEVER** ask `@git` to merge `develop` directly into `main` or `release`.
+- Only `hotfix/*` (branched from `main`) and `release/*` (branched from `develop`) should ever touch `main`.
+- `feature/*`, `bugfix/*`, and `refactor/*` branches always merge **only** into `develop`.
 - Commits on `develop` are not automatically release-ready.
-
-### Proper release flow
-
-When the user asks to deploy, release, or tag a version:
-
-1. Create a `release/<version>` branch from `develop`
-2. Run the Deployment pipeline (Docker/Kubernetes → Build/Release → Documentation)
-3. The pipeline's final step (`Git tag`) handles: merge to `main` + tag + merge back to `develop` + branch cleanup
-
-### Proper hotfix flow
-
-When a production fix is needed:
-
-1. Create a `hotfix/<name>` branch from `main` (not develop)
-2. Run the Hotfix pipeline
-3. It handles: merge to `main` + tag + merge to `develop` + branch cleanup
 
 ## Pipeline Execution
 
@@ -215,14 +207,15 @@ Git → Security → Pentest → Code Review → Git merge
 
 **Deployment:**
 ```
-Git → Docker + Kubernetes (parallel)
+Git (create release/*) → Docker + Kubernetes (parallel)
 → Build + Release (parallel)
-→ Documentation → Git tag
+→ Documentation → Git (merge to main + tag + merge to develop + cleanup)
 ```
 
 **Hotfix:**
 ```
-Git → Debugging → Code Review → Git tag + merge to main + develop
+Git (create hotfix/* from main) → Debugging → Code Review
+→ Git (merge to main + tag + merge to develop + cleanup)
 ```
 
 ## Deliverables

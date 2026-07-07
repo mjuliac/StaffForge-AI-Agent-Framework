@@ -52,7 +52,7 @@ Git (create feature/*) → Security → Pentest → Code Review → Git (merge)
 ```
 Git (create release/*) → [Docker + Kubernetes] (parallel)
 → [Build + Release] (parallel)
-→ Documentation → Git (tag)
+→ Documentation → Git (finalize: merge to main + tag + merge to develop + cleanup)
 ```
 
 ### Hotfix (Urgent)
