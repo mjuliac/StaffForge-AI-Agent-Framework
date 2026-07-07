@@ -41,6 +41,53 @@ Analyze the user's prompt to determine task type using these keyword rules:
 
 Extract a short kebab-case branch name from the prompt (e.g., "implement user auth" → `feature/user-auth`).
 
+## Technology Detection
+
+After detecting the task type, scan the prompt for technology keywords.
+For each keyword found, add the corresponding subagent to the pipeline's execution level.
+
+**Convention:** The subagent name equals the technology keyword (e.g., `flask` → `@flask`).
+For synonyms or multi-word technologies use this mapping:
+
+| Keyword(s) | Subagent |
+|------------|----------|
+| python | `@python` |
+| javascript, js | `@javascript` |
+| typescript, ts | `@typescript` |
+| node, nodejs | `@nodejs` |
+| c#, csharp | `@csharp` |
+| .net, dotnet | `@dotnet` |
+| go, golang | `@go` |
+| asp.net, aspnetcore | `@aspnet-core` |
+| entity framework, ef | `@entity-framework` |
+| react native | `@react-native` |
+| react query, tanstack | `@react-query` |
+| react router | `@react-router` |
+| shadcn, shadcn/ui | `@shadcn-ui` |
+| material ui, mui | `@mui` |
+| github actions | `@github-actions` |
+| gitlab ci | `@gitlab-ci` |
+| google cloud, gcp | `@gcp` |
+| data science | `@data-science` |
+| machine learning, ml | `@machine-learning` |
+| sql server, mssql | `@sqlserver` |
+| elasticsearch, elastic | `@elasticsearch` |
+| accessibility, a11y | `@a11y` |
+| internationalization, i18n | `@i18n` |
+| end to end, e2e | `@e2e` |
+| windows forms, winforms | `@winforms` |
+| minimal api | `@minimal-api` |
+
+For any technology not in this table, use the literal keyword as the subagent name
+(e.g., "flask" → `@flask`, "redis" → `@redis`, "docker" → `@docker`).
+
+Group detected agents into the execution level that matches their domain:
+- **Framework/Language agents** → Level 1 (alongside Architect)
+- **Database agents** → Level 2 (alongside Knowledge)
+- **Testing agents** → Testing level
+- **Security agents** → Security level
+- **Infrastructure agents** → Deployment level
+
 ## Git Flow — ALWAYS delegate to @git
 
 All git operations — without exception — are delegated to `@git` via the Task tool.
@@ -73,7 +120,22 @@ Delegate the final merge to `@git`:
 
 ## Pipeline Execution
 
-Consult `ORCHESTRATOR_MATRIX.md` for the pipeline of the detected task type.
+Consult `ORCHESTRATOR_MATRIX.md` for the base pipeline of the detected task type.
+Then incorporate the **detected technology agents** into the appropriate execution levels
+(see Technology Detection above).
+
+For example, a feature request mentioning "flask, sqlalchemy, postgres, pytest" produces:
+
+```
+Git → Planner
+├─ Flask + SQLAlchemy ──┐  (Language/Framework level)
+├─ Architect ───────────┤
+│                       └→ Postgres + Knowledge → Impact
+├─ Pytest ──────────────┤  (Testing level)
+├─ Security ────────────┤
+└─ Code Review + Docs ──┘
+```
+
 Follow the parallel execution strategy below.
 
 ## Parallel Execution Strategy
