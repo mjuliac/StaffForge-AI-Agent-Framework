@@ -13,18 +13,44 @@ examples/         ← Usage examples
 
 ## Quick start
 
+### From GitHub
+
 ```bash
-# 1. Install dependencies
+git clone --depth 1 https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
+cd StaffForge-AI-Agent-Framework
+npm install        # installs tools/ dependencies automatically
+npm run setup      # interactive installer (OpenCode)
+opencode
+```
+
+Or use the setup script:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/setup.sh | bash
+cd StaffForge-AI-Agent-Framework
+opencode
+```
+
+### From existing clone
+
+```bash
 cd tools && npm install
-
-# 2. Run interactive installer (recommended)
 node tools/install.mjs
-
-# 3. Start using OpenCode in this directory
 opencode
 ```
 
 The installer generates `opencode.json` in the project root. The **orchestrator** is the default agent — it detects the task type, creates a git flow branch, and executes the pipeline in parallel.
+
+### One-liner per platform
+
+```bash
+npm run setup              # OpenCode interactive
+npm run export:claude      # Claude Code
+npm run export:cursor      # Cursor
+npm run export:copilot     # GitHub Copilot
+npm run export:aider       # Aider
+npm run export:gemini      # Gemini CLI
+```
 
 ---
 
@@ -196,10 +222,21 @@ See `ORCHESTRATOR_MATRIX.md` for task → pipeline mapping with parallel executi
 ## Commands
 
 ```bash
-cd tools && npm install          # Install dependencies
-node tools/validate.mjs          # Validate all 40 agent definitions
-node tools/export.mjs --platform <name>   # Export agents for a platform
+# Root-level (npm)
+npm install              # Install all dependencies (tools/ included)
+npm run setup            # Interactive OpenCode installer
+npm run export:opencode  # Export to OpenCode
+npm run export:claude    # Export to Claude Code
+npm run export:cursor    # Export to Cursor
+npm run export:copilot   # Export to GitHub Copilot
+npm run export:aider     # Export to Aider
+npm run export:gemini    # Export to Gemini CLI
+npm run validate         # Validate all agents
+
+# Low-level (node)
+node tools/export.mjs --platform <name>   # Export agents for any platform
 node tools/install.mjs           # Interactive OpenCode installer
+node tools/validate.mjs          # Validate all 40 agent definitions
 node tools/init-agent.mjs <name> # Create a new agent from template
 ```
 

@@ -1,0 +1,27 @@
+{
+  "name": "staffforge-ai-agent-framework",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
+  "scripts": {
+    "postinstall": "cd tools && npm install",
+    "setup": "node tools/install.mjs",
+    "setup:opencode": "node tools/install.mjs --agent orchestrator",
+    "setup:build": "node tools/install.mjs --agent build",
+    "setup:plan": "node tools/install.mjs --agent plan",
+    "export": "node tools/export.mjs",
+    "export:opencode": "node tools/export.mjs --platform opencode",
+    "export:claude": "node tools/export.mjs --platform claude-code",
+    "export:cursor": "node tools/export.mjs --platform cursor",
+    "export:copilot": "node tools/export.mjs --platform copilot",
+    "export:aider": "node tools/export.mjs --platform aider",
+    "export:gemini": "node tools/export.mjs --platform gemini-cli",
+    "validate": "node tools/validate.mjs",
+    "init-agent": "node tools/init-agent.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git"
+  },
+  "homepage": "https://github.com/mjuliac/StaffForge-AI-Agent-Framework#readme"
+}
