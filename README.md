@@ -19,10 +19,17 @@ examples/         ← Usage examples
 curl -fsSL https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/instala.sh | bash
 ```
 
-The interactive script asks for platform, default agent, and location (project or global), then downloads the framework and exports the agents. For OpenCode it also creates the `opencode.json` symlink.
+The interactive script asks for platform, default agent, and location (project or global), then downloads the framework and exports the agents to the correct paths for your chosen platform. It saves a `.staffforge-install.json` config so re-running the same command detects the previous install and offers to reinstall without re-asking:
 
 ```bash
-# After install:
+# Next time — update to the latest agents:
+curl -fsSL https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/instala.sh | bash
+# → Previous installation detected: copilot (agent: orchestrator)
+#   Reinstall with same settings? [Y/n]:  ← press Enter
+```
+
+```bash
+# After install (your platform's CLI):
 opencode
 ```
 
@@ -32,7 +39,7 @@ opencode
 iwr -useb https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/install.ps1 | iex
 ```
 
-Same interactive flow. Global location uses `$env:LOCALAPPDATA\staffforge\`.
+Same interactive flow with update detection. Global location uses `$env:LOCALAPPDATA\staffforge\`.
 
 ### Clone the repository (any OS)
 
