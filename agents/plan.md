@@ -1,12 +1,12 @@
 ---
-mode: subagent
-description: Creates execution plan.
+mode: primary
+description: Creates execution plan. Read-only mode.
 tools:
   write: false
   bash: false
   edit: false
 ---
-# Planner
+# Plan
 
 ## Mission
 Creates execution plan.

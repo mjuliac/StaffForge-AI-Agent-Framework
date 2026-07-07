@@ -5,13 +5,13 @@ OpenCode multi-provider agent framework. Canonical agents in `agents/*.md`.
 ## Structure
 
 ```
-agents/           — 41 agent definitions with YAML frontmatter (mode, description, tools)
+agents/           — 40 agent definitions with YAML frontmatter (mode, description, tools)
 adapters/          — Platform exporters per platform (opencode, claude-code, cursor, copilot, aider, gemini-cli)
 schemas/           — JSON Schema for agent validation (agent.schema.json)
 templates/         — Scaffolding for new agents (agent.md)
-tools/             — Node.js CLI: validate, export, init-agent
+tools/             — Node.js CLI: validate, export, init-agent, install
 examples/          — Sample outputs and export commands
-ORCHESTRATOR_MATRIX.md — task → pipeline routing
+ORCHESTRATOR_MATRIX.md — task → pipeline routing with Git Flow integration
 ```
 
 ## Routing
@@ -20,11 +20,12 @@ See `ORCHESTRATOR_MATRIX.md`.
 
 | Type       | Pipeline |
 |------------|----------|
-| Feature    | Planner → Requirements → Architect → Knowledge → Impact → Language → Security → Testing → Code Review → Documentation |
-| Bug        | Planner → Knowledge → Impact → Debugging → Language → Testing → Code Review |
-| Refactor   | Architect → Refactor → Performance → Code Review |
-| Security   | Security → Pentest → Code Review |
-| Deployment | Docker → Kubernetes → Build → Release → Documentation |
+| Feature    | Git (feature/*) → Planner → Requirements → Architect → Knowledge → Impact → Language → Security → Testing → Code Review → Documentation → Git (merge) |
+| Bug        | Git (bugfix/*) → Planner → Knowledge → Impact → Debugging → Language → Testing → Code Review → Git (merge) |
+| Refactor   | Git (feature/*) → Architect → Refactor → Performance → Code Review → Git (merge) |
+| Security   | Git (feature/*) → Security → Pentest → Code Review → Git (merge) |
+| Deployment | Git (release/*) → Docker → Kubernetes → Build → Release → Documentation → Git (tag) |
+| Hotfix     | Git (hotfix/*) → Debugging → Code Review → Git (tag + merge to main + develop) |
 
 ## Conventions
 
@@ -39,7 +40,7 @@ See `ORCHESTRATOR_MATRIX.md`.
 ```yaml
 ---
 description: One-line role summary
-mode: subagent
+mode: subagent           # primary (Tab cycle), subagent (@mention), or all (both)
 tools:
   write: false    # may create files
   bash: false     # may run shell commands

@@ -7,8 +7,8 @@
   "properties": {
     "mode": {
       "type": "string",
-      "enum": ["subagent"],
-      "description": "Agent mode — always 'subagent' for framework agents"
+      "enum": ["primary", "subagent", "all"],
+      "description": "Agent mode — primary (Tab cycle), subagent (@mention), or all (both)"
     },
     "description": {
       "type": "string",

@@ -1,10 +1,10 @@
 ---
-mode: subagent
-description: Build systems expert.
+mode: primary
+description: Build systems expert. Full tool access.
 tools:
-  write: false
-  bash: false
-  edit: false
+  write: true
+  bash: true
+  edit: true
 ---
 # Build
 
