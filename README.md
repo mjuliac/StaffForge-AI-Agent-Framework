@@ -13,38 +13,38 @@ examples/         ← Usage examples
 
 ## Quick start
 
-### Desde tu proyecto — macOS / Linux
+### From your project — macOS / Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/instala.sh | bash
 ```
 
-El script te guía: seleccionas plataforma, agente por defecto, ubicación (proyecto o global), descarga el framework y exporta los agentes. Para OpenCode crea automáticamente el enlace `opencode.json`.
+The interactive script asks for platform, default agent, and location (project or global), then downloads the framework and exports the agents. For OpenCode it also creates the `opencode.json` symlink.
 
 ```bash
-# Tras la instalación:
+# After install:
 opencode
 ```
 
-### Desde tu proyecto — Windows (PowerShell)
+### From your project — Windows (PowerShell)
 
 ```powershell
 iwr -useb https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/install.ps1 | iex
 ```
 
-Mismo flujo interactivo. La ubicación global usa `$env:LOCALAPPDATA\staffforge\`.
+Same interactive flow. Global location uses `$env:LOCALAPPDATA\staffforge\`.
 
-### Clonando el repositorio (cualquier SO)
+### Clone the repository (any OS)
 
 ```bash
 git clone --depth 1 https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
 npm install
-npm run setup      # instalador interactivo (OpenCode)
+npm run setup      # interactive installer (OpenCode)
 opencode
 ```
 
-### Exportar a otras plataformas (tras clonar)
+### Export to other platforms (after cloning)
 
 ```bash
 npm run export:claude      # Claude Code

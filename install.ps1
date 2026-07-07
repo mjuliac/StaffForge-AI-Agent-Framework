@@ -13,20 +13,20 @@ $Branch = "develop"
 $UserProject = Get-Location
 $TmpDir = Join-Path $env:TEMP "staffforge-$([System.IO.Path]::GetRandomFileName())"
 
-Write-Host "StaffForge AI Agent Framework — Instalación remota (Windows)" -ForegroundColor White
+Write-Host "StaffForge AI Agent Framework — Remote Installation (Windows)" -ForegroundColor White
 Write-Host ""
 
 # ── Platform ──────────────────────────────────────────
-Write-Host "Selecciona la plataforma de IA:"
-Write-Host "  1) opencode      — OpenCode (recomendado)"
+Write-Host "Select the AI platform:"
+Write-Host "  1) opencode      — OpenCode (recommended)"
 Write-Host "  2) claude-code   — Claude Code"
 Write-Host "  3) cursor        — Cursor"
 Write-Host "  4) copilot       — GitHub Copilot"
 Write-Host "  5) aider         — Aider"
 Write-Host "  6) gemini-cli    — Gemini CLI"
-Write-Host "  7) all           — Todas las plataformas"
+Write-Host "  7) all           — All platforms"
 Write-Host ""
-$platformChoice = Read-Host "? Plataforma [1]"
+$platformChoice = Read-Host "? Platform [1]"
 
 switch -Wildcard ($platformChoice) {
   "2*" { $Platform = "claude-code" }
@@ -40,12 +40,12 @@ switch -Wildcard ($platformChoice) {
 
 # ── Default agent ─────────────────────────────────────
 Write-Host ""
-Write-Host "Selecciona el agente por defecto:"
-Write-Host "  1) orchestrator  — coordina trabajo, crea ramas git flow, ejecuta pipelines"
-Write-Host "  2) build         — acceso completo a herramientas"
-Write-Host "  3) plan          — solo lectura (análisis y planificación)"
+Write-Host "Select the default agent:"
+Write-Host "  1) orchestrator  — coordinates work, creates git flow branches, executes pipelines"
+Write-Host "  2) build         — full tool access"
+Write-Host "  3) plan          — read-only (analysis and planning)"
 Write-Host ""
-$agentChoice = Read-Host "? Agente por defecto [1]"
+$agentChoice = Read-Host "? Default agent [1]"
 
 switch -Wildcard ($agentChoice) {
   "2*" { $DefaultAgent = "build" }
@@ -55,11 +55,11 @@ switch -Wildcard ($agentChoice) {
 
 # ── Location ──────────────────────────────────────────
 Write-Host ""
-Write-Host "¿Dónde quieres instalar la configuración?"
-Write-Host "  1) En este proyecto  (.\staffforge\)"
-Write-Host "  2) Global            ($env:LOCALAPPDATA\staffforge\)"
+Write-Host "Where do you want to install the configuration?"
+Write-Host "  1) In this project  (.\staffforge\)"
+Write-Host "  2) Global           ($env:LOCALAPPDATA\staffforge\)"
 Write-Host ""
-$locChoice = Read-Host "? Ubicación [1]"
+$locChoice = Read-Host "? Location [1]"
 
 if ($locChoice -eq "2") {
   $InstallDir = "$env:LOCALAPPDATA\staffforge"
@@ -69,17 +69,17 @@ if ($locChoice -eq "2") {
 
 # ── Download ──────────────────────────────────────────
 Write-Host ""
-Write-Host "→ Descargando StaffForge..." -ForegroundColor Cyan
+Write-Host "→ Downloading StaffForge..." -ForegroundColor Cyan
 git clone --depth 1 --branch $Branch $Repo $TmpDir 2>&1 | Out-Null
 Push-Location $TmpDir
 
-Write-Host "→ Instalando dependencias..." -ForegroundColor Cyan
+Write-Host "→ Installing dependencies..." -ForegroundColor Cyan
 npm install --silent 2>&1 | Out-Null
 
 # ── Export ────────────────────────────────────────────
 function Install-Platform {
   param([string]$platform, [string]$outDir)
-  Write-Host "→ Exportando para $platform..." -ForegroundColor Cyan
+  Write-Host "→ Exporting for $platform..." -ForegroundColor Cyan
   New-Item -ItemType Directory -Force -Path $outDir | Out-Null
   switch ($platform) {
     "opencode"    { node tools/install.mjs --agent $DefaultAgent --out $outDir }
@@ -99,9 +99,9 @@ if ($Platform -eq "all") {
   }
 
   Write-Host ""
-  Write-Host "✓ Todas las plataformas instaladas en: $InstallDir" -ForegroundColor Green
+  Write-Host "✓ All platforms installed at: $InstallDir" -ForegroundColor Green
   Write-Host ""
-  Write-Host "  Para copiar a tu proyecto:"
+  Write-Host "  To copy to your project:"
   Write-Host "    Copy-Item -Recurse $InstallDir\claude-code\*  .claude\"
   Write-Host "    Copy-Item -Recurse $InstallDir\cursor\.cursor ."
   Write-Host "    Copy-Item -Recurse $InstallDir\copilot\.github ."
@@ -110,22 +110,74 @@ if ($Platform -eq "all") {
 } else {
   Install-Platform $Platform $InstallDir
   Write-Host ""
-  Write-Host "✓ StaffForge instalado para $Platform" -ForegroundColor Green
+  Write-Host "✓ StaffForge installed for $Platform" -ForegroundColor Green
 
-  if ($Platform -eq "opencode") {
-    $opencodeJson = Join-Path $InstallDir "opencode.json"
-    $opencodeLink = Join-Path $UserProject "opencode.json"
-    if (Test-Path $opencodeJson) {
-      New-Item -ItemType SymbolicLink -Path $opencodeLink -Target $opencodeJson -Force | Out-Null
-      Write-Host "  ✓ Enlace creado: $opencodeLink → $opencodeJson" -ForegroundColor Green
+  # Copy files to project root (not symlink — so staffforge/ can be cleaned up)
+  switch ($Platform) {
+    "opencode" {
+      $src = Join-Path $InstallDir "opencode.json"
+      $dst = Join-Path $UserProject "opencode.json"
+      Copy-Item -Force $src $dst
+      Write-Host "  ✓ opencode.json copied" -ForegroundColor Green
+      Write-Host ""
+      Write-Host "  Now run: opencode"
     }
+    "copilot" {
+      $src = Join-Path $InstallDir ".github\copilot-instructions.md"
+      $dstDir = Join-Path $UserProject ".github"
+      New-Item -ItemType Directory -Force -Path $dstDir | Out-Null
+      Copy-Item -Force $src (Join-Path $dstDir "copilot-instructions.md")
+      Write-Host "  ✓ .github\copilot-instructions.md copied" -ForegroundColor Green
+    }
+    "cursor" {
+      $src = Join-Path $InstallDir ".cursor\rules"
+      $dstDir = Join-Path $UserProject ".cursor"
+      New-Item -ItemType Directory -Force -Path $dstDir | Out-Null
+      $dst = Join-Path $dstDir "rules"
+      Remove-Item -Recurse -Force $dst -ErrorAction SilentlyContinue
+      Copy-Item -Recurse -Force $src $dst
+      Write-Host "  ✓ .cursor\rules\ copied" -ForegroundColor Green
+    }
+    "aider" {
+      $src = Join-Path $InstallDir ".aider.rules.md"
+      $dst = Join-Path $UserProject ".aider.rules.md"
+      Copy-Item -Force $src $dst
+      Write-Host "  ✓ .aider.rules.md copied" -ForegroundColor Green
+    }
+    "gemini-cli" {
+      $src = Join-Path $InstallDir ".gemini"
+      $dst = Join-Path $UserProject ".gemini"
+      Remove-Item -Recurse -Force $dst -ErrorAction SilentlyContinue
+      Copy-Item -Recurse -Force $src $dst
+      Write-Host "  ✓ .gemini\ copied" -ForegroundColor Green
+    }
+    "claude-code" {
+      $src = Join-Path $InstallDir "CLAUDE.md"
+      $dst = Join-Path $UserProject "CLAUDE.md"
+      Copy-Item -Force $src $dst
+      $srcRules = Join-Path $InstallDir ".claude\rules"
+      $dstDir = Join-Path $UserProject ".claude"
+      New-Item -ItemType Directory -Force -Path $dstDir | Out-Null
+      $dstRules = Join-Path $dstDir "rules"
+      Remove-Item -Recurse -Force $dstRules -ErrorAction SilentlyContinue
+      Copy-Item -Recurse -Force $srcRules $dstRules
+      Write-Host "  ✓ CLAUDE.md + .claude\rules\ copied" -ForegroundColor Green
+    }
+  }
+
+  # Cleanup staffforge/ on project-level install
+  if ($InstallDir.StartsWith($UserProject)) {
     Write-Host ""
-    Write-Host "  Ahora ejecuta: opencode"
+    Write-Host "→ Cleaning up temporary files..." -ForegroundColor Cyan
+    Remove-Item -Recurse -Force $InstallDir -ErrorAction SilentlyContinue
+    $scriptPath = Join-Path $UserProject "install.ps1"
+    Remove-Item -Force $scriptPath -ErrorAction SilentlyContinue
+    Write-Host "✓ Cleanup complete" -ForegroundColor Green
   }
 }
 
 Write-Host ""
-Write-Host "Hecho. Los agentes están en: $InstallDir" -ForegroundColor White
+Write-Host "✓ Installation complete." -ForegroundColor Green
 
 Pop-Location
 Remove-Item -Recurse -Force $TmpDir -ErrorAction SilentlyContinue

@@ -32,20 +32,20 @@ NC='\033[0m'
 cleanup() { rm -rf "$TMP_DIR"; }
 trap cleanup EXIT
 
-echo -e "${BOLD}StaffForge AI Agent Framework — Instalación remota${NC}"
+echo -e "${BOLD}StaffForge AI Agent Framework — Remote Installation${NC}"
 echo ""
 
 # ── Platform ──────────────────────────────────────────
-echo "Selecciona la plataforma de IA:"
-echo "  1) opencode      — OpenCode (recomendado)"
+echo "Select the AI platform:"
+echo "  1) opencode      — OpenCode (recommended)"
 echo "  2) claude-code   — Claude Code"
 echo "  3) cursor        — Cursor"
 echo "  4) copilot       — GitHub Copilot"
 echo "  5) aider         — Aider"
 echo "  6) gemini-cli    — Gemini CLI"
-echo "  7) all           — Todas las plataformas"
+echo "  7) all           — All platforms"
 echo ""
-read $READ_OPTS -rp "? Plataforma [1]: " platform_choice
+read $READ_OPTS -rp "? Platform [1]: " platform_choice
 
 case "$platform_choice" in
   2|claude-code) PLATFORM="claude-code" ;;
@@ -59,12 +59,12 @@ esac
 
 # ── Default agent ─────────────────────────────────────
 echo ""
-echo "Selecciona el agente por defecto:"
-echo "  1) orchestrator  — coordina trabajo, crea ramas git flow, ejecuta pipelines"
-echo "  2) build         — acceso completo a herramientas"
-echo "  3) plan          — solo lectura (análisis y planificación)"
+echo "Select the default agent:"
+echo "  1) orchestrator  — coordinates work, creates git flow branches, executes pipelines"
+echo "  2) build         — full tool access"
+echo "  3) plan          — read-only (analysis and planning)"
 echo ""
-read $READ_OPTS -rp "? Agente por defecto [1]: " agent_choice
+read $READ_OPTS -rp "? Default agent [1]: " agent_choice
 
 case "$agent_choice" in
   2|build) DEFAULT_AGENT="build" ;;
@@ -74,11 +74,11 @@ esac
 
 # ── Location ──────────────────────────────────────────
 echo ""
-echo "¿Dónde quieres instalar la configuración?"
-echo "  1) En este proyecto  (./staffforge/)"
-echo "  2) Global            (~/.config/staffforge/)"
+echo "Where do you want to install the configuration?"
+echo "  1) In this project  (./staffforge/)"
+echo "  2) Global           (~/.config/staffforge/)"
 echo ""
-read $READ_OPTS -rp "? Ubicación [1]: " loc_choice
+read $READ_OPTS -rp "? Location [1]: " loc_choice
 
 if [ "$loc_choice" = "2" ]; then
   INSTALL_DIR="$HOME/.config/staffforge"
@@ -89,12 +89,12 @@ fi
 # ── Obtain framework code ─────────────────────────────
 if [ -f "tools/export.mjs" ]; then
   FRAMEWORK_DIR="$USER_PROJECT"
-  echo -e "${BLUE}→ Usando StaffForge local${NC}"
+  echo -e "${BLUE}→ Using local StaffForge${NC}"
 else
   FRAMEWORK_DIR="$TMP_DIR"
-  echo -e "${BLUE}→ Descargando StaffForge desde ${REPO}...${NC}"
+  echo -e "${BLUE}→ Downloading StaffForge from ${REPO}...${NC}"
   git clone --depth 1 --branch "$BRANCH" "$REPO" "$FRAMEWORK_DIR"
-  echo -e "${BLUE}→ Instalando dependencias...${NC}"
+  echo -e "${BLUE}→ Installing dependencies...${NC}"
   (cd "$FRAMEWORK_DIR" && npm install --silent)
 fi
 
@@ -104,7 +104,7 @@ cd "$FRAMEWORK_DIR"
 install_platform() {
   local platform="$1"
   local out_dir="$2"
-  echo -e "${BLUE}→ Exportando para ${platform}...${NC}"
+  echo -e "${BLUE}→ Exporting for ${platform}...${NC}"
   mkdir -p "$out_dir"
   case "$platform" in
     opencode)    node tools/install.mjs --agent "$DEFAULT_AGENT" --out "$out_dir" ;;
@@ -123,13 +123,13 @@ if [ "$PLATFORM" = "all" ]; then
     install_platform "$p" "${INSTALL_DIR}/${p}"
   done
   echo ""
-  echo -e "${GREEN}✓ Todas las plataformas instaladas en:${NC}  ${INSTALL_DIR}/"
+  echo -e "${GREEN}✓ All platforms installed at:${NC}  ${INSTALL_DIR}/"
   echo ""
-  echo "  Para usar con OpenCode directamente:"
+  echo "  To use with OpenCode directly:"
   echo "    ln -s ${INSTALL_DIR}/opencode/opencode.json ${USER_PROJECT}/opencode.json"
   echo "    opencode"
   echo ""
-  echo "  Para copiar a otras plataformas desde ${INSTALL_DIR}/:"
+  echo "  To copy to other platforms from ${INSTALL_DIR}/:"
   echo "    cp -r ${INSTALL_DIR}/claude-code/*  ${USER_PROJECT}/.claude/"
   echo "    cp -r ${INSTALL_DIR}/cursor/.cursor ${USER_PROJECT}/"
   echo "    cp -r ${INSTALL_DIR}/copilot/.github ${USER_PROJECT}/"
@@ -138,55 +138,55 @@ if [ "$PLATFORM" = "all" ]; then
 else
   install_platform "$PLATFORM" "$INSTALL_DIR"
   echo ""
-  echo -e "${GREEN}✓ StaffForge instalado para ${PLATFORM}${NC}"
+  echo -e "${GREEN}✓ StaffForge installed for ${PLATFORM}${NC}"
 
   # Copy files to project root (NOT symlink — so staffforge/ can be cleaned up)
   case "$PLATFORM" in
     opencode)
       cp "${INSTALL_DIR}/opencode.json" "${USER_PROJECT}/opencode.json"
-      echo -e "  ${GREEN}✓${NC} opencode.json copiado a ${USER_PROJECT}/"
+      echo -e "  ${GREEN}✓${NC} opencode.json copied to ${USER_PROJECT}/"
       echo ""
-      echo "  Ahora ejecuta: opencode"
+      echo "  Now run: opencode"
       ;;
     copilot)
       mkdir -p "${USER_PROJECT}/.github"
       cp "${INSTALL_DIR}/.github/copilot-instructions.md" "${USER_PROJECT}/.github/copilot-instructions.md"
-      echo -e "  ${GREEN}✓${NC} .github/copilot-instructions.md copiado"
+      echo -e "  ${GREEN}✓${NC} .github/copilot-instructions.md copied"
       ;;
     cursor)
       rm -rf "${USER_PROJECT}/.cursor/rules" 2>/dev/null
       mkdir -p "${USER_PROJECT}/.cursor"
       cp -r "${INSTALL_DIR}/.cursor/rules" "${USER_PROJECT}/.cursor/"
-      echo -e "  ${GREEN}✓${NC} .cursor/rules/ copiado"
+      echo -e "  ${GREEN}✓${NC} .cursor/rules/ copied"
       ;;
     aider)
       cp "${INSTALL_DIR}/.aider.rules.md" "${USER_PROJECT}/.aider.rules.md"
-      echo -e "  ${GREEN}✓${NC} .aider.rules.md copiado"
+      echo -e "  ${GREEN}✓${NC} .aider.rules.md copied"
       ;;
     gemini-cli)
       rm -rf "${USER_PROJECT}/.gemini" 2>/dev/null
       cp -r "${INSTALL_DIR}/.gemini" "${USER_PROJECT}/"
-      echo -e "  ${GREEN}✓${NC} .gemini/ copiado"
+      echo -e "  ${GREEN}✓${NC} .gemini/ copied"
       ;;
     claude-code)
       cp "${INSTALL_DIR}/CLAUDE.md" "${USER_PROJECT}/CLAUDE.md"
       rm -rf "${USER_PROJECT}/.claude/rules" 2>/dev/null
       mkdir -p "${USER_PROJECT}/.claude"
       cp -r "${INSTALL_DIR}/.claude/rules" "${USER_PROJECT}/.claude/"
-      echo -e "  ${GREEN}✓${NC} CLAUDE.md + .claude/rules/ copiados"
+      echo -e "  ${GREEN}✓${NC} CLAUDE.md + .claude/rules/ copied"
       ;;
   esac
 
   # ── Cleanup: remove staffforge/ and instala.sh on project-level install ──
   if [[ "$INSTALL_DIR" == "$USER_PROJECT"* ]]; then
     echo ""
-    echo -e "${BLUE}→ Limpiando archivos temporales...${NC}"
+    echo -e "${BLUE}→ Cleaning up temporary files...${NC}"
     rm -rf "$INSTALL_DIR"
     rm -f "${USER_PROJECT}/instala.sh" 2>/dev/null || true
-    echo -e "${GREEN}✓${NC} Limpieza completada"
+    echo -e "${GREEN}✓${NC} Cleanup complete"
   fi
 fi
 
 echo ""
-echo -e "${GREEN}${BOLD}✓ Instalación completada.${NC}"
+echo -e "${GREEN}${BOLD}✓ Installation complete.${NC}"
 cd "$USER_PROJECT"
