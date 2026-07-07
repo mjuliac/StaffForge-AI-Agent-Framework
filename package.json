@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
+  "type": "module",
   "scripts": {
     "postinstall": "cd tools && npm install",
-    "setup": "node tools/install.mjs",
-    "setup:opencode": "node tools/install.mjs --agent orchestrator",
-    "setup:build": "node tools/install.mjs --agent build",
-    "setup:plan": "node tools/install.mjs --agent plan",
+    "setup": "node install.mjs",
+    "setup:opencode": "node install.mjs --platform opencode --agent orchestrator -y",
+    "setup:build": "node install.mjs --platform opencode --agent build -y",
+    "setup:plan": "node install.mjs --platform opencode --agent plan -y",
     "export": "node tools/export.mjs",
     "export:opencode": "node tools/export.mjs --platform opencode",
     "export:claude": "node tools/export.mjs --platform claude-code",
@@ -17,8 +18,22 @@
     "export:aider": "node tools/export.mjs --platform aider",
     "export:gemini": "node tools/export.mjs --platform gemini-cli",
     "validate": "node tools/validate.mjs",
-    "init-agent": "node tools/init-agent.mjs"
+    "init-agent": "node tools/init-agent.mjs",
+    "publish:cli": "cd packages/cli && npm publish"
   },
+  "bin": "./install.mjs",
+  "files": [
+    "install.mjs",
+    "packages/",
+    "agents/",
+    "schemas/",
+    "templates/",
+    "adapters/",
+    "tools/",
+    "README.md",
+    "AGENTS.md",
+    "ORCHESTRATOR_MATRIX.md"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git"

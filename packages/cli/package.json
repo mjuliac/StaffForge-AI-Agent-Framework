@@ -1,0 +1,26 @@
+{
+  "name": "@staffforge/cli",
+  "version": "0.1.0",
+  "description": "StaffForge AI Agent Framework — universal installer",
+  "type": "module",
+  "bin": {
+    "staffforge": "./install.mjs"
+  },
+  "files": [
+    "install.mjs",
+    "package.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git"
+  },
+  "homepage": "https://github.com/mjuliac/StaffForge-AI-Agent-Framework#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

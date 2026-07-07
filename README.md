@@ -13,33 +13,32 @@ examples/         ← Usage examples
 
 ## Quick start
 
-### From your project — macOS / Linux
+### From any project — **one command, all OS**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/instala.sh | bash
+npx @staffforge/cli
 ```
 
-The interactive script asks for platform, default agent, and location (project or global), then downloads the framework and exports the agents to the correct paths for your chosen platform. It saves a `.staffforge-install.json` config so re-running the same command detects the previous install and offers to reinstall without re-asking:
+Interactive prompts ask for platform, default agent, and location. Works on Linux, macOS, and Windows — Node.js is the only requirement.
 
+Or non-interactive with flags:
 ```bash
-# Next time — update to the latest agents:
-curl -fsSL https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/instala.sh | bash
-# → Previous installation detected: copilot (agent: orchestrator)
-#   Reinstall with same settings? [Y/n]:  ← press Enter
+npx @staffforge/cli --platform opencode --agent orchestrator
 ```
 
+The installer saves a `.staffforge-install.json` config, so re-running detects previous settings:
+
 ```bash
-# After install (your platform's CLI):
+# Update to latest agents:
+npx @staffforge/cli
+# → Previous: opencode (agent: orchestrator)
+#   Reinstall? [Y/n]:  ← press Enter
+```
+
+After install:
+```bash
 opencode
 ```
-
-### From your project — Windows (PowerShell)
-
-```powershell
-iwr -useb https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/install.ps1 | iex
-```
-
-Same interactive flow with update detection. Global location uses `$env:LOCALAPPDATA\staffforge\`.
 
 ### Clone the repository (any OS)
 
@@ -47,8 +46,7 @@ Same interactive flow with update detection. Global location uses `$env:LOCALAPP
 git clone --depth 1 https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
 npm install
-npm run setup      # interactive installer (OpenCode)
-opencode
+npm run setup          # interactive installer
 ```
 
 ### Export to other platforms (after cloning)
@@ -60,6 +58,10 @@ npm run export:copilot     # GitHub Copilot
 npm run export:aider       # Aider
 npm run export:gemini      # Gemini CLI
 ```
+
+### Legacy installers
+
+The old platform-specific scripts (`instala.sh` for bash, `install.ps1` for PowerShell) still work but are deprecated. They now redirect to the unified Node.js installer.
 
 ---
 
@@ -192,16 +194,16 @@ cp -r adapters/gemini-cli/output/.gemini .
 ## Interactive installer
 
 ```bash
-node tools/install.mjs
+node install.mjs
 ```
 
-This runs the **OpenCode** export and copies `opencode.json` to the project root. You can also set the default agent:
+Runs the export for any supported platform and copies the config files to your project. Supports all flags:
 
 ```bash
-node tools/install.mjs --agent orchestrator   # default, coordinates all work
-node tools/install.mjs --agent build          # full tool access
-node tools/install.mjs --agent plan           # read-only mode
-node tools/install.mjs --agent build --out ~/my-project
+node install.mjs --platform opencode --agent orchestrator
+node install.mjs --platform claude-code --agent build
+node install.mjs --platform all
+node install.mjs -y                                 # defaults (opencode, orchestrator, project-local)
 ```
 
 ## Agent modes
@@ -269,7 +271,10 @@ The orchestrator:
 ```bash
 # Root-level (npm)
 npm install              # Install all dependencies (tools/ included)
-npm run setup            # Interactive OpenCode installer
+npm run setup            # Interactive installer
+npm run setup:opencode   # Non-interactive: OpenCode + orchestrator
+npm run setup:build      # Non-interactive: OpenCode + build agent
+npm run setup:plan       # Non-interactive: OpenCode + plan agent
 npm run export:opencode  # Export to OpenCode
 npm run export:claude    # Export to Claude Code
 npm run export:cursor    # Export to Cursor
@@ -279,10 +284,11 @@ npm run export:gemini    # Export to Gemini CLI
 npm run validate         # Validate all agents
 
 # Low-level (node)
+node install.mjs                      # Interactive installer (any platform)
+node install.mjs --platform opencode --agent orchestrator -y
 node tools/export.mjs --platform <name>   # Export agents for any platform
-node tools/install.mjs           # Interactive OpenCode installer
-node tools/validate.mjs          # Validate all 40 agent definitions
-node tools/init-agent.mjs <name> # Create a new agent from template
+node tools/validate.mjs              # Validate all agent definitions
+node tools/init-agent.mjs <name>     # Create a new agent from template
 ```
 
 ## Adapting to a new platform
@@ -293,4 +299,4 @@ node tools/init-agent.mjs <name> # Create a new agent from template
 
 ## opencode.json
 
-Not committed to repo. Generate with `node tools/export.mjs --platform opencode` or `node tools/install.mjs`.
+Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx @staffforge/cli`.
