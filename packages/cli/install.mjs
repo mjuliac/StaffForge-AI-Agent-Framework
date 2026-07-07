@@ -4,7 +4,7 @@
  * StaffForge AI Agent Framework — universal installer
  *
  * Local (repo cloned):    node install.mjs
- * Remote (any project):   npx @staffforge/cli
+ * Remote (any project):   npx github:mjuliac/StaffForge-AI-Agent-Framework
  *
  * Options:
  *   --platform <name>   opencode | claude-code | cursor | copilot | aider | gemini-cli | all
