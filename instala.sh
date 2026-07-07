@@ -140,14 +140,53 @@ else
   echo ""
   echo -e "${GREEN}✓ StaffForge instalado para ${PLATFORM}${NC}"
 
-  if [ "$PLATFORM" = "opencode" ]; then
-    ln -sf "${INSTALL_DIR}/opencode.json" "${USER_PROJECT}/opencode.json"
-    echo -e "  ${GREEN}✓${NC} Enlace creado: ${USER_PROJECT}/opencode.json → ${INSTALL_DIR}/opencode.json"
+  # Copy files to project root (NOT symlink — so staffforge/ can be cleaned up)
+  case "$PLATFORM" in
+    opencode)
+      cp "${INSTALL_DIR}/opencode.json" "${USER_PROJECT}/opencode.json"
+      echo -e "  ${GREEN}✓${NC} opencode.json copiado a ${USER_PROJECT}/"
+      echo ""
+      echo "  Ahora ejecuta: opencode"
+      ;;
+    copilot)
+      mkdir -p "${USER_PROJECT}/.github"
+      cp "${INSTALL_DIR}/.github/copilot-instructions.md" "${USER_PROJECT}/.github/copilot-instructions.md"
+      echo -e "  ${GREEN}✓${NC} .github/copilot-instructions.md copiado"
+      ;;
+    cursor)
+      rm -rf "${USER_PROJECT}/.cursor/rules" 2>/dev/null
+      mkdir -p "${USER_PROJECT}/.cursor"
+      cp -r "${INSTALL_DIR}/.cursor/rules" "${USER_PROJECT}/.cursor/"
+      echo -e "  ${GREEN}✓${NC} .cursor/rules/ copiado"
+      ;;
+    aider)
+      cp "${INSTALL_DIR}/.aider.rules.md" "${USER_PROJECT}/.aider.rules.md"
+      echo -e "  ${GREEN}✓${NC} .aider.rules.md copiado"
+      ;;
+    gemini-cli)
+      rm -rf "${USER_PROJECT}/.gemini" 2>/dev/null
+      cp -r "${INSTALL_DIR}/.gemini" "${USER_PROJECT}/"
+      echo -e "  ${GREEN}✓${NC} .gemini/ copiado"
+      ;;
+    claude-code)
+      cp "${INSTALL_DIR}/CLAUDE.md" "${USER_PROJECT}/CLAUDE.md"
+      rm -rf "${USER_PROJECT}/.claude/rules" 2>/dev/null
+      mkdir -p "${USER_PROJECT}/.claude"
+      cp -r "${INSTALL_DIR}/.claude/rules" "${USER_PROJECT}/.claude/"
+      echo -e "  ${GREEN}✓${NC} CLAUDE.md + .claude/rules/ copiados"
+      ;;
+  esac
+
+  # ── Cleanup: remove staffforge/ and instala.sh on project-level install ──
+  if [[ "$INSTALL_DIR" == "$USER_PROJECT"* ]]; then
     echo ""
-    echo "  Ahora ejecuta: opencode"
+    echo -e "${BLUE}→ Limpiando archivos temporales...${NC}"
+    rm -rf "$INSTALL_DIR"
+    rm -f "${USER_PROJECT}/instala.sh" 2>/dev/null || true
+    echo -e "${GREEN}✓${NC} Limpieza completada"
   fi
 fi
 
 echo ""
-echo -e "${BOLD}Hecho.${NC}  Los agentes están en: ${INSTALL_DIR}/"
+echo -e "${GREEN}${BOLD}✓ Instalación completada.${NC}"
 cd "$USER_PROJECT"
