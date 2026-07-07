@@ -84,7 +84,7 @@ node tools/export.mjs --platform opencode
 | `opencode.json` | Agent config (modes, permissions) |
 
 Agents with `mode: primary` appear in the **Tab** cycle (orchestrator, build, plan).
-Agents with `mode: subagent` appear in the **@** autocomplete menu (38 specialized agents).
+Agents with `mode: subagent` appear in the **@** autocomplete menu (133 specialized agents).
 
 > The `--out` flag copies the generated file elsewhere. For normal use, run without `--out` — the file is placed at `adapters/opencode/output/` and then copied to the project root by the installer.
 
@@ -141,7 +141,7 @@ node tools/export.mjs --platform copilot
 |--------|---------|
 | `.github/copilot-instructions.md` | All agents concatenated as instructions |
 
-Copilot reads `.github/copilot-instructions.md` automatically when it exists in the project. All 40 agents are included in a single file with `---` separators.
+Copilot reads `.github/copilot-instructions.md` automatically when it exists in the project. All 136 agents are included in a single file with `---` separators.
 
 Copy the output to your project root:
 

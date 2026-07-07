@@ -5,7 +5,7 @@ OpenCode multi-provider agent framework. Canonical agents in `agents/*.md`.
 ## Structure
 
 ```
-agents/           — 40 agent definitions with YAML frontmatter (mode, description, tools)
+agents/           — 136 agent definitions with YAML frontmatter (mode, description, tools)
 adapters/          — Platform exporters per platform (opencode, claude-code, cursor, copilot, aider, gemini-cli)
 schemas/           — JSON Schema for agent validation (agent.schema.json)
 templates/         — Scaffolding for new agents (agent.md)
@@ -67,4 +67,4 @@ node tools/init-agent.mjs <name>     # create a new agent from template
 
 ## opencode.json
 
-Not committed to repo. Generate with `node tools/export.mjs --platform opencode`.
+Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:mjuliac/StaffForge-AI-Agent-Framework`.

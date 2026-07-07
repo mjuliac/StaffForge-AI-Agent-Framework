@@ -4,12 +4,13 @@
  * StaffForge AI Agent Framework — universal installer
  *
  * Local (repo cloned):    node install.mjs
- * Remote (any project):   npx @staffforge/cli
+ * Remote (any project):   npx github:mjuliac/StaffForge-AI-Agent-Framework
  *
  * Options:
  *   --platform <name>   opencode | claude-code | cursor | copilot | aider | gemini-cli | all
  *   --agent <name>      orchestrator | build | plan
- *   --out <dir>         output directory (default: project root)
+ *   --out <dir>         output directory (project: copies to CWD; global: platform standard dir)
+ *   --global, -g        Install to platform's standard global directory
  *   --yes, -y           non-interactive, use defaults
  *   --help, -h          show help
  */
@@ -33,6 +34,15 @@ const TMP = join('/tmp', `staffforge-${process.pid}`);
 const CONFIG = join(CWD, '.staffforge-install.json');
 const ME = __dirname;
 
+const GLOBAL_DIRS = {
+  'opencode':   join(env.HOME || env.USERPROFILE || '~', '.config', 'opencode'),
+  'claude-code': join(env.HOME || env.USERPROFILE || '~', '.claude'),
+  'cursor':     join(env.HOME || env.USERPROFILE || '~', '.cursor'),
+  'copilot':    null,
+  'aider':      env.HOME || env.USERPROFILE || '~',
+  'gemini-cli': join(env.HOME || env.USERPROFILE || '~', '.gemini'),
+};
+
 // ── Colors ──
 const b = s => `\x1b[1m${s}\x1b[0m`;
 const g = s => `\x1b[32m${s}\x1b[0m`;
@@ -46,14 +56,24 @@ ${b('Usage:')}
   node install.mjs                          ${bl('# interactive')}
   node install.mjs -y                       ${bl('# non-interactive (defaults)')}
   node install.mjs --platform opencode --agent orchestrator
+  node install.mjs --global                 ${bl('# install globally for all projects')}
   npx github:mjuliac/StaffForge-AI-Agent-Framework              ${bl('# remote install')}
 
 ${b('Options:')}
   --platform <name>   Platform (opencode, claude-code, cursor, copilot, aider, gemini-cli, all)
   --agent <name>      Default agent (orchestrator, build, plan)
-  --out <dir>         Output directory
+  --out <dir>         Output directory (project: copies to CWD; global: platform standard dir)
+  --global, -g        Install to platform's standard global directory
   --yes, -y           Skip prompts, use defaults
   --help, -h          Show this help
+
+${b('Global directories per platform:')}
+  opencode          ~/.config/opencode/
+  claude-code       ~/.claude/
+  cursor            ~/.cursor/
+  copilot           (not supported globally, use project install)
+  aider             ~/.aider.rules.md
+  gemini-cli        ~/.gemini/
 `);
 }
 
@@ -67,6 +87,7 @@ function parseArgs() {
       case '--platform': o.platform = a[++i]; break;
       case '--agent': o.agent = a[++i]; break;
       case '--out': o.out = a[++i]; break;
+      case '--global': case '-g': o.global = true; break;
       case '--yes': case '-y': o.yes = true; break;
       default: console.error(`Unknown: ${a[i]}`); exit(1);
     }
@@ -115,37 +136,48 @@ function runExport(fwDir, platform, agent, out) {
   }
 }
 
-function copyResult(platform, src, dest) {
-  const cp = (f, d) => { copyFileSync(f, d); };
+function copyResult(platform, src, dest, isGlobal) {
+  const cp = (f, d) => { mkdirSync(dirname(d), { recursive: true }); copyFileSync(f, d); };
   const mv = (f, d) => { rmSync(d, { recursive: true, force: true }); mkdirSync(dirname(d), { recursive: true }); renameSync(f, d); };
+
+  if (isGlobal) {
+    const gd = GLOBAL_DIRS[platform];
+    if (!gd) {
+      console.log(`  ${b('!')} ${platform} has no standard global location. Use project install instead.`);
+      return;
+    }
+    dest = gd;
+  }
+
   switch (platform) {
     case 'opencode':
       cp(join(src, 'opencode.json'), join(dest, 'opencode.json'));
-      console.log(`  ${g('✓')} opencode.json → ${dest}/`);
       break;
-    case 'claude-code':
+    case 'claude-code': {
+      const cd = isGlobal ? dest : join(dest, '.claude');
       if (existsSync(join(src, 'CLAUDE.md'))) cp(join(src, 'CLAUDE.md'), join(dest, 'CLAUDE.md'));
-      if (existsSync(join(src, '.claude/rules'))) mv(join(src, '.claude/rules'), join(dest, '.claude/rules'));
-      console.log(`  ${g('✓')} CLAUDE.md + .claude/rules/`);
+      if (existsSync(join(src, '.claude/rules'))) mv(join(src, '.claude/rules'), join(cd, 'rules'));
       break;
-    case 'cursor':
-      if (existsSync(join(src, '.cursor/rules'))) mv(join(src, '.cursor/rules'), join(dest, '.cursor/rules'));
-      console.log(`  ${g('✓')} .cursor/rules/`);
+    }
+    case 'cursor': {
+      const cd = isGlobal ? dest : join(dest, '.cursor');
+      if (existsSync(join(src, '.cursor/rules'))) mv(join(src, '.cursor/rules'), join(cd, 'rules'));
       break;
+    }
     case 'copilot':
       mkdirSync(join(dest, '.github'), { recursive: true });
       if (existsSync(join(src, '.github/copilot-instructions.md'))) cp(join(src, '.github/copilot-instructions.md'), join(dest, '.github/copilot-instructions.md'));
-      console.log(`  ${g('✓')} .github/copilot-instructions.md`);
       break;
     case 'aider':
       if (existsSync(join(src, '.aider.rules.md'))) cp(join(src, '.aider.rules.md'), join(dest, '.aider.rules.md'));
-      console.log(`  ${g('✓')} .aider.rules.md`);
       break;
-    case 'gemini-cli':
-      if (existsSync(join(src, '.gemini'))) mv(join(src, '.gemini'), join(dest, '.gemini'));
-      console.log(`  ${g('✓')} .gemini/`);
+    case 'gemini-cli': {
+      const gd = isGlobal ? dest : join(dest, '.gemini');
+      if (existsSync(join(src, '.gemini'))) mv(join(src, '.gemini'), gd);
       break;
+    }
   }
+  console.log(`  ${g('✓')} ${platform} → ${dest}/`);
 }
 
 function isTracked(f) {
@@ -166,19 +198,20 @@ async function main() {
   else console.log(`${bl('→')} Using local StaffForge`);
 
   let p = o.platform, a = o.agent, d = o.out;
+  let isGlobal = o.global || false;
   const prev = loadPrev();
 
   // ── Auto defaults with --yes ──
   if (o.yes) {
     p = p || 'opencode';
     a = a || 'orchestrator';
-    d = d || join(CWD, 'staffforge');
+    if (!d) d = isGlobal ? null : join(CWD, 'staffforge');
   }
 
-  if (!o.yes && prev && !p && !a && !d) {
-    console.log(`${bl('→')} Previous: ${prev.platform} (agent: ${prev.defaultAgent})`);
+  if (!o.yes && prev && !p && !a && !d && !o.global) {
+    console.log(`${bl('→')} Previous: ${prev.platform} (agent: ${prev.defaultAgent})${prev.global ? ' [global]' : ''}`);
     const r = await ask('  Reinstall? [Y/n]: ');
-    if (r.toLowerCase() !== 'n' && r !== 'no') { p = prev.platform; a = prev.defaultAgent; d = prev.installDir; }
+    if (r.toLowerCase() !== 'n' && r !== 'no') { p = prev.platform; a = prev.defaultAgent; d = prev.installDir; isGlobal = prev.global || false; }
   }
 
   if (!p) {
@@ -199,13 +232,21 @@ async function main() {
     if (!['orchestrator','build','plan'].includes(a)) a = 'orchestrator';
   }
 
-  if (!d) {
+  if (!d && !isGlobal) {
     console.log('\nLocation:');
-    console.log('  1) Project  (./staffforge/)');
-    console.log('  2) Global   (~/.config/staffforge/)');
+    console.log('  1) Project   — copy to this project root (./)');
+    console.log('  2) Global    — copy to platform standard directory');
+    console.log('                  opencode  → ~/.config/opencode/');
+    console.log('                  claude    → ~/.claude/');
+    console.log('                  cursor    → ~/.cursor/');
+    console.log('                  aider     → ~/.aider.rules.md');
+    console.log('                  gemini-cli → ~/.gemini/');
     const c = (await ask('\n? [1]: ')).trim();
-    d = c === '2' ? join(env.HOME || env.USERPROFILE || '~', '.config', 'staffforge') : join(CWD, 'staffforge');
+    isGlobal = c === '2';
+    d = isGlobal ? null : join(CWD, 'staffforge');
   }
+
+  if (isGlobal && !d) d = join(CWD, '.staffforge-tmp');
 
   d = resolve(d);
   const platforms = p === 'all' ? ['opencode','claude-code','cursor','copilot','aider','gemini-cli'] : [p];
@@ -215,24 +256,31 @@ async function main() {
   }
 
   if (p === 'all') {
-    console.log(`\n${g('✓')} All platforms at: ${d}/`);
+    console.log(`\n${g('✓')} All platforms exported to staging: ${d}/`);
+    if (isGlobal) {
+      console.log(`${bl('→')} Copying each platform to its global directory...\n`);
+      for (const pl of platforms) {
+        copyResult(pl, join(d, pl), CWD, true);
+      }
+    }
   } else {
     console.log(`\n${g('✓')} StaffForge installed for ${p}`);
-    copyResult(p, d, CWD);
+    copyResult(p, d, CWD, isGlobal);
   }
 
-  if (p !== 'all') savePrev({ platform: p, defaultAgent: a, installDir: d });
+  if (p !== 'all') savePrev({ platform: p, defaultAgent: a, installDir: d, global: isGlobal });
 
   // Cleanup
   if (downloaded) {
     console.log(`\n${bl('→')} Cleaning up...`);
     rmSync(fw, { recursive: true, force: true });
-  } else if (d.startsWith(CWD) && !d.includes('node_modules')) {
+  } else if (!isGlobal && d.startsWith(CWD) && !d.includes('node_modules')) {
     const name = process.platform === 'win32' ? 'install.ps1' : 'instala.sh';
     const sp = join(CWD, name);
     if (existsSync(sp) && !isTracked(sp)) rmSync(sp, { force: true });
     if (existsSync(d) && d !== CWD) rmSync(d, { recursive: true, force: true });
   }
+  // For global, keep staging for reference and leave cleanup to user
 
   console.log(`\n${b(g('✓ Installation complete.'))}\n`);
   rl.close();
