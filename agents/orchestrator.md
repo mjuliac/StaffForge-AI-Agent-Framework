@@ -162,6 +162,13 @@ Follow the parallel execution strategy below.
 You MUST always launch every independent agent in parallel using a single message with multiple Task tool calls.
 Never send one Task call, wait for it, then send another — unless the second agent depends on the first's output.
 
+### Two execution modes
+
+| Mode | When | How |
+|------|------|-----|
+| **Parallel** | Agents have no dependency on each other | Launch all in ONE message with multiple Task calls |
+| **Sequential** | Agent B needs Agent A's output | Run A first, collect its result, include relevant output in B's prompt, then run B |
+
 ### Dependency analysis
 - Consult `ORCHESTRATOR_MATRIX.md` for the pipeline of the given task type
 - Analyze which steps produce outputs consumed by others (dependency edges)
@@ -171,34 +178,55 @@ Never send one Task call, wait for it, then send another — unless the second a
 - Execute level by level
 - Within each level, launch all subagents simultaneously via the Task tool in ONE message (multiple concurrent invocations)
 - Collect all results from a level before advancing to the next
+- When moving between levels: read the output of every agent from the previous level and pass relevant context to the next level's agents
 - If a step fails, decide whether the pipeline can continue or must abort based on dependency criticality
 
-### Concrete example — Feature level 1
+### Concrete example — Feature pipeline (parallel + sequential)
 
-Instead of:
+**Level 0 — sequential (Git → Planner):**
 ```
-❌ Task tool: Requirements           # wait...
-❌ Task tool: Architect (only after)  # wrong
+Task(Git, "create feature/user-auth branch")  → wait for result
+Task(Planner, "plan implementation")           → include Git's branch output
 ```
 
-Do:
+**Level 1 — parallel:**
 ```
 ✅ One message with TWO Task calls:
-   Task(Requirements) + Task(Architect)   # parallel
+   Task(Requirements) + Task(Architect)
 ```
 
-### Concrete example — Feature level 3
-
+**Level 2 — sequential (requires Level 1 output):**
 ```
-✅ One message with THREE Task calls:
+Read Requirements + Architect results.
+✅ One message with ONE Task call:
+   Task(Knowledge, include Requirements + Architect findings)
+```
+
+**Level 3 — parallel:**
+```
+✅ One message with FOUR Task calls:
    Task(Impact) + Task(Language) + Task(Security) + Task(Testing)
 ```
 
-### Outside the pipeline
-Even for informal research, exploration, or lookup tasks — if two agents have no dependency, batch them.
-Example: "Find how auth works and check the DB schema" →
+**Level 4 — parallel (requires Level 3 output):**
 ```
+Read all Level 3 outputs. Include code + findings.
+✅ One message with TWO Task calls:
+   Task(Code Review, pass all code) + Task(Documentation, pass all findings)
+```
+
+### Concrete examples outside the pipeline
+
+**Parallel** — independent research:
+```
+Find how auth works and check the DB schema:
 ✅ Task(explore, auth code) + Task(explore, schema)
+```
+
+**Sequential** — second agent needs first agent's result:
+```
+Find the login endpoint, then write a test for it:
+✅ Task(explore, login endpoint) → read result → Task(testing, "write test for: <endpoint details>")
 ```
 
 ### Dependency graph by task type
