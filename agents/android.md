@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - android
+  - kotlin
+  - mobile
+  - java
+capabilities:
+  - code
+  - activity
+  - fragment
 ---
 
 # Android

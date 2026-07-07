@@ -7,6 +7,16 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - aws
+  - cloud
+  - infrastructure
+  - amazon
+capabilities:
+  - deploy
+  - serverless
+  - s3
+  - lambda
 ---
 
 # Aws

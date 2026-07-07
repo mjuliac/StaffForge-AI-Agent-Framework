@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - sqlalchemy
+  - python
+  - orm
+  - database
+capabilities:
+  - schema
+  - query
+  - migration
 ---
 # Sqlalchemy
 

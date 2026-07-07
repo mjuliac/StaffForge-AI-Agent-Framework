@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - cassandra
+  - nosql
+  - database
+  - wide-column
+capabilities:
+  - query
+  - cql
+  - replication
 ---
 
 # Cassandra

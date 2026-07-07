@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - azure
+  - cloud
+  - microsoft
+  - infrastructure
+capabilities:
+  - deploy
+  - function
+  - app-service
 ---
 
 # Azure

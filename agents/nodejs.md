@@ -7,6 +7,10 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - nodejs
+capabilities:
+  - code
 ---
 
 # Node.js

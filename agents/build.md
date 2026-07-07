@@ -7,6 +7,15 @@ tools:
   write: true
   bash: true
   edit: true
+keywords:
+  - build
+  - compile
+  - bundle
+  - artifact
+capabilities:
+  - build
+  - compile
+  - package
 ---
 # Build
 

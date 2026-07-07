@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - redux
+  - state-management
+  - react
+  - store
+capabilities:
+  - state
+  - reducer
+  - middleware
 ---
 
 # Redux

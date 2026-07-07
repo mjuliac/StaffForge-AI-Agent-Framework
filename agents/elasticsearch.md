@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - elasticsearch
+  - elastic
+  - search
+  - analytics
+capabilities:
+  - search
+  - index
+  - aggregation
 ---
 
 # Elasticsearch

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - serilog
+  - dotnet
+  - logging
+  - structured
+capabilities:
+  - log
+  - sink
+  - enricher
 ---
 
 # Serilog

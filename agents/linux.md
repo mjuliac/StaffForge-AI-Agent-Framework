@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - linux
+  - unix
+  - os
+  - sysadmin
+capabilities:
+  - shell
+  - config
+  - sysadmin
 ---
 # Linux
 

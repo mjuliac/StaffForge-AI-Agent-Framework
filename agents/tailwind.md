@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - tailwind
+  - css
+  - styling
+  - utility
+capabilities:
+  - style
+  - responsive
+  - design
 ---
 
 # Tailwind CSS

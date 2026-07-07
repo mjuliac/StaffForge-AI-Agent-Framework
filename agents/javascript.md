@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - javascript
+  - js
+  - programming
+  - web
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # JavaScript

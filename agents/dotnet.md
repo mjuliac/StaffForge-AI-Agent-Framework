@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - dotnet
+  - .net
+  - csharp
+  - framework
+capabilities:
+  - code
+  - build
+  - nuget
 ---
 
 # .NET

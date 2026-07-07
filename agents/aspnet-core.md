@@ -7,6 +7,16 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - aspnet-core
+  - asp.net
+  - csharp
+  - dotnet
+  - web
+capabilities:
+  - code
+  - controller
+  - middleware
 ---
 
 # ASP.NET Core

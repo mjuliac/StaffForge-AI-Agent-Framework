@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - express
+  - nodejs
+  - backend
+  - api
+capabilities:
+  - code
+  - middleware
+  - route
 ---
 
 # Express

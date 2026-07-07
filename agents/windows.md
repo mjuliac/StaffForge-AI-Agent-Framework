@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - windows
+  - microsoft
+  - os
+  - sysadmin
+capabilities:
+  - shell
+  - config
+  - sysadmin
 ---
 
 # Windows

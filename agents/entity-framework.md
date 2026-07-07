@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - entity-framework
+  - ef
+  - dotnet
+  - orm
+capabilities:
+  - schema
+  - query
+  - migration
 ---
 
 # Entity Framework

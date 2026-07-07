@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - microservices
+  - distributed
+  - architecture
+  - soa
+capabilities:
+  - design
+  - decompose
+  - communicate
 ---
 # Microservices
 

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - clean-architecture
+  - architecture
+  - ddd
+  - solid
+capabilities:
+  - design
+  - layer
+  - separation-of-concerns
 ---
 # Clean-Architecture
 

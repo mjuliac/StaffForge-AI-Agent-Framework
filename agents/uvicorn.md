@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - uvicorn
+  - python
+  - asgi
+  - server
+capabilities:
+  - serve
+  - async
+  - reload
 ---
 
 # Uvicorn

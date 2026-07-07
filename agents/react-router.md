@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - react-router
+  - react
+  - routing
+  - spa
+capabilities:
+  - route
+  - navigation
+  - param
 ---
 
 # React Router

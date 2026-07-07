@@ -2,11 +2,22 @@
 id: orchestrator
 name: Orchestrator
 mode: primary
-description: Coordinates all work, delegates git to @git and complex shell to @bash/@powershell, routes tasks, communicates with the user.
+description: >-
+  Coordinates all work, delegates git to @git and complex shell to @bash/@powershell, routes tasks, communicates with
+  the user.
 tools:
   write: true
   bash: true
   edit: true
+keywords:
+  - orchestrator
+  - routing
+  - pipeline
+  - coordination
+capabilities:
+  - route
+  - delegate
+  - coordinate
 ---
 # Orchestrator
 

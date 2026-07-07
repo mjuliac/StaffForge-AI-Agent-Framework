@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - performance
+  - optimization
+  - profiling
+  - speed
+capabilities:
+  - profile
+  - optimize
+  - benchmark
 ---
 # Performance
 

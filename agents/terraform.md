@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - terraform
+  - iac
+  - infrastructure
+  - cloud
+capabilities:
+  - provision
+  - module
+  - state
 ---
 
 # Terraform

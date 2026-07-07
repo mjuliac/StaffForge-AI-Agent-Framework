@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - sre
+  - reliability
+  - sla
+  - incident
+capabilities:
+  - monitor
+  - alert
+  - incident-response
 ---
 
 # Site Reliability

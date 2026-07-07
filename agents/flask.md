@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - flask
+  - python
+  - backend
+  - web
+capabilities:
+  - code
+  - route
+  - blueprint
 ---
 
 # Flask

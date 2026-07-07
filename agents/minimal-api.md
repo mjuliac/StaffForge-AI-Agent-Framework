@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - minimal-api
+  - dotnet
+  - csharp
+  - api
+capabilities:
+  - route
+  - endpoint
+  - lightweight
 ---
 
 # Minimal API

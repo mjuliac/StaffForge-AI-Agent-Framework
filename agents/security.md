@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - security
+  - owasp
+  - vulnerability
+  - audit
+capabilities:
+  - audit
+  - review
+  - scan
 ---
 # Security
 

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - java
+  - jvm
+  - programming
+  - backend
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # Java

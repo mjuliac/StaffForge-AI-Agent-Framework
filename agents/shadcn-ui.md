@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - shadcn-ui
+  - react
+  - ui
+  - components
+capabilities:
+  - component
+  - design-system
+  - tailwind
 ---
 
 # shadcn/ui

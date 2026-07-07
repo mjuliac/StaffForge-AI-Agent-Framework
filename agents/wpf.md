@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - wpf
+  - dotnet
+  - csharp
+  - desktop
+capabilities:
+  - code
+  - ui
+  - xaml
 ---
 
 # WPF

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - gunicorn
+  - python
+  - wsgi
+  - server
+capabilities:
+  - serve
+  - workers
+  - deployment
 ---
 
 # Gunicorn

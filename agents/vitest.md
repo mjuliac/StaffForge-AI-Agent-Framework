@@ -7,6 +7,16 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - vitest
+  - javascript
+  - testing
+  - unit-test
+capabilities:
+  - test
+  - mock
+  - assert
+  - vite
 ---
 
 # Vitest

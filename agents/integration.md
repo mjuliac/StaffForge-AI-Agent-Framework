@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - integration
+  - integration-testing
+  - e2e
+  - api-test
+capabilities:
+  - test
+  - integrate
+  - verify
 ---
 
 # Integration

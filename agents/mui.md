@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - mui
+  - material-ui
+  - react
+  - ui
+capabilities:
+  - component
+  - design-system
+  - theming
 ---
 
 # Material UI

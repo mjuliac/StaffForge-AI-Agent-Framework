@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - pyside6
+  - python
+  - qt
+  - gui
+capabilities:
+  - gui
+  - widget
+  - signal-slot
 ---
 # Pyside6
 

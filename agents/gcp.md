@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - gcp
+  - google-cloud
+  - cloud
+  - infrastructure
+capabilities:
+  - deploy
+  - function
+  - run
 ---
 
 # Gcp

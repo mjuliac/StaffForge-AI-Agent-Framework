@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - angular
+  - frontend
+  - web
+  - typescript
+capabilities:
+  - code
+  - component
+  - service
 ---
 
 # Angular

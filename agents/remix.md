@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - remix
+  - react
+  - fullstack
+  - web
+capabilities:
+  - code
+  - server-component
+  - loader
 ---
 
 # Remix

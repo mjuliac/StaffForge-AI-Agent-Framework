@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - mysql
+  - database
+  - sql
+  - relational
+capabilities:
+  - query
+  - schema
+  - migration
 ---
 
 # Mysql

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - pydantic
+  - python
+  - validation
+  - schema
+capabilities:
+  - validation
+  - schema
+  - serialization
 ---
 
 # Pydantic

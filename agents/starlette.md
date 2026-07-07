@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - starlette
+  - python
+  - asgi
+  - web
+capabilities:
+  - code
+  - middleware
+  - route
 ---
 
 # Starlette

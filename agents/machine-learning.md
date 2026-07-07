@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - machine-learning
+  - ml
+  - ai
+  - data-science
+capabilities:
+  - train
+  - predict
+  - evaluate
 ---
 
 # Machine Learning

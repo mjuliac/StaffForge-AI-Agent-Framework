@@ -7,6 +7,14 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - php
+  - programming
+  - web
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # Php

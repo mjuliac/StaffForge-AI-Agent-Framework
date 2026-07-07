@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - qt-designer
+  - qt
+  - gui
+  - ui-designer
+capabilities:
+  - design
+  - widget
+  - layout
 ---
 # Qt-Designer
 

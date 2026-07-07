@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - ui-ux
+  - design
+  - user-experience
+  - interface
+capabilities:
+  - design
+  - prototype
+  - usability
 ---
 # Ui-Ux
 

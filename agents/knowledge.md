@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - knowledge
+  - discovery
+  - search
+  - codebase
+capabilities:
+  - search
+  - find
+  - explore
 ---
 # Knowledge
 

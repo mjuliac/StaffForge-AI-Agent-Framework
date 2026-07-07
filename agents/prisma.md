@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - prisma
+  - orm
+  - database
+  - typescript
+capabilities:
+  - schema
+  - query
+  - migration
 ---
 
 # Prisma

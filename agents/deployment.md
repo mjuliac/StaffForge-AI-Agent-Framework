@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - deployment
+  - deploy
+  - cd
+  - release
+capabilities:
+  - deploy
+  - rollback
+  - canary
 ---
 # Deployment
 

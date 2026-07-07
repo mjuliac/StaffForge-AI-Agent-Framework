@@ -7,6 +7,14 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - python
+  - programming
+  - backend
+capabilities:
+  - code
+  - lint
+  - test
 ---
 # Python
 

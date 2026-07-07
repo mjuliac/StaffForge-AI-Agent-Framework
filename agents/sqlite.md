@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - sqlite
+  - database
+  - sql
+  - embedded
+capabilities:
+  - query
+  - schema
+  - migration
 ---
 # Sqlite
 

@@ -7,6 +7,14 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - astro
+  - frontend
+  - ssg
+  - islands
+capabilities:
+  - code
+  - static-site-generation
 ---
 
 # Astro

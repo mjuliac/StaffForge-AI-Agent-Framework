@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - django
+  - python
+  - backend
+  - web
+capabilities:
+  - code
+  - orm
+  - admin
 ---
 # Django
 

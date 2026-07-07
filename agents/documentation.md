@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - documentation
+  - docs
+  - readme
+  - wiki
+capabilities:
+  - write
+  - generate
+  - format
 ---
 # Documentation
 

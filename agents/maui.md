@@ -7,6 +7,16 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - maui
+  - dotnet
+  - csharp
+  - mobile
+  - desktop
+capabilities:
+  - code
+  - ui
+  - cross-platform
 ---
 
 # Maui

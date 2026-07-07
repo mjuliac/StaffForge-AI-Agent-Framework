@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - sql-server
+  - mssql
+  - database
+  - sql
+capabilities:
+  - query
+  - schema
+  - migration
 ---
 
 # Sqlserver

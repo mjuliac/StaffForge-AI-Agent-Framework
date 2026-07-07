@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - jenkins
+  - ci
+  - cd
+  - automation
+capabilities:
+  - pipeline
+  - job
+  - ci
 ---
 
 # Jenkins

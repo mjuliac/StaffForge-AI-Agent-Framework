@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - zustand
+  - state-management
+  - react
+  - store
+capabilities:
+  - state
+  - store
+  - hook
 ---
 
 # Zustand

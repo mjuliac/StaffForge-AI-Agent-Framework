@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - fastapi
+  - python
+  - api
+  - backend
+capabilities:
+  - code
+  - route
+  - validation
 ---
 # Fastapi
 

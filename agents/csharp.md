@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - csharp
+  - c#
+  - dotnet
+  - programming
+capabilities:
+  - code
+  - lint
+  - test
 ---
 # Csharp
 

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - architect
+  - design
+  - architecture
+  - patterns
+capabilities:
+  - design
+  - review
+  - plan
 ---
 # Architect
 

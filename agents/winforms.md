@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - winforms
+  - dotnet
+  - csharp
+  - desktop
+capabilities:
+  - code
+  - ui
+  - windows
 ---
 
 # Windows Forms

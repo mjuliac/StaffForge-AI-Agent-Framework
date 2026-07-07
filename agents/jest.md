@@ -7,6 +7,16 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - jest
+  - javascript
+  - testing
+  - unit-test
+capabilities:
+  - test
+  - mock
+  - assert
+  - snapshot
 ---
 
 # Jest

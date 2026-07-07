@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - monitoring
+  - observability
+  - metrics
+  - alert
+capabilities:
+  - monitor
+  - dashboard
+  - alert
 ---
 
 # Monitoring

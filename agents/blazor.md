@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - blazor
+  - dotnet
+  - csharp
+  - wasm
+capabilities:
+  - code
+  - component
+  - interactivity
 ---
 
 # Blazor

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - e2e
+  - end-to-end
+  - testing
+  - browser
+capabilities:
+  - test
+  - automate
+  - verify
 ---
 
 # End-to-End Testing

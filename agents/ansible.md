@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - ansible
+  - automation
+  - config-management
+  - devops
+capabilities:
+  - playbook
+  - provision
+  - deploy
 ---
 
 # Ansible

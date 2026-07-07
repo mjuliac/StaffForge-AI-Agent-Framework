@@ -7,6 +7,13 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - svelte
+  - frontend
+  - web
+capabilities:
+  - code
+  - component
 ---
 
 # Svelte

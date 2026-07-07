@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - websocket
+  - ws
+  - realtime
+  - bidirectional
+capabilities:
+  - connection
+  - event
+  - streaming
 ---
 
 # Websocket

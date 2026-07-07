@@ -7,6 +7,16 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - nextjs
+  - next.js
+  - react
+  - fullstack
+  - ssr
+capabilities:
+  - code
+  - server-component
+  - api-route
 ---
 
 # Next.js

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - code-review
+  - review
+  - quality
+  - best-practices
+capabilities:
+  - review
+  - lint
+  - feedback
 ---
 # Code-Review
 

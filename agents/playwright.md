@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - playwright
+  - e2e
+  - testing
+  - browser
+capabilities:
+  - test
+  - e2e
+  - browser-automation
 ---
 
 # Playwright

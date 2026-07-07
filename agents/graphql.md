@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - graphql
+  - api
+  - query
+  - backend
+capabilities:
+  - schema
+  - resolver
+  - mutation
 ---
 
 # Graphql

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - debugging
+  - debug
+  - troubleshooting
+  - fix
+capabilities:
+  - trace
+  - analyze
+  - fix
 ---
 # Debugging
 

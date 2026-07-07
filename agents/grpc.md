@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - grpc
+  - rpc
+  - api
+  - proto
+capabilities:
+  - service
+  - protobuf
+  - streaming
 ---
 
 # Grpc

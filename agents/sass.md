@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - sass
+  - scss
+  - css
+  - styling
+capabilities:
+  - style
+  - mixin
+  - variable
 ---
 
 # Sass

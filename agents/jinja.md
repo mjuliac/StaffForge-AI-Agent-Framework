@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - jinja
+  - jinja2
+  - python
+  - template
+capabilities:
+  - template
+  - render
+  - generation
 ---
 
 # Jinja

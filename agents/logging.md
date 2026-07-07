@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - logging
+  - log
+  - observability
+  - structured
+capabilities:
+  - log
+  - aggregate
+  - analyze
 ---
 # Logging
 

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - alembic
+  - python
+  - migration
+  - database
+capabilities:
+  - migration
+  - schema
+  - versioning
 ---
 
 # Alembic

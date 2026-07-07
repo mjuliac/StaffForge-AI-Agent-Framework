@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - api-design
+  - rest
+  - openapi
+  - contract
+capabilities:
+  - schema
+  - docs
+  - versioning
 ---
 # Api-Design
 

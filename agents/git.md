@@ -7,6 +7,16 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - git
+  - version-control
+  - branch
+  - commit
+capabilities:
+  - branch
+  - commit
+  - merge
+  - push
 ---
 # Git
 

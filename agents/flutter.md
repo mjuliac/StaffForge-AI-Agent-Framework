@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - flutter
+  - dart
+  - mobile
+  - ui
+capabilities:
+  - code
+  - widget
+  - cross-platform
 ---
 
 # Flutter

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - react-query
+  - tanstack
+  - react
+  - data-fetching
+capabilities:
+  - query
+  - mutation
+  - cache
 ---
 
 # React Query

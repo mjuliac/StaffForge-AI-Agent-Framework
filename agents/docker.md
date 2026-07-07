@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - docker
+  - container
+  - devops
+  - infra
+capabilities:
+  - build
+  - compose
+  - containerize
 ---
 # Docker
 

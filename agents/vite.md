@@ -7,6 +7,10 @@ tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - vite
+capabilities:
+  - code
 ---
 
 # Vite

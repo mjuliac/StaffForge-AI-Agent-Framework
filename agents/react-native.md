@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - react-native
+  - react
+  - mobile
+  - native
+capabilities:
+  - code
+  - component
+  - mobile
 ---
 
 # React Native

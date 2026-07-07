@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - macos
+  - apple
+  - os
+  - desktop
+capabilities:
+  - shell
+  - config
+  - sysadmin
 ---
 
 # Macos

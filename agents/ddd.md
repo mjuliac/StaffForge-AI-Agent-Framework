@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - ddd
+  - domain-driven-design
+  - architecture
+  - ubiquitous-language
+capabilities:
+  - model
+  - aggregate
+  - bounded-context
 ---
 # Ddd
 

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - dapper
+  - dotnet
+  - orm
+  - micro-orm
+capabilities:
+  - query
+  - mapping
+  - performance
 ---
 
 # Dapper

@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - tkinter
+  - python
+  - gui
+  - desktop
+capabilities:
+  - gui
+  - widget
+  - event
 ---
 
 # Tkinter

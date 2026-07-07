@@ -7,6 +7,15 @@ tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - celery
+  - python
+  - task-queue
+  - async
+capabilities:
+  - task
+  - queue
+  - schedule
 ---
 
 # Celery
