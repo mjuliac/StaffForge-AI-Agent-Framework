@@ -13,33 +13,33 @@ examples/         ← Usage examples
 
 ## Quick start
 
-### Desde tu proyecto (recomendado)
-
-Ejecuta desde la raíz de cualquier proyecto donde quieras usar los agentes:
+### Desde tu proyecto — macOS / Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/instala.sh | bash
 ```
 
-El script te guía:
-1. Seleccionas la plataforma de IA (OpenCode, Claude Code, Cursor, etc.)
-2. Seleccionas el agente por defecto (orchestrator, build, plan)
-3. Seleccionas ubicación: en tu proyecto (`./staffforge/`) o global (`~/.config/staffforge/`)
-4. Descarga el framework, exporta los agentes, y los instala
-
-Para OpenCode automáticamente crea un enlace `opencode.json` → `staffforge/opencode/opencode.json`.
+El script te guía: seleccionas plataforma, agente por defecto, ubicación (proyecto o global), descarga el framework y exporta los agentes. Para OpenCode crea automáticamente el enlace `opencode.json`.
 
 ```bash
 # Tras la instalación:
 opencode
 ```
 
-### Clonando el repositorio
+### Desde tu proyecto — Windows (PowerShell)
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/mjuliac/StaffForge-AI-Agent-Framework/develop/install.ps1 | iex
+```
+
+Mismo flujo interactivo. La ubicación global usa `$env:LOCALAPPDATA\staffforge\`.
+
+### Clonando el repositorio (cualquier SO)
 
 ```bash
 git clone --depth 1 https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
-npm install        # instala dependencias automáticamente
+npm install
 npm run setup      # instalador interactivo (OpenCode)
 opencode
 ```
