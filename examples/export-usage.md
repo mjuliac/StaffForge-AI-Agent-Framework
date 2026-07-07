@@ -29,16 +29,15 @@ node tools/export.mjs --platform gemini-cli
 node tools/export.mjs --platform claude-code --out ~/my-project/
 node tools/export.mjs --platform opencode --out ~/my-project/
 
-# --- Unified installer (any platform, any OS) ---
+# --- Interactive installer (OpenCode only) ---
 
-# Remote (no clone needed)
-npx github:mjuliac/StaffForge-AI-Agent-Framework
+node tools/install.mjs
 
-# Local (repo cloned)
-node install.mjs
+# --- Non-interactive installer ---
 
-# Non-interactive
-node install.mjs --platform opencode --agent orchestrator -y
+node tools/install.mjs --agent orchestrator
+node tools/install.mjs --agent build
+node tools/install.mjs --agent plan
 
 # --- Copy to project root (for non-OpenCode platforms) ---
 
