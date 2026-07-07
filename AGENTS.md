@@ -20,12 +20,12 @@ See `ORCHESTRATOR_MATRIX.md`.
 
 | Type       | Pipeline |
 |------------|----------|
-| Feature    | Git (feature/*) → Planner → Requirements → Architect → Knowledge → Impact → Language → Security → Testing → Code Review → Documentation → Git (merge) |
-| Bug        | Git (bugfix/*) → Planner → Knowledge → Impact → Debugging → Language → Testing → Code Review → Git (merge) |
-| Refactor   | Git (feature/*) → Architect → Refactor → Performance → Code Review → Git (merge) |
-| Security   | Git (feature/*) → Security → Pentest → Code Review → Git (merge) |
-| Deployment | Git (release/*) → Docker → Kubernetes → Build → Release → Documentation → Git (tag) |
-| Hotfix     | Git (hotfix/*) → Debugging → Code Review → Git (tag + merge to main + develop) |
+| Feature    | Git → Planner → [Requirements+Architect] → Knowledge → Impact → [Language+Security+Testing] → [Code Review+Documentation] → Git merge |
+| Bug        | Git → Planner → [Knowledge+Impact] → Debugging → [Language+Testing] → Code Review → Git merge |
+| Refactor   | Git → Architect → [Refactor+Performance] → Code Review → Git merge |
+| Security   | Git → Security → Pentest → Code Review → Git merge |
+| Deployment | Git → [Docker+Kubernetes] → [Build+Release] → Documentation → Git tag |
+| Hotfix     | Git → Debugging → Code Review → Git tag + merge to main + develop |
 
 ## Conventions
 

@@ -1,6 +1,9 @@
 
 # Routing Matrix
 
+> **Notation:** `+` between agents means they run in **parallel** at the same level.
+> Sequential `→` means the previous step must complete before the next begins.
+
 ## Git Flow Integration
 
 All task types create a branch via the `git` agent before starting work:
@@ -16,19 +19,28 @@ All task types create a branch via the `git` agent before starting work:
 
 ### Feature
 ```
-Git (create feature/*) → Planner → Requirements → Architect → Knowledge → Impact
-→ Language Specialist → Security → Testing → Code Review → Documentation → Git (merge)
+Git (create feature/*) → Planner
+→ [Requirements + Architect] (parallel)
+→ Knowledge → Impact
+→ [Language Specialist + Security + Testing] (parallel)
+→ [Code Review + Documentation] (parallel)
+→ Git (merge)
 ```
 
 ### Bug Fix
 ```
-Git (create bugfix/*) → Planner → Knowledge → Impact → Debugging → Language Specialist
-→ Testing → Code Review → Git (merge)
+Git (create bugfix/*) → Planner
+→ [Knowledge + Impact] (parallel)
+→ Debugging
+→ [Language Specialist + Testing] (parallel)
+→ Code Review → Git (merge)
 ```
 
 ### Refactor
 ```
-Git (create feature/*) → Architect → Refactor → Performance → Code Review → Git (merge)
+Git (create feature/*) → Architect
+→ [Refactor + Performance] (parallel)
+→ Code Review → Git (merge)
 ```
 
 ### Security
@@ -38,7 +50,9 @@ Git (create feature/*) → Security → Pentest → Code Review → Git (merge)
 
 ### Deployment
 ```
-Git (create release/*) → Docker → Kubernetes → Build → Release → Documentation → Git (tag)
+Git (create release/*) → [Docker + Kubernetes] (parallel)
+→ [Build + Release] (parallel)
+→ Documentation → Git (tag)
 ```
 
 ### Hotfix (Urgent)
