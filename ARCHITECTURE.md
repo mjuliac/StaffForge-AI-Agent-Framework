@@ -1,7 +1,7 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state at Sprint 0 (RFC-001 baseline).  
-> This document describes the architecture as-is before the RFC-001 evolution.
+> Current state at Phase 4 (DAG Scheduler + Ejecución Paralela).  
+> Active branch: `feature/rfc-001-architecture`
 
 ---
 
@@ -49,9 +49,37 @@
 Shared programmatic APIs consumed by CLI tools and external consumers.
 
 | Module | File | Exports |
-|---|---|---|
+|---|---|---|---|
 | Agent Registry | `tools/lib/agent-registry.mjs` | `AgentRegistry`, `getAgentRegistry()` |
 | Adapter Registry | `tools/lib/adapter-registry.mjs` | `AdapterRegistry`, `getAdapterRegistry()` |
+| Capability Engine | `tools/lib/capability-engine.mjs` | `CapabilityEngine`, `getCapabilityEngine()` |
+| Router | `tools/lib/router.mjs` | `Router`, `getRouter()` |
+| DAG | `tools/lib/dag.mjs` | `DAG` |
+| Scheduler | `tools/lib/scheduler.mjs` | `Scheduler`, `getScheduler()` |
+
+**Capability Engine** (`CapabilityEngine`):
+- `analyzeIntent(text)` — extract keywords + detect task type
+- `scoreAgent(agent, intent)` — rank agent against prompt intent
+- `findBestMatch(intent, options?)` — top-N agents by score
+- `expandCapabilities(text)` — resolve capability aliases
+
+**Router** (`Router`):
+- `resolveTask(taskType, prompt)` — build pipeline (template agents + technology matches)
+- `buildPipeline(agentIds)` — topological sort by depends_on/before/after
+- `suggestAgents(prompt)` — free-form agent recommendation
+
+**DAG** (`DAG`):
+- `addNode(id, data)` / `addEdge(from, to)` — build graph
+- `getLevels()` — parallel execution groups (Kahn's algorithm)
+- `topologicalSort()` — linear order
+- `validate()` — cycle detection
+- `static fromAgents(agents)` — build from agent definitions
+
+**Scheduler** (`Scheduler`):
+- `fromAgentIds(ids)` — build execution plan
+- `fromRouterPipeline(pipeline)` — convert Router output to plan
+- `buildPlan(taskType, ids, context)` — full plan with summary
+- `validatePipeline(ids)` — validate DAG
 
 **Agent Registry** (`AgentRegistry`):
 - `load()` — parse all agents from disk
@@ -170,10 +198,18 @@ Defines 6 task types with DAG pipelines:
 │   └── agent.schema.v0.json # Frozen pre-RFC schema
 ├── templates/
 │   └── agent.md
+├── tests/
+│   ├── unit/
+│   │   ├── dag.test.mjs         # DAG unit tests
+│   │   └── scheduler.test.mjs   # Scheduler unit tests
 ├── tools/
 │   ├── lib/
 │   │   ├── agent-registry.mjs   # Programmatic Agent Registry API
-│   │   └── adapter-registry.mjs # Programmatic Adapter Registry API
+│   │   ├── adapter-registry.mjs # Programmatic Adapter Registry API
+│   │   ├── capability-engine.mjs # Intent analysis + scoring
+│   │   ├── router.mjs           # Declarative pipeline router
+│   │   ├── dag.mjs              # Directed acyclic graph
+│   │   └── scheduler.mjs        # Pipeline execution planner
 │   ├── export.mjs          # Multi-platform exporter
 │   ├── validate.mjs        # JSON Schema validation
 │   ├── init-agent.mjs      # Scaffolding tool
@@ -240,6 +276,12 @@ Orchestrator (agents/orchestrator.md)
 | `node tools/export.mjs --platform gemini-cli` | ✅ 136 files |
 | `tools/lib/agent-registry.mjs` | ✅ AgentRegistry API (load, query, search, resolveDependencies) |
 | `tools/lib/adapter-registry.mjs` | ✅ AdapterRegistry API (lazy-load, export, exportToAll) |
+| `tools/lib/capability-engine.mjs` | ✅ CapabilityEngine (analyzeIntent, scoreAgent, findBestMatch) |
+| `tools/lib/router.mjs` | ✅ Router (resolveTask, buildPipeline, suggestAgents) |
+| `tools/lib/dag.mjs` | ✅ DAG (addNode/Edge, getLevels, topologicalSort, validate, cycle detection) |
+| `tools/lib/scheduler.mjs` | ✅ Scheduler (fromAgentIds, fromRouterPipeline, buildPlan, validatePipeline) |
+| `tests/unit/dag.test.mjs` | ✅ 27/27 passed |
+| `tests/unit/scheduler.test.mjs` | ✅ 14/14 passed |
 | Git working tree | ✅ On `feature/rfc-001-architecture` |
 
 ---
