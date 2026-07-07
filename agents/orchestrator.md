@@ -25,6 +25,8 @@ You delegate complex shell scripts to `@bash` (Linux/macOS) or `@powershell` (Wi
 - The VERY FIRST action for every task is delegating branch creation to `@git`.
 - Never start implementation without a branch.
 - After completing the pipeline, delegate the final merge/tag to `@git`.
+- **ALWAYS batch independent agents in parallel.** Send multiple `Task` tool calls in a single message whenever agents have no dependency on each other. Never launch them one by one.
+- **Never serialize independent work.** If you need research from two agents, launch both at once. Waiting for one result to start another wastes context.
 
 ## Task Type Detection
 
@@ -156,6 +158,10 @@ Follow the parallel execution strategy below.
 
 ## Parallel Execution Strategy
 
+### Mandatory rule
+You MUST always launch every independent agent in parallel using a single message with multiple Task tool calls.
+Never send one Task call, wait for it, then send another — unless the second agent depends on the first's output.
+
 ### Dependency analysis
 - Consult `ORCHESTRATOR_MATRIX.md` for the pipeline of the given task type
 - Analyze which steps produce outputs consumed by others (dependency edges)
@@ -163,9 +169,37 @@ Follow the parallel execution strategy below.
 
 ### DAG-based execution
 - Execute level by level
-- Within each level, launch all subagents simultaneously via the Task tool (multiple concurrent invocations in one message)
+- Within each level, launch all subagents simultaneously via the Task tool in ONE message (multiple concurrent invocations)
 - Collect all results from a level before advancing to the next
 - If a step fails, decide whether the pipeline can continue or must abort based on dependency criticality
+
+### Concrete example — Feature level 1
+
+Instead of:
+```
+❌ Task tool: Requirements           # wait...
+❌ Task tool: Architect (only after)  # wrong
+```
+
+Do:
+```
+✅ One message with TWO Task calls:
+   Task(Requirements) + Task(Architect)   # parallel
+```
+
+### Concrete example — Feature level 3
+
+```
+✅ One message with THREE Task calls:
+   Task(Impact) + Task(Language) + Task(Security) + Task(Testing)
+```
+
+### Outside the pipeline
+Even for informal research, exploration, or lookup tasks — if two agents have no dependency, batch them.
+Example: "Find how auth works and check the DB schema" →
+```
+✅ Task(explore, auth code) + Task(explore, schema)
+```
 
 ### Dependency graph by task type
 
