@@ -7,82 +7,208 @@ agents/           ← Canonical agent definitions (Markdown + frontmatter)
 adapters/         ← Platform-specific exporters (OpenCode, Claude Code, Cursor, etc.)
 schemas/          ← JSON Schema for agent validation
 templates/        ← Scaffolding for new agents
-tools/            ← CLI scripts (validate, export, init)
+tools/            ← CLI scripts (validate, export, init, install)
 examples/         ← Usage examples
-docs/             ← Guides
 ```
 
 ## Quick start
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 cd tools && npm install
 
-# Run interactive installer (recommended)
+# 2. Run interactive installer (recommended)
 node tools/install.mjs
 
-# Or export directly
+# 3. Start using OpenCode in this directory
+opencode
+```
+
+The installer generates `opencode.json` in the project root. The **orchestrator** is the default agent — it detects the task type, creates a git flow branch, and executes the pipeline in parallel.
+
+---
+
+## Installation per platform
+
+Export agents to any supported platform:
+
+```bash
+node tools/export.mjs --platform <name> [--out <dir>]
+```
+
+### OpenCode
+
+```bash
 node tools/export.mjs --platform opencode
-
-# Create a new agent
-node tools/init-agent.mjs my-new-agent
 ```
 
-## Installation
+| Output | Purpose |
+|--------|---------|
+| `opencode.json` | Agent config (modes, permissions) |
 
-### Interactive installer
+Agents with `mode: primary` appear in the **Tab** cycle (orchestrator, build, plan).
+Agents with `mode: subagent` appear in the **@** autocomplete menu (38 specialized agents).
+
+> The `--out` flag copies the generated file elsewhere. For normal use, run without `--out` — the file is placed at `adapters/opencode/output/` and then copied to the project root by the installer.
+
+---
+
+### Claude Code
+
+```bash
+node tools/export.mjs --platform claude-code
+```
+
+| Output | Purpose |
+|--------|---------|
+| `CLAUDE.md` | Orchestrator instructions (top-level rules) |
+| `.claude/rules/<agent>.md` | One file per subagent |
+
+Claude Code reads `CLAUDE.md` automatically from the project root. Subagent rules in `.claude/rules/` are loaded as additional instructions when the relevant agent is invoked.
+
+Copy the output to your project root:
+
+```bash
+cp -r adapters/claude-code/output/* .
+```
+
+---
+
+### Cursor
+
+```bash
+node tools/export.mjs --platform cursor
+```
+
+| Output | Purpose |
+|--------|---------|
+| `.cursor/rules/<agent>.mdc` | One `.mdc` rule file per agent |
+
+Cursor loads `.mdc` files from `.cursor/rules/` automatically. Each file has frontmatter with a `description` field so Cursor can select the right rule for the context.
+
+Copy the output to your project root:
+
+```bash
+cp -r adapters/cursor/output/.cursor .
+```
+
+---
+
+### GitHub Copilot
+
+```bash
+node tools/export.mjs --platform copilot
+```
+
+| Output | Purpose |
+|--------|---------|
+| `.github/copilot-instructions.md` | All agents concatenated as instructions |
+
+Copilot reads `.github/copilot-instructions.md` automatically when it exists in the project. All 40 agents are included in a single file with `---` separators.
+
+Copy the output to your project root:
+
+```bash
+cp -r adapters/copilot/output/.github .
+```
+
+---
+
+### Aider
+
+```bash
+node tools/export.mjs --platform aider
+```
+
+| Output | Purpose |
+|--------|---------|
+| `.aider.rules.md` | All agents as rule definitions |
+
+Aider loads `.aider.rules.md` automatically from the project root. Each agent's full body is included, separated by `---`.
+
+Copy the output to your project root:
+
+```bash
+cp adapters/aider/output/.aider.rules.md .
+```
+
+---
+
+### Gemini CLI
+
+```bash
+node tools/export.mjs --platform gemini-cli
+```
+
+| Output | Purpose |
+|--------|---------|
+| `.gemini/<agent>.md` | One prompt file per agent |
+
+Gemini CLI reads markdown files from `.gemini/` as system prompts. Each file contains the agent's full instructions.
+
+Copy the output to your project root:
+
+```bash
+cp -r adapters/gemini-cli/output/.gemini .
+```
+
+---
+
+## Interactive installer
 
 ```bash
 node tools/install.mjs
 ```
 
-This will:
-1. Ask you to select a default agent (build or plan)
-2. Export all agents for OpenCode
-3. Generate `opencode.json` in your current directory
-
-### Non-interactive
+This runs the **OpenCode** export and copies `opencode.json` to the project root. You can also set the default agent:
 
 ```bash
-# Set build as default (full tool access)
-node tools/install.mjs --agent build
-
-# Set plan as default (read-only mode)
-node tools/install.mjs --agent plan
-
-# Export to specific directory
+node tools/install.mjs --agent orchestrator   # default, coordinates all work
+node tools/install.mjs --agent build          # full tool access
+node tools/install.mjs --agent plan           # read-only mode
 node tools/install.mjs --agent build --out ~/my-project
 ```
 
-### Agent modes
+## Agent modes
 
-After installation, use **Tab** to switch between agent modes:
+| Mode | Tab cycle | @ mention | Permissions |
+|------|-----------|-----------|-------------|
+| **orchestrator** | ✓ default | ✓ | Full tools |
+| **build** | ✓ | ✓ | Full tools |
+| **plan** | ✓ | ✓ | Read-only |
+| 38 subagents | — | ✓ | Varies |
 
-| Mode | Description | Permissions |
-|------|-------------|-------------|
-| **build** | Full tool access | Edit, bash, write enabled |
-| **plan** | Read-only mode | Analysis and planning only |
-
-- **Tab** - Switch between build and plan modes
-- **Shift+Tab** - Switch in reverse order
+- **Tab** — Cycle: orchestrator → build → plan
+- **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@docker`)
+- Orchestrator is the default agent. It detects task type from your prompt, creates a git flow branch, then executes the pipeline.
 
 ## Architecture
 
-- **Orchestrator** — owns user communication and Git Flow
-- **Subagents** — specialized roles (architect, security, testing, etc.)
+- **Orchestrator** (default agent) — receives all requests, detects task type, creates git flow branches, routes pipelines, communicates with the user
+- **Subagents** (38) — specialized roles (architect, security, testing, docker, etc.)
 - **Only the orchestrator** may talk to the user, write files, or manage git
+- Subagents run in **parallel** when they have no dependency on each other (DAG-based execution)
 
 ## Routing
 
-See `ORCHESTRATOR_MATRIX.md` for task → pipeline mapping.
+See `ORCHESTRATOR_MATRIX.md` for task → pipeline mapping with parallel execution groups.
 
-## Supported platforms
+## Commands
 
-| Adapter | Output |
-|---------|--------|
-| OpenCode | `opencode.json` |
-| Claude Code | `CLAUDE.md` + `.claude/rules/` |
-| Cursor | `.cursor/rules/*.mdc` |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Aider | `.aider.rules.md` |
-| Gemini CLI | `.gemini/*.md` |
+```bash
+cd tools && npm install          # Install dependencies
+node tools/validate.mjs          # Validate all 40 agent definitions
+node tools/export.mjs --platform <name>   # Export agents for a platform
+node tools/install.mjs           # Interactive OpenCode installer
+node tools/init-agent.mjs <name> # Create a new agent from template
+```
+
+## Adapting to a new platform
+
+1. Create `adapters/<name>/index.mjs` exporting a default function
+2. Function receives `agents[]`, returns `[{path, content}]`
+3. Run `node tools/export.mjs --platform <name>`
+
+## opencode.json
+
+Not committed to repo. Generate with `node tools/export.mjs --platform opencode` or `node tools/install.mjs`.
