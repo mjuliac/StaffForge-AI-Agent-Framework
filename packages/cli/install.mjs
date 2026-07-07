@@ -46,7 +46,7 @@ ${b('Usage:')}
   node install.mjs                          ${bl('# interactive')}
   node install.mjs -y                       ${bl('# non-interactive (defaults)')}
   node install.mjs --platform opencode --agent orchestrator
-  npx @staffforge/cli                       ${bl('# remote install')}
+  npx github:mjuliac/StaffForge-AI-Agent-Framework              ${bl('# remote install')}
 
 ${b('Options:')}
   --platform <name>   Platform (opencode, claude-code, cursor, copilot, aider, gemini-cli, all)

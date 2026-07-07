@@ -16,21 +16,21 @@ examples/         ← Usage examples
 ### From any project — **one command, all OS**
 
 ```bash
-npx @staffforge/cli
+npx github:mjuliac/StaffForge-AI-Agent-Framework
 ```
 
 Interactive prompts ask for platform, default agent, and location. Works on Linux, macOS, and Windows — Node.js is the only requirement.
 
 Or non-interactive with flags:
 ```bash
-npx @staffforge/cli --platform opencode --agent orchestrator
+npx github:mjuliac/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
 ```
 
 The installer saves a `.staffforge-install.json` config, so re-running detects previous settings:
 
 ```bash
 # Update to latest agents:
-npx @staffforge/cli
+npx github:mjuliac/StaffForge-AI-Agent-Framework
 # → Previous: opencode (agent: orchestrator)
 #   Reinstall? [Y/n]:  ← press Enter
 ```
@@ -299,4 +299,4 @@ node tools/init-agent.mjs <name>     # Create a new agent from template
 
 ## opencode.json
 
-Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx @staffforge/cli`.
+Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:mjuliac/StaffForge-AI-Agent-Framework`.

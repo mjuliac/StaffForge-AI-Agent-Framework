@@ -15,7 +15,7 @@ echo ""
 echo -e "  ${GREEN}→${NC} This script is deprecated."
 echo -e "  ${GREEN}→${NC} Use the unified installer instead:"
 echo ""
-echo "    npx @staffforge/cli"
+echo "    npx github:mjuliac/StaffForge-AI-Agent-Framework"
 echo ""
 echo "  Or run directly from the repo:"
 echo "    node install.mjs"
@@ -32,9 +32,9 @@ fi
 
 # ── Check for npx ──
 if command -v npx &>/dev/null; then
-  echo -e "  ${GREEN}→${NC} Launching npx @staffforge/cli..."
+  echo -e "  ${GREEN}→${NC} Launching npx from GitHub..."
   echo ""
-  npx @staffforge/cli "$@"
+  npx github:mjuliac/StaffForge-AI-Agent-Framework "$@"
   exit $?
 fi
 
