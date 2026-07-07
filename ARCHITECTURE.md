@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state at Phase 4 (DAG Scheduler + Ejecución Paralela).  
+> Current state at Phase 5 (Telemetría + Pipeline Reports).  
 > Active branch: `feature/rfc-001-architecture`
 
 ---
@@ -56,6 +56,9 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 | Router | `tools/lib/router.mjs` | `Router`, `getRouter()` |
 | DAG | `tools/lib/dag.mjs` | `DAG` |
 | Scheduler | `tools/lib/scheduler.mjs` | `Scheduler`, `getScheduler()` |
+| Telemetry Collector | `tools/lib/telemetry/collector.mjs` | `TelemetryCollector`, `getCollector()` |
+| Telemetry Storage | `tools/lib/telemetry/storage.mjs` | `TelemetryStorage`, `getStorage()` |
+| Telemetry Reporter | `tools/lib/telemetry/reporter.mjs` | `TelemetryReporter`, `getReporter()` |
 
 **Capability Engine** (`CapabilityEngine`):
 - `analyzeIntent(text)` — extract keywords + detect task type
@@ -80,6 +83,43 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 - `fromRouterPipeline(pipeline)` — convert Router output to plan
 - `buildPlan(taskType, ids, context)` — full plan with summary
 - `validatePipeline(ids)` — validate DAG
+
+**TelemetryCollector** (`TelemetryCollector`):
+- `startRun(pipelineId, taskType, context?)` — start a pipeline run
+- `recordAgentCall(agentId, {duration, tokens, model, provider, status})` — log agent execution
+- `recordError(agentId, error)` — log error
+- `endRun(status)` — finalize run, compute duration & totals
+- `getReport()` — enriched report with agent_summary
+
+**TelemetryStorage** (`TelemetryStorage`):
+- `save(runData)` — append JSON line to `~/.staffforge/telemetry/runs.jsonl`
+- `load(runId)` — find run by pipeline_id
+- `list(limit)` — recent runs (newest first)
+- `count()` / `deleteAll()` — management
+
+**TelemetryReporter** (`TelemetryReporter`):
+- `generateSummary(agents)` — stats: total, byStatus, avg tokens/duration
+- `generateMarkdown(report)` — markdown pipeline report
+- `generateJSON(report)` — enriched JSON output
+
+**Telemetry report schema**:
+```json
+{
+  "pipeline_id": "run_20260707_abc123",
+  "task_type": "feature",
+  "pipeline": ["architect", "security", "testing"],
+  "duration_ms": 32000,
+  "total_tokens": 15892,
+  "provider": "OpenAI",
+  "model": "gpt-4o",
+  "agents": [
+    { "id": "architect", "duration_ms": 8500, "tokens": 4200, "status": "success" }
+  ],
+  "status": "success",
+  "errors": [],
+  "timestamp": "2026-07-07T12:00:00Z"
+}
+```
 
 **Agent Registry** (`AgentRegistry`):
 - `load()` — parse all agents from disk
@@ -204,12 +244,17 @@ Defines 6 task types with DAG pipelines:
 │   │   └── scheduler.test.mjs   # Scheduler unit tests
 ├── tools/
 │   ├── lib/
-│   │   ├── agent-registry.mjs   # Programmatic Agent Registry API
-│   │   ├── adapter-registry.mjs # Programmatic Adapter Registry API
+│   │   ├── agent-registry.mjs    # Programmatic Agent Registry API
+│   │   ├── adapter-registry.mjs  # Programmatic Adapter Registry API
 │   │   ├── capability-engine.mjs # Intent analysis + scoring
-│   │   ├── router.mjs           # Declarative pipeline router
-│   │   ├── dag.mjs              # Directed acyclic graph
-│   │   └── scheduler.mjs        # Pipeline execution planner
+│   │   ├── router.mjs            # Declarative pipeline router
+│   │   ├── dag.mjs               # Directed acyclic graph
+│   │   ├── scheduler.mjs         # Pipeline execution planner
+│   │   └── telemetry/
+│   │       ├── collector.mjs     # TelemetryCollector
+│   │       ├── storage.mjs       # JSON Lines persistence
+│   │       ├── reporter.mjs      # Markdown/JSON report generator
+│   │       └── index.mjs         # Public exports
 │   ├── export.mjs          # Multi-platform exporter
 │   ├── validate.mjs        # JSON Schema validation
 │   ├── init-agent.mjs      # Scaffolding tool
@@ -282,6 +327,10 @@ Orchestrator (agents/orchestrator.md)
 | `tools/lib/scheduler.mjs` | ✅ Scheduler (fromAgentIds, fromRouterPipeline, buildPlan, validatePipeline) |
 | `tests/unit/dag.test.mjs` | ✅ 27/27 passed |
 | `tests/unit/scheduler.test.mjs` | ✅ 14/14 passed |
+| `tools/lib/telemetry/collector.mjs` | ✅ TelemetryCollector (startRun, recordAgentCall, recordError, endRun, getReport) |
+| `tools/lib/telemetry/storage.mjs` | ✅ TelemetryStorage (JSON Lines save/load/list/count) |
+| `tools/lib/telemetry/reporter.mjs` | ✅ TelemetryReporter (generateSummary, generateMarkdown, generateJSON) |
+| `tests/unit/telemetry.test.mjs` | ✅ 50/50 passed |
 | Git working tree | ✅ On `feature/rfc-001-architecture` |
 
 ---
