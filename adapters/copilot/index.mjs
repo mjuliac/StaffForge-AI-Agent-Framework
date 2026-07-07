@@ -5,10 +5,6 @@
 export default function copilotAdapter(agents) {
   const lines = [];
   for (const agent of agents) {
-    lines.push(`# ${agent.name}`);
-    lines.push('');
-    lines.push(agent.frontmatter.description);
-    lines.push('');
     lines.push(agent.body);
     lines.push('');
     lines.push('---');

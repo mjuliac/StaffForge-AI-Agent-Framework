@@ -5,11 +5,11 @@
 export default function claudeCodeAdapter(agents) {
   const files = [];
 
-  const orchestartor = agents.find(a => a.name === 'orchestrator');
-  if (orchestartor) {
+  const orchestratorAgent = agents.find(a => a.name === 'orchestrator');
+  if (orchestratorAgent) {
     files.push({
       path: "CLAUDE.md",
-      content: orchestartor.body + "\n",
+      content: orchestratorAgent.body + "\n",
     });
   }
 
