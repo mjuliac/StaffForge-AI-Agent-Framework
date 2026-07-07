@@ -14,7 +14,7 @@ Write-Host ""
 Write-Host "  → This script is deprecated." -ForegroundColor Green
 Write-Host "  → Use the unified installer instead:" -ForegroundColor Green
 Write-Host ""
-Write-Host "    npx @staffforge/cli"
+Write-Host "    npx github:mjuliac/StaffForge-AI-Agent-Framework"
 Write-Host ""
 Write-Host "  Or run directly from the repo:" -ForegroundColor Green
 Write-Host "    node install.mjs"
@@ -38,8 +38,8 @@ if (Test-Path ".\tools\export.mjs") {
 
 # Try npx
 try {
-  Write-Host "  → Launching npx @staffforge/cli..." -ForegroundColor Green
-  & npx @staffforge/cli $args
+  Write-Host "  → Launching npx from GitHub..." -ForegroundColor Green
+  & npx github:mjuliac/StaffForge-AI-Agent-Framework $args
   exit $LASTEXITCODE
 } catch {
   # Fallback: git clone
