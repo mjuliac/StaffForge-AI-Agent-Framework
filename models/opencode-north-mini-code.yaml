@@ -1,0 +1,18 @@
+id: north-mini-code
+provider: opencode
+family: north
+name: North Mini Code
+version: "1.0"
+context_window: 32768
+supports_tools: true
+supports_reasoning: false
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0
+cost_per_1k_output: 0
+priority: 60
+strengths: [coding, fast, cost-efficient, review]
+weaknesses: [no-reasoning, architecture]
+metadata:
+  release_date: "2026-01"
+  source: opencode-free

@@ -1,0 +1,18 @@
+id: llama-3-70b
+provider: ollama
+family: llama
+name: Llama 3 70B
+version: "2024-07"
+context_window: 32768
+supports_tools: false
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0
+cost_per_1k_output: 0
+priority: 40
+strengths: [local, free, coding, analysis]
+weaknesses: [no-tools, limited-context, complex-reasoning]
+metadata:
+  release_date: "2024-07"
+  source: local-ollama
