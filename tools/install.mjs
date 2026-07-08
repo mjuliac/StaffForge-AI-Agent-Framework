@@ -1,7 +1,7 @@
 import { createInterface } from 'node:readline';
 import { execFileSync } from 'node:child_process';
 import { existsSync, copyFileSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
-import { join, dirname, basename } from 'node:path';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

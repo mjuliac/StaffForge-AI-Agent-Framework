@@ -1,9 +1,17 @@
-import { TelemetryStorage } from './telemetry/storage.mjs';
+// import { MemoryStorage } from './storage/index.mjs';
 
 export class LearningEngine {
   constructor(storage = null) {
     this._storage = storage;
     this._executions = [];
+
+    // Load from storage if available
+    if (this._storage) {
+      const loaded = this._storage.list();
+      if (loaded && loaded.length > 0) {
+        this._executions = loaded;
+      }
+    }
   }
 
   recordExecution({ modelId, agentId, taskType, duration, tokens, cost, success, error, retries }) {
@@ -91,7 +99,6 @@ export class LearningEngine {
     if (totalRuns < 10) return weights;
 
     const allRankings = this.getAllRankings();
-    let totalRanked = 0;
     let freeSuccessCount = 0;
     let freeTotalCount = 0;
     let complexSuccessCount = 0;
@@ -99,7 +106,6 @@ export class LearningEngine {
 
     for (const [, rankings] of Object.entries(allRankings)) {
       for (const r of rankings) {
-        totalRanked++;
         const modelExecs = this._executions.filter((e) => e.modelId === r.modelId);
         const isFree = modelExecs.every((e) => (e.cost || 0) === 0);
         if (isFree) {

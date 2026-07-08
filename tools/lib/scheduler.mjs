@@ -43,18 +43,37 @@ export class Scheduler {
   }
 
   fromRouterPipeline(pipeline) {
-    const allAgentIds = [];
-    if (pipeline.agents) {
-      allAgentIds.push(...pipeline.agents.map((a) => a.id || a));
+    // Use YAML pipeline level structure if available
+    if (pipeline.levels && pipeline.levels.length > 0) {
+      const levels = pipeline.levels.map((level, i) => ({
+        level: i + 1,
+        parallel: (level.agents || [])
+          .map((agent) => {
+            const id = agent.id || agent;
+            const a = this._registry.findById(id);
+            return { id, name: a?.name || id, agent: a };
+          })
+          .filter((p) => p.agent),
+      }));
+
+      return {
+        type: 'yaml',
+        levels,
+        totalLevels: levels.length,
+        totalAgents: levels.reduce((sum, l) => sum + l.parallel.length, 0),
+      };
     }
-    if (pipeline.levels) {
-      for (const level of pipeline.levels) {
-        for (const agent of level) {
-          const id = agent.id || agent;
-          if (!allAgentIds.includes(id)) allAgentIds.push(id);
-        }
+
+    // Fallback to flat agent list
+    const allAgentIds = [];
+
+    if (pipeline.agents) {
+      for (const agent of pipeline.agents) {
+        const id = agent.id || agent;
+        if (!allAgentIds.includes(id)) allAgentIds.push(id);
       }
     }
+
     return this.fromAgentIds(allAgentIds);
   }
 
