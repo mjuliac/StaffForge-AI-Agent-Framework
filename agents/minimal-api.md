@@ -1,10 +1,22 @@
 ---
+id: minimal-api
+name: Minimal Api
 mode: subagent
+category: technology
 description: Minimal API Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - minimal-api
+  - dotnet
+  - csharp
+  - api
+capabilities:
+  - route
+  - endpoint
+  - lightweight
 ---
 
 # Minimal API

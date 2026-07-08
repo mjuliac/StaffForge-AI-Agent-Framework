@@ -1,10 +1,22 @@
 ---
+id: remix
+name: Remix
 mode: subagent
+category: technology
 description: Remix Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - remix
+  - react
+  - fullstack
+  - web
+capabilities:
+  - code
+  - server-component
+  - loader
 ---
 
 # Remix

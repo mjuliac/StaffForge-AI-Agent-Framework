@@ -1,10 +1,22 @@
 ---
+id: fastapi
+name: Fastapi
 mode: subagent
+category: technology
 description: FastAPI Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - fastapi
+  - python
+  - api
+  - backend
+capabilities:
+  - code
+  - route
+  - validation
 ---
 # Fastapi
 

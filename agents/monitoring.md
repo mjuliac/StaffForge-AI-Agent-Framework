@@ -1,10 +1,22 @@
 ---
+id: monitoring
+name: Monitoring
 mode: subagent
+category: domain
 description: Monitoring Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - monitoring
+  - observability
+  - metrics
+  - alert
+capabilities:
+  - monitor
+  - dashboard
+  - alert
 ---
 
 # Monitoring

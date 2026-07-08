@@ -1,10 +1,22 @@
 ---
+id: docker
+name: Docker
 mode: subagent
+category: technology
 description: Docker expert.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - docker
+  - container
+  - devops
+  - infra
+capabilities:
+  - build
+  - compose
+  - containerize
 ---
 # Docker
 

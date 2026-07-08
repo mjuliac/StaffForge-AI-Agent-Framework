@@ -1,10 +1,22 @@
 ---
+id: starlette
+name: Starlette
 mode: subagent
+category: technology
 description: Starlette Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - starlette
+  - python
+  - asgi
+  - web
+capabilities:
+  - code
+  - middleware
+  - route
 ---
 
 # Starlette

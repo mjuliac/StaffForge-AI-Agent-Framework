@@ -1,10 +1,22 @@
 ---
+id: gcp
+name: Gcp
 mode: subagent
+category: technology
 description: Gcp Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - gcp
+  - google-cloud
+  - cloud
+  - infrastructure
+capabilities:
+  - deploy
+  - function
+  - run
 ---
 
 # Gcp

@@ -1,10 +1,22 @@
 ---
+id: dependency-audit
+name: Dependency Audit
 mode: subagent
+category: utility
 description: Dependency/CVE auditor.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - dependency-audit
+  - dependencies
+  - cve
+  - supply-chain
+capabilities:
+  - audit
+  - scan
+  - report
 ---
 # Dependency-Audit
 

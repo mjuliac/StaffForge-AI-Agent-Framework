@@ -1,10 +1,22 @@
 ---
+id: typescript
+name: Typescript
 mode: subagent
+category: technology
 description: TypeScript Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - typescript
+  - ts
+  - programming
+  - web
+capabilities:
+  - code
+  - lint
+  - typecheck
 ---
 
 # TypeScript

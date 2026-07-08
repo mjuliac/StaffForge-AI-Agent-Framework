@@ -1,10 +1,22 @@
 ---
+id: react-query
+name: React Query
 mode: subagent
+category: technology
 description: React Query Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - react-query
+  - tanstack
+  - react
+  - data-fetching
+capabilities:
+  - query
+  - mutation
+  - cache
 ---
 
 # React Query

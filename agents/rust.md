@@ -1,10 +1,21 @@
 ---
+id: rust
+name: Rust
 mode: subagent
+category: technology
 description: Rust Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - rust
+  - programming
+  - systems
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # Rust

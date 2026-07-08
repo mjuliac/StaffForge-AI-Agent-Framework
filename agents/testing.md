@@ -1,10 +1,22 @@
 ---
+id: testing
+name: Testing
 mode: subagent
+category: core
 description: Testing strategy specialist.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - testing
+  - qa
+  - quality
+  - verification
+capabilities:
+  - test
+  - plan
+  - coverage
 ---
 # Testing
 

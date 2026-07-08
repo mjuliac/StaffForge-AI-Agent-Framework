@@ -1,10 +1,22 @@
 ---
+id: windows
+name: Windows
 mode: subagent
+category: utility
 description: Windows Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - windows
+  - microsoft
+  - os
+  - sysadmin
+capabilities:
+  - shell
+  - config
+  - sysadmin
 ---
 
 # Windows

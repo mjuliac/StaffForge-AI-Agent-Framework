@@ -1,10 +1,22 @@
 ---
+id: react-router
+name: React Router
 mode: subagent
+category: technology
 description: React Router Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - react-router
+  - react
+  - routing
+  - spa
+capabilities:
+  - route
+  - navigation
+  - param
 ---
 
 # React Router

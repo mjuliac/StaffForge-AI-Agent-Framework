@@ -1,10 +1,23 @@
 ---
+id: database
+name: Database
 mode: subagent
+category: domain
 description: Database design specialist.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - database
+  - db
+  - data
+  - storage
+capabilities:
+  - schema
+  - query
+  - migration
+  - design
 ---
 # Database
 

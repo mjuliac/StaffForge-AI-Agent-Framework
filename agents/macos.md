@@ -1,10 +1,22 @@
 ---
+id: macos
+name: Macos
 mode: subagent
+category: utility
 description: Macos Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - macos
+  - apple
+  - os
+  - desktop
+capabilities:
+  - shell
+  - config
+  - sysadmin
 ---
 
 # Macos

@@ -1,10 +1,22 @@
 ---
+id: xunit
+name: Xunit
 mode: subagent
+category: technology
 description: xUnit Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - xunit
+  - dotnet
+  - testing
+  - unit-test
+capabilities:
+  - test
+  - assert
+  - theory
 ---
 
 # xUnit

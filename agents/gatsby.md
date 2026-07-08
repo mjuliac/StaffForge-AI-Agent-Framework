@@ -1,10 +1,21 @@
 ---
+id: gatsby
+name: Gatsby
 mode: subagent
+category: technology
 description: Gatsby Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - gatsby
+  - react
+  - ssg
+  - graphql
+capabilities:
+  - code
+  - static-site-generation
 ---
 
 # Gatsby

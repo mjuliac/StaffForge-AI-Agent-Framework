@@ -1,10 +1,22 @@
 ---
+id: winforms
+name: Winforms
 mode: subagent
+category: technology
 description: Windows Forms Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - winforms
+  - dotnet
+  - csharp
+  - desktop
+capabilities:
+  - code
+  - ui
+  - windows
 ---
 
 # Windows Forms

@@ -1,10 +1,22 @@
 ---
+id: mongodb
+name: Mongodb
 mode: subagent
+category: technology
 description: Mongodb Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - mongodb
+  - nosql
+  - database
+  - document
+capabilities:
+  - query
+  - aggregation
+  - index
 ---
 
 # Mongodb

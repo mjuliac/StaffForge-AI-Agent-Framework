@@ -1,10 +1,22 @@
 ---
+id: postgres
+name: Postgres
 mode: subagent
+category: technology
 description: PostgreSQL expert.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - postgres
+  - postgresql
+  - database
+  - sql
+capabilities:
+  - query
+  - schema
+  - migration
 ---
 # Postgres
 

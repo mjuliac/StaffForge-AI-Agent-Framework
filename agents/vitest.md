@@ -1,10 +1,23 @@
 ---
+id: vitest
+name: Vitest
 mode: subagent
+category: technology
 description: Vitest Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - vitest
+  - javascript
+  - testing
+  - unit-test
+capabilities:
+  - test
+  - mock
+  - assert
+  - vite
 ---
 
 # Vitest

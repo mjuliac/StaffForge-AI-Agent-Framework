@@ -1,10 +1,22 @@
 ---
+id: build
+name: Build
 mode: primary
+category: domain
 description: Build systems expert. Full tool access.
 tools:
   write: true
   bash: true
   edit: true
+keywords:
+  - build
+  - compile
+  - bundle
+  - artifact
+capabilities:
+  - build
+  - compile
+  - package
 ---
 # Build
 

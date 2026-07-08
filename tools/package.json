@@ -2,6 +2,14 @@
   "name": "staffforge-tools",
   "private": true,
   "type": "module",
+  "scripts": {
+    "test": "node ../tests/run-all.mjs",
+    "test:unit": "node ../tests/run-all.mjs unit",
+    "test:integration": "node ../tests/run-all.mjs integration",
+    "validate": "node validate.mjs",
+    "export": "node export.mjs --all",
+    "docs": "node generate-docs.mjs"
+  },
   "dependencies": {
     "ajv": "^8.17.1",
     "glob": "^11.0.0",

@@ -1,10 +1,22 @@
 ---
+id: requirements
+name: Requirements
 mode: subagent
+category: domain
 description: Extracts requirements.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - requirements
+  - specification
+  - analysis
+  - business
+capabilities:
+  - analyze
+  - spec
+  - document
 ---
 # Requirements
 

@@ -1,10 +1,22 @@
 ---
+id: mysql
+name: Mysql
 mode: subagent
+category: technology
 description: Mysql Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - mysql
+  - database
+  - sql
+  - relational
+capabilities:
+  - query
+  - schema
+  - migration
 ---
 
 # Mysql

@@ -1,10 +1,22 @@
 ---
+id: api-design
+name: Api Design
 mode: subagent
+category: domain
 description: REST/gRPC/OpenAPI specialist.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - api-design
+  - rest
+  - openapi
+  - contract
+capabilities:
+  - schema
+  - docs
+  - versioning
 ---
 # Api-Design
 

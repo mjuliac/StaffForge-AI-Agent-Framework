@@ -1,10 +1,22 @@
 ---
+id: zustand
+name: Zustand
 mode: subagent
+category: technology
 description: Zustand Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - zustand
+  - state-management
+  - react
+  - store
+capabilities:
+  - state
+  - store
+  - hook
 ---
 
 # Zustand

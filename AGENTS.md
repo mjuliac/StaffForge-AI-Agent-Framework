@@ -24,8 +24,8 @@ See `ORCHESTRATOR_MATRIX.md`.
 | Bug        | Git → Planner → [Knowledge+Impact] → Debugging → [Language+Testing] → Code Review → Git merge |
 | Refactor   | Git → Architect → [Refactor+Performance] → Code Review → Git merge |
 | Security   | Git → Security → Pentest → Code Review → Git merge |
-| Deployment | Git → [Docker+Kubernetes] → [Build+Release] → Documentation → Git tag |
-| Hotfix     | Git → Debugging → Code Review → Git tag + merge to main + develop |
+| Deployment | Git → [Docker+Kubernetes] → [Build+Release] → Documentation → Git (merge to main + tag + merge to develop + cleanup) |
+| Hotfix     | Git (from main) → Debugging → Code Review → Git (merge to main + tag + merge to develop + cleanup) |
 
 ## Conventions
 

@@ -1,10 +1,22 @@
 ---
+id: javascript
+name: Javascript
 mode: subagent
+category: technology
 description: JavaScript Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - javascript
+  - js
+  - programming
+  - web
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # JavaScript

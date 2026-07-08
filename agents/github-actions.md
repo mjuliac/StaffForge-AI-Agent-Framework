@@ -1,10 +1,22 @@
 ---
+id: github-actions
+name: Github Actions
 mode: subagent
+category: technology
 description: GitHub Actions Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - github-actions
+  - ci
+  - cd
+  - automation
+capabilities:
+  - workflow
+  - ci
+  - deploy
 ---
 
 # GitHub Actions

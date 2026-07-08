@@ -1,10 +1,22 @@
 ---
+id: css
+name: Css
 mode: subagent
+category: technology
 description: Css Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - css
+  - styling
+  - design
+  - layout
+capabilities:
+  - style
+  - animation
+  - responsive
 ---
 
 # Css

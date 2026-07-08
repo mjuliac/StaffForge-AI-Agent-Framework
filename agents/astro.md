@@ -1,10 +1,21 @@
 ---
+id: astro
+name: Astro
 mode: subagent
+category: technology
 description: Astro Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - astro
+  - frontend
+  - ssg
+  - islands
+capabilities:
+  - code
+  - static-site-generation
 ---
 
 # Astro

@@ -1,10 +1,23 @@
 ---
+id: swiftui
+name: Swiftui
 mode: subagent
+category: technology
 description: SwiftUI Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - swiftui
+  - swift
+  - ios
+  - macos
+  - ui
+capabilities:
+  - code
+  - view
+  - declarative-ui
 ---
 
 # SwiftUI

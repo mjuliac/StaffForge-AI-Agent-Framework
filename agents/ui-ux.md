@@ -1,10 +1,22 @@
 ---
+id: ui-ux
+name: Ui Ux
 mode: subagent
+category: domain
 description: Desktop UX specialist.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - ui-ux
+  - design
+  - user-experience
+  - interface
+capabilities:
+  - design
+  - prototype
+  - usability
 ---
 # Ui-Ux
 

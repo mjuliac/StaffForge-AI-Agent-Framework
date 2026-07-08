@@ -1,10 +1,22 @@
 ---
+id: mui
+name: Mui
 mode: subagent
+category: technology
 description: Material UI Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - mui
+  - material-ui
+  - react
+  - ui
+capabilities:
+  - component
+  - design-system
+  - theming
 ---
 
 # Material UI

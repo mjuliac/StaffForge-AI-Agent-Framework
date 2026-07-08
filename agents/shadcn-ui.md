@@ -1,10 +1,22 @@
 ---
+id: shadcn-ui
+name: Shadcn Ui
 mode: subagent
+category: technology
 description: shadcn/ui Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - shadcn-ui
+  - react
+  - ui
+  - components
+capabilities:
+  - component
+  - design-system
+  - tailwind
 ---
 
 # shadcn/ui

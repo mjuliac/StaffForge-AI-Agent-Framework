@@ -1,10 +1,22 @@
 ---
+id: redux
+name: Redux
 mode: subagent
+category: technology
 description: Redux Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - redux
+  - state-management
+  - react
+  - store
+capabilities:
+  - state
+  - reducer
+  - middleware
 ---
 
 # Redux

@@ -1,10 +1,22 @@
 ---
+id: asyncio
+name: Asyncio
 mode: subagent
+category: technology
 description: asyncio Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - asyncio
+  - python
+  - async
+  - concurrency
+capabilities:
+  - async
+  - await
+  - event-loop
 ---
 
 # asyncio

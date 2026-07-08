@@ -1,10 +1,22 @@
 ---
+id: architect
+name: Architect
 mode: subagent
+category: core
 description: Protects architecture.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - architect
+  - design
+  - architecture
+  - patterns
+capabilities:
+  - design
+  - review
+  - plan
 ---
 # Architect
 

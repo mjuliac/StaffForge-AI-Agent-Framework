@@ -1,10 +1,23 @@
 ---
+id: kubernetes
+name: Kubernetes
 mode: subagent
+category: technology
 description: Kubernetes expert.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - kubernetes
+  - k8s
+  - container
+  - orchestration
+capabilities:
+  - deploy
+  - pod
+  - service
+  - helm
 ---
 # Kubernetes
 

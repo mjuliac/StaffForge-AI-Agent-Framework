@@ -1,10 +1,22 @@
 ---
+id: dotnet
+name: Dotnet
 mode: subagent
+category: technology
 description: .NET Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - dotnet
+  - .net
+  - csharp
+  - framework
+capabilities:
+  - code
+  - build
+  - nuget
 ---
 
 # .NET

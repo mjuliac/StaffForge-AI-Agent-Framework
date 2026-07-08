@@ -1,10 +1,22 @@
 ---
+id: gitlab-ci
+name: Gitlab Ci
 mode: subagent
+category: technology
 description: GitLab CI Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - gitlab-ci
+  - ci
+  - cd
+  - automation
+capabilities:
+  - pipeline
+  - ci
+  - deploy
 ---
 
 # GitLab CI

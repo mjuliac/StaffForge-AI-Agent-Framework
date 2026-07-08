@@ -1,10 +1,22 @@
 ---
+id: machine-learning
+name: Machine Learning
 mode: subagent
+category: domain
 description: Machine Learning Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - machine-learning
+  - ml
+  - ai
+  - data-science
+capabilities:
+  - train
+  - predict
+  - evaluate
 ---
 
 # Machine Learning

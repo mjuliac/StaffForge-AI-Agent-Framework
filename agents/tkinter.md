@@ -1,10 +1,22 @@
 ---
+id: tkinter
+name: Tkinter
 mode: subagent
+category: technology
 description: Tkinter Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - tkinter
+  - python
+  - gui
+  - desktop
+capabilities:
+  - gui
+  - widget
+  - event
 ---
 
 # Tkinter

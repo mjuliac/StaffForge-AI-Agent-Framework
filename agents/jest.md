@@ -1,10 +1,23 @@
 ---
+id: jest
+name: Jest
 mode: subagent
+category: technology
 description: Jest Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - jest
+  - javascript
+  - testing
+  - unit-test
+capabilities:
+  - test
+  - mock
+  - assert
+  - snapshot
 ---
 
 # Jest

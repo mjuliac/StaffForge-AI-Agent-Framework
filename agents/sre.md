@@ -1,10 +1,22 @@
 ---
+id: sre
+name: Sre
 mode: subagent
+category: domain
 description: Site Reliability Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - sre
+  - reliability
+  - sla
+  - incident
+capabilities:
+  - monitor
+  - alert
+  - incident-response
 ---
 
 # Site Reliability

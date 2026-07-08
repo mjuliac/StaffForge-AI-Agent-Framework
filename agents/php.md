@@ -1,10 +1,21 @@
 ---
+id: php
+name: Php
 mode: subagent
+category: technology
 description: Php Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - php
+  - programming
+  - web
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # Php

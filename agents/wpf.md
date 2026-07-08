@@ -1,10 +1,22 @@
 ---
+id: wpf
+name: Wpf
 mode: subagent
+category: technology
 description: WPF Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - wpf
+  - dotnet
+  - csharp
+  - desktop
+capabilities:
+  - code
+  - ui
+  - xaml
 ---
 
 # WPF

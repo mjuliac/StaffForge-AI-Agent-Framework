@@ -1,10 +1,22 @@
 ---
+id: grpc
+name: Grpc
 mode: subagent
+category: technology
 description: Grpc Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - grpc
+  - rpc
+  - api
+  - proto
+capabilities:
+  - service
+  - protobuf
+  - streaming
 ---
 
 # Grpc
