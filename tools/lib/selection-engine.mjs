@@ -1,18 +1,11 @@
 import { getModelRegistry } from './model-registry.mjs';
 import { getModelProfile } from './model-profile.mjs';
 
-const WEIGHTS = {
-  profile: 0.35,
-  capability: 0.25,
-  priority: 0.15,
-  cost: 0.15,
-  reasoning: 0.10,
-};
-
 export class SelectionEngine {
   constructor(modelRegistry = null, modelProfile = null) {
     this._registry = modelRegistry || getModelRegistry();
     this._profile = modelProfile || getModelProfile();
+    this._weights = { profile: 0.35, capability: 0.25, priority: 0.15, cost: 0.15, reasoning: 0.10 };
   }
 
   select(taskType, options = {}) {
@@ -79,19 +72,19 @@ export class SelectionEngine {
     let score = 0;
 
     const profileScore = this._profileScore(model, taskType);
-    score += profileScore * WEIGHTS.profile;
+    score += profileScore * this._weights.profile;
 
     const capScore = this._capabilityScore(model, capabilities);
-    score += capScore * WEIGHTS.capability;
+    score += capScore * this._weights.capability;
 
     const priorityScore = this._priorityScore(model);
-    score += priorityScore * WEIGHTS.priority;
+    score += priorityScore * this._weights.priority;
 
     const costScore = this._costScore(model);
-    score += costScore * WEIGHTS.cost;
+    score += costScore * this._weights.cost;
 
     const reasoningScore = this._reasoningScore(model);
-    score += reasoningScore * WEIGHTS.reasoning;
+    score += reasoningScore * this._weights.reasoning;
 
     return Math.round(score * 100) / 100;
   }
@@ -134,11 +127,11 @@ export class SelectionEngine {
   }
 
   getWeights() {
-    return { ...WEIGHTS };
+    return { ...this._weights };
   }
 
   setWeights(weights) {
-    Object.assign(WEIGHTS, weights);
+    Object.assign(this._weights, weights);
   }
 }
 
