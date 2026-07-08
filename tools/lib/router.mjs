@@ -2,58 +2,7 @@ import { getAgentRegistry } from './agent-registry.mjs';
 import { getCapabilityEngine } from './capability-engine.mjs';
 import { getTaskMapper } from './task-mapper.mjs';
 import { getLogger } from './logger.mjs';
-
-const PIPELINE_TEMPLATES = {
-  feature: {
-    agents: [
-      'requirements',
-      'architect',
-      'knowledge',
-      'impact-analysis',
-      'security',
-      'testing',
-      'code-review',
-      'documentation',
-    ],
-    description:
-      'Git → Planner → [Requirements+Architect] → Knowledge → Impact → [Language+Security+Testing] → [Code Review+Documentation] → Git merge',
-  },
-  bugfix: {
-    agents: ['knowledge', 'impact-analysis', 'debugging', 'testing', 'code-review'],
-    description: 'Git → Planner → [Knowledge+Impact] → Debugging → [Language+Testing] → Code Review → Git merge',
-  },
-  refactor: {
-    agents: ['architect', 'refactor', 'performance', 'code-review'],
-    description: 'Git → Architect → [Refactor+Performance] → Code Review → Git merge',
-  },
-  security: {
-    agents: ['security', 'pentest', 'code-review'],
-    description: 'Git → Security → Pentest → Code Review → Git merge',
-  },
-  deployment: {
-    agents: ['docker', 'kubernetes', 'deployment', 'release', 'documentation'],
-    description: 'Git → [Docker+Kubernetes] → [Build+Release] → Documentation → Git merge',
-  },
-  hotfix: {
-    agents: ['debugging', 'code-review'],
-    description: 'Git (from main) → Debugging → Code Review → Git merge',
-  },
-};
-
-const PIPELINE_LEVELS = {
-  feature: [
-    ['requirements', 'architect'],
-    ['knowledge'],
-    ['impact-analysis'],
-    ['security', 'testing'],
-    ['code-review', 'documentation'],
-  ],
-  bugfix: [['knowledge', 'impact-analysis'], ['debugging'], ['testing'], ['code-review']],
-  refactor: [['architect'], ['refactor', 'performance'], ['code-review']],
-  security: [['security'], ['pentest'], ['code-review']],
-  deployment: [['docker', 'kubernetes'], ['deployment', 'release'], ['documentation']],
-  hotfix: [['debugging'], ['code-review']],
-};
+import pipelineRegistry from './pipeline-registry.mjs';
 
 export class Router {
   constructor(agentRegistry = null, capabilityEngine = null, taskMapper = null) {
@@ -64,7 +13,7 @@ export class Router {
   }
 
   resolveTask(taskType, prompt = '') {
-    const template = PIPELINE_TEMPLATES[taskType];
+    const template = pipelineRegistry.resolve(taskType);
     if (!template) {
       return { taskType, agents: [], description: `Unknown task type: ${taskType}` };
     }
@@ -76,14 +25,14 @@ export class Router {
       taskType,
       modelProfile,
       description: template.description,
-      agents: this._resolveAgentList(template.agents, intent),
-      levels: this._resolveLevels(taskType, intent),
+      agents: this._resolveAgentList(template, intent),
+      levels: this._resolveLevels(template, intent),
     };
 
     return pipeline;
   }
 
-  _resolveAgentList(templateAgentIds, intent) {
+  _resolveAgentList(template, intent) {
     const techAgents =
       intent.keywords.length > 0
         ? this._engine.findBestMatch(intent, {
@@ -96,7 +45,10 @@ export class Router {
     const result = [];
     const seen = new Set();
 
-    for (const id of templateAgentIds) {
+    // Get all agents from all levels
+    const allTemplateAgents = template.levels?.flatMap((level) => level.agents) || [];
+
+    for (const id of allTemplateAgents) {
       const agent = this._registry.findById(id);
       if (agent && !seen.has(agent.id)) {
         result.push(agent);
@@ -114,8 +66,8 @@ export class Router {
     return result;
   }
 
-  _resolveLevels(taskType, intent) {
-    const levels = PIPELINE_LEVELS[taskType];
+  _resolveLevels(template, intent) {
+    const levels = template.levels;
     if (!levels) return [];
 
     const techAgents =
@@ -130,7 +82,7 @@ export class Router {
     const extraAgents = techAgents.map((s) => s.agent);
 
     return levels.map((level, i) => {
-      const resolved = level.map((id) => this._registry.findById(id)).filter(Boolean);
+      const resolved = (level.agents || []).map((id) => this._registry.findById(id)).filter(Boolean);
       if (i === 0) {
         for (const agent of extraAgents) {
           if (!resolved.find((a) => a.id === agent.id)) {
@@ -138,7 +90,12 @@ export class Router {
           }
         }
       }
-      return resolved;
+      // Preserve YAML level structure
+      return {
+        name: level.name,
+        parallel: level.parallel || false,
+        agents: resolved,
+      };
     });
   }
 

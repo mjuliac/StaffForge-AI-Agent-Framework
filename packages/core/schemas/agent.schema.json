@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://staffforge.dev/schemas/agent.schema.json",
+  "title": "StaffForge Agent",
+  "description": "Canonical agent definition for the StaffForge multi-provider AI agent framework",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique agent identifier (kebab-case, must match filename without extension)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name (Title Case)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-line summary of the agent's role"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the agent definition"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["primary", "subagent", "all"],
+      "description": "Agent mode — primary (Tab cycle), subagent (@mention), or all (both)"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["core", "technology", "domain", "platform", "utility"],
+      "description": "Agent taxonomy category"
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Search keywords for routing and discovery"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Capabilities this agent provides to pipelines"
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Routing priority (higher = preferred; default 50)"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Arbitrary tags for filtering and grouping"
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Agent IDs that must complete before this agent runs"
+    },
+    "before": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Agent IDs that must run after this agent (this agent gates them)"
+    },
+    "after": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Agent IDs that must complete before this agent runs (alias for depends_on)"
+    },
+    "tools": {
+      "type": "object",
+      "properties": {
+        "write": {
+          "type": "boolean",
+          "description": "May create or overwrite files"
+        },
+        "bash": {
+          "type": "boolean",
+          "description": "May execute shell commands"
+        },
+        "edit": {
+          "type": "boolean",
+          "description": "May modify existing files"
+        }
+      },
+      "required": ["write", "bash", "edit"],
+      "additionalProperties": false
+    },
+    "compatible_platforms": {
+      "type": "array",
+      "items": {
+        "enum": ["opencode", "claude-code", "cursor", "copilot", "aider", "gemini-cli"]
+      },
+      "description": "Platforms this agent is compatible with"
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Additional permission requirements (platform-specific)"
+    },
+    "input_schema": {
+      "type": "object",
+      "description": "JSON Schema defining expected input structure"
+    },
+    "output_schema": {
+      "type": "object",
+      "description": "JSON Schema defining expected output structure"
+    },
+    "examples": {
+      "type": "array",
+      "items": { "type": "object" },
+      "description": "Usage examples for documentation"
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Known limitations or constraints"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Owner or team responsible for this agent"
+    },
+    "extends": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Parent agent ID to inherit body content from"
+    }
+  },
+  "required": ["description", "mode", "tools"],
+  "additionalProperties": false
+}
