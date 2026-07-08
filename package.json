@@ -1,6 +1,6 @@
 {
   "name": "staffforge-ai-agent-framework",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "license": "MIT",
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
