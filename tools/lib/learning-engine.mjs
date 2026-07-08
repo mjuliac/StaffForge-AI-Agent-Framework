@@ -65,7 +65,13 @@ export class LearningEngine {
   }
 
   getTotalRuns(modelId, taskType) {
-    return this._executions.filter(e => e.modelId === modelId && e.taskType === taskType).length;
+    if (!modelId && !taskType) return this._executions.length;
+    const filtered = this._executions.filter(e => {
+      if (modelId && e.modelId !== modelId) return false;
+      if (taskType && e.taskType !== taskType) return false;
+      return true;
+    });
+    return filtered.length;
   }
 
   getAllRankings() {
@@ -75,6 +81,61 @@ export class LearningEngine {
       result[tt] = this.getModelRanking(tt, { topN: Infinity });
     }
     return result;
+  }
+
+  getAdjustedWeights(baseWeights = null) {
+    const weights = baseWeights || { profile: 0.35, capability: 0.25, priority: 0.15, cost: 0.15, reasoning: 0.10 };
+    const totalRuns = this._executions.length;
+    if (totalRuns < 10) return weights;
+
+    const allRankings = this.getAllRankings();
+    let totalRanked = 0;
+    let freeSuccessCount = 0;
+    let freeTotalCount = 0;
+    let complexSuccessCount = 0;
+    let complexTotalCount = 0;
+
+    for (const [, rankings] of Object.entries(allRankings)) {
+      for (const r of rankings) {
+        totalRanked++;
+        const modelExecs = this._executions.filter(e => e.modelId === r.modelId);
+        const isFree = modelExecs.every(e => (e.cost || 0) === 0);
+        if (isFree) {
+          freeTotalCount += r.totalRuns;
+          freeSuccessCount += Math.round(r.totalRuns * r.successRate);
+        }
+        const isComplex = modelExecs.some(e => e.taskType === 'architecture' || e.taskType === 'security');
+        if (isComplex) {
+          complexTotalCount += r.totalRuns;
+          complexSuccessCount += Math.round(r.totalRuns * r.successRate);
+        }
+      }
+    }
+
+    if (freeTotalCount > 0) {
+      const freeSuccessRate = freeSuccessCount / freeTotalCount;
+      if (freeSuccessRate > 0.8) {
+        weights.cost = Math.min(0.30, weights.cost + 0.05);
+        weights.priority = Math.max(0.10, weights.priority - 0.025);
+        weights.reasoning = Math.max(0.05, weights.reasoning - 0.025);
+      }
+    }
+
+    if (complexTotalCount > 0) {
+      const complexSuccessRate = complexSuccessCount / complexTotalCount;
+      if (complexSuccessRate > 0.7) {
+        weights.reasoning = Math.min(0.20, weights.reasoning + 0.05);
+      }
+    }
+
+    const sum = Object.values(weights).reduce((a, b) => a + b, 0);
+    if (sum > 0) {
+      for (const key of Object.keys(weights)) {
+        weights[key] /= sum;
+      }
+    }
+
+    return weights;
   }
 
   clearHistory() {
