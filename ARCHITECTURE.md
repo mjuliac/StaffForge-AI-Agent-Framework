@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state at Phase 7 (Testing + Documentación Automática).  
+> Current state at RFC-002 (Model Intelligence Layer).  
 > Active branch: `feature/rfc-001-architecture`
 
 ---
@@ -59,6 +59,13 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 | Telemetry Collector | `tools/lib/telemetry/collector.mjs` | `TelemetryCollector`, `getCollector()` |
 | Telemetry Storage | `tools/lib/telemetry/storage.mjs` | `TelemetryStorage`, `getStorage()` |
 | Telemetry Reporter | `tools/lib/telemetry/reporter.mjs` | `TelemetryReporter`, `getReporter()` |
+| Model Registry | `tools/lib/model-registry.mjs` | `ModelRegistry`, `getModelRegistry()` |
+| Model Profile | `tools/lib/model-profile.mjs` | `ModelProfile`, `getModelProfile()` |
+| Model Discovery | `tools/lib/model-discovery.mjs` | `ModelDiscovery`, `getModelDiscovery()` |
+| Selection Engine | `tools/lib/selection-engine.mjs` | `SelectionEngine`, `getSelectionEngine()` |
+| Fallback Engine | `tools/lib/fallback-engine.mjs` | `FallbackEngine`, `getFallbackEngine()` |
+| Learning Engine | `tools/lib/learning-engine.mjs` | `LearningEngine`, `getLearningEngine()` |
+| Model Selector | `tools/lib/model-selector.mjs` | `ModelSelector`, `getModelSelector()` |
 
 **Capability Engine** (`CapabilityEngine`):
 - `analyzeIntent(text)` — extract keywords + detect task type
@@ -116,10 +123,55 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
     { "id": "architect", "duration_ms": 8500, "tokens": 4200, "status": "success" }
   ],
   "status": "success",
-  "errors": [],
-  "timestamp": "2026-07-07T12:00:00Z"
 }
-```
+
+**Model Registry** (`ModelRegistry`):
+- `load()` — parse all models from `models/*.yaml`
+- `findById(id)` / `findByProvider(provider)` / `findByFamily(family)` — lookup
+- `findByCapability(capability)` / `findByTaskType(taskType)` — filter
+- `findWithTools()` / `findWithReasoning()` / `findFree()` — feature filters
+- `listProviders()` / `listFamilies()` — distinct values
+- `register(model)` — add model at runtime
+- `toJSON()` — serialize all models
+
+**Model Profile** (`ModelProfile`):
+- `load()` — parse task profiles from `models/profiles.yaml`
+- `getProfile(taskType)` / `listProfiles()` — profile lookup
+- `matchProfile(taskType, model)` — weighted scoring (family, tools, reasoning, context, cost)
+- `rankModels(taskType, models)` — sorted by profile match
+- `registerProfile(taskType, profile)` — add profile at runtime
+
+**Model Discovery** (`ModelDiscovery`):
+- `registerAdapter(provider, adapterFn)` — register custom discovery
+- `discoverAll()` / `discoverProvider(provider)` — run discovery
+- `listProviders()` — registered + file-based adapters
+- Auto-loads adapters from `tools/lib/discovery/*.mjs`
+
+**Selection Engine** (`SelectionEngine`):
+- `select(taskType, options?)` — best model for task
+- `selectTopN(taskType, options?)` — top N ranked models
+- `rankModels(taskType, options?)` — scored and sorted
+- `scoreModel(model, taskType, capabilities?)` — normalized 0-1 score
+- Weighted scoring: profile (35%), capability (25%), priority (15%), cost (15%), reasoning (10%)
+
+**Fallback Engine** (`FallbackEngine`):
+- `executeWithFallback(agentFn, context, primaryModel)` — primary → same-provider → other-provider → free
+- `getNextModel(failedModel, taskType)` — next available alternative
+- `recordFailure(modelId, error)` / `recordSuccess(modelId, taskType)` — in-memory counters
+
+**Learning Engine** (`LearningEngine`):
+- `recordExecution({modelId, taskType, duration, success})` — store execution
+- `getModelRanking(taskType, {topN})` — sorted by success rate (60%) + speed (20%) + tokens (20%)
+- `getSuccessRate(modelId, taskType)` / `getAverageCost(modelId)` — stats
+- `clearHistory()` — reset data
+
+**Model Selector** (`ModelSelector`):
+- `select(taskType, {strategy, provider, requireTools})` — pick model (intelligent/free/cheapest/fastest)
+- `execute(taskType, agentFn)` — run with optional fallback + learning
+- `estimateCost(model, inputTokens, outputTokens)` — USD cost
+- `listAvailable(options)` — filtered model list
+- `getRanking(taskType)` — learning-backed or selection-backed ranking
+- `configure(policy)` — set strategy, prefer_free, fallback, learning, etc.
 
 **Agent Registry** (`AgentRegistry`):
 - `load()` — parse all agents from disk
@@ -286,8 +338,10 @@ Orchestrator (agents/orchestrator.md)
     ├─ 2. Detect technologies from prompt (python → @python, docker → @docker)
     ├─ 3. Consult ORCHESTRATOR_MATRIX.md for pipeline
     ├─ 4. Delegate to @git for branch creation
-    ├─ 5. Execute pipeline levels (parallel where possible)
-    └─ 6. Delegate final merge/tag to @git
+    ├─ 5. Select optimal model via ModelSelector (MIL)
+    ├─ 6. Execute pipeline levels (parallel where possible, with fallback)
+    ├─ 7. Record execution in LearningEngine + Telemetry
+    └─ 8. Delegate final merge/tag to @git
 ```
 
 ---
@@ -340,10 +394,27 @@ Orchestrator (agents/orchestrator.md)
 | `tests/run-all.mjs` | ✅ 201/201 passed (9 suites) |
 | `tools/migrate-categories.mjs` | ✅ Assigned category to all 136 agents |
 | `tools/generate-docs.mjs` | ✅ DocumentationGenerator (catalog, capabilities, DAG, matrix, architecture) |
+| `tools/lib/model-registry.mjs` | ✅ ModelRegistry |
+| `tools/lib/model-profile.mjs` | ✅ ModelProfile (matchProfile weighted scoring) |
+| `tools/lib/model-discovery.mjs` | ✅ ModelDiscovery (registerAdapter, discoverAll, auto-load) |
+| `tools/lib/selection-engine.mjs` | ✅ SelectionEngine (select, rankModels, scoreModel) |
+| `tools/lib/fallback-engine.mjs` | ✅ FallbackEngine (4-level chain, executeWithFallback) |
+| `tools/lib/learning-engine.mjs` | ✅ LearningEngine (recordExecution, getModelRanking) |
+| `tools/lib/model-selector.mjs` | ✅ ModelSelector (facade, 4 strategies, execute, estimateCost) |
+| `tests/unit/registry/ModelRegistry.test.mjs` | ✅ 29/29 passed |
+| `tests/unit/registry/ModelProfile.test.mjs` | ✅ 21/21 passed |
+| `tests/unit/registry/ModelDiscovery.test.mjs` | ✅ 15/15 passed |
+| `tests/unit/registry/SelectionEngine.test.mjs` | ✅ 24/24 passed |
+| `tests/unit/registry/FallbackEngine.test.mjs` | ✅ 31/31 passed |
+| `tests/unit/registry/LearningEngine.test.mjs` | ✅ 33/33 passed |
+| `tests/unit/registry/ModelSelector.test.mjs` | ✅ 27/27 passed |
+| `tests/integration/mil-pipeline.test.mjs` | ✅ 13/13 passed |
+| `tests/e2e/mil-lifecycle.test.mjs` | ✅ 35/35 passed |
+| `tests/run-all.mjs` | ✅ 422/422 passed (18 suites) |
 | Agent categories | ✅ core=8, technology=94, domain=23, utility=11 |
-| Git working tree | ✅ On `feature/rfc-001-architecture` |
+| Git working tree | ✅ On `feature/rfc-002-model-intelligence` |
 
 ---
 
-*Generated at Phase 2 of RFC-001 implementation (Agent Registry + Adapter Registry).*
-*Last updated: 2026-07-07*
+*Generated at RFC-002 implementation (Model Intelligence Layer).*
+*Last updated: 2026-07-08*

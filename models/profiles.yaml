@@ -1,0 +1,57 @@
+profiles:
+  coding:
+    prefer: [deepseek, claude, gpt-4]
+    require_tools: true
+    min_context: 32768
+    max_cost: 0.01
+    description: "General coding and implementation tasks"
+
+  architecture:
+    prefer: [deepseek, claude, gpt-4]
+    require_reasoning: true
+    min_context: 65536
+    max_cost: 0.05
+    description: "System design, architecture decisions, DDD"
+
+  documentation:
+    prefer: [claude, gemini, gpt-4]
+    require_tools: false
+    min_context: 16384
+    max_cost: 0.005
+    description: "Writing docs, READMEs, API references"
+
+  testing:
+    prefer: [deepseek, claude, gemini]
+    require_tools: true
+    min_context: 32768
+    max_cost: 0.01
+    description: "Unit tests, integration tests, test generation"
+
+  review:
+    prefer: [deepseek, claude, north-mini-code]
+    require_tools: false
+    min_context: 32768
+    max_cost: 0.005
+    description: "Code review, PR review, audit"
+
+  security:
+    prefer: [deepseek, claude, gpt-4]
+    require_reasoning: true
+    require_tools: false
+    min_context: 65536
+    max_cost: 0.05
+    description: "Security audits, vulnerability analysis, pentest"
+
+  reasoning:
+    prefer: [deepseek, claude, gpt-4, nemotron]
+    require_reasoning: true
+    min_context: 65536
+    max_cost: 0.05
+    description: "Complex reasoning, analysis, planning"
+
+  quick:
+    prefer: [miMo, north-mini-code, gemini-flash]
+    require_tools: false
+    min_context: 8192
+    max_cost: 0
+    description: "Quick answers, simple tasks, cost-free"

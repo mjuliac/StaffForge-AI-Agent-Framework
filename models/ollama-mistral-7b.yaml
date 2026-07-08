@@ -1,0 +1,18 @@
+id: mistral-7b
+provider: ollama
+family: mistral
+name: Mistral 7B
+version: "2024-03"
+context_window: 32768
+supports_tools: false
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0
+cost_per_1k_output: 0
+priority: 35
+strengths: [local, free, fast, coding]
+weaknesses: [no-tools, limited-capabilities]
+metadata:
+  release_date: "2024-03"
+  source: local-ollama

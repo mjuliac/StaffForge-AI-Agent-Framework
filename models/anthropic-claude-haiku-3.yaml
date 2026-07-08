@@ -1,0 +1,18 @@
+id: claude-haiku-3
+provider: anthropic
+family: claude
+name: Claude Haiku 3
+version: "2025-03-13"
+context_window: 200000
+supports_tools: true
+supports_reasoning: false
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.00025
+cost_per_1k_output: 0.00125
+priority: 50
+strengths: [fast, cost-efficient, coding, simple-tasks]
+weaknesses: [complex-reasoning, architecture]
+metadata:
+  release_date: "2025-03"
+  provider_url: "https://anthropic.com"

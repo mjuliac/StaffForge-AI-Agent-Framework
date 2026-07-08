@@ -1,0 +1,18 @@
+id: gpt-4o
+provider: openai
+family: gpt-4
+name: GPT-4o
+version: "2024-08-06"
+context_window: 128000
+supports_tools: true
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.0025
+cost_per_1k_output: 0.01
+priority: 80
+strengths: [coding, reasoning, planning, analysis, vision]
+weaknesses: [cost, latency]
+metadata:
+  release_date: "2024-08"
+  provider_url: "https://platform.openai.com"

@@ -1,0 +1,18 @@
+id: gemini-2.0-pro
+provider: google
+family: gemini
+name: Gemini 2.0 Pro
+version: "2025-04"
+context_window: 1048576
+supports_tools: true
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.001
+cost_per_1k_output: 0.002
+priority: 65
+strengths: [reasoning, long-context, architecture, planning]
+weaknesses: [latency, creative]
+metadata:
+  release_date: "2025-04"
+  provider_url: "https://ai.google.dev"

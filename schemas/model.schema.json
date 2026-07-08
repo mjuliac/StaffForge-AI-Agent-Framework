@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://staffforge.dev/schemas/model.schema.json",
+  "title": "StaffForge Model Manifest",
+  "description": "Manifest for an AI model in the StaffForge Model Registry",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique model identifier (kebab-case)"
+    },
+    "provider": {
+      "type": "string",
+      "description": "Provider name (e.g., opencode, openai, anthropic, ollama)"
+    },
+    "family": {
+      "type": "string",
+      "description": "Model family name (e.g., gpt-4, claude, gemini)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable model name"
+    },
+    "version": {
+      "type": "string",
+      "description": "Model version string"
+    },
+    "context_window": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum context window in tokens"
+    },
+    "supports_tools": {
+      "type": "boolean",
+      "description": "Whether the model supports function/tool calling"
+    },
+    "supports_reasoning": {
+      "type": "boolean",
+      "description": "Whether the model supports extended reasoning/thinking"
+    },
+    "supports_json": {
+      "type": "boolean",
+      "description": "Whether the model supports JSON mode"
+    },
+    "supports_streaming": {
+      "type": "boolean",
+      "description": "Whether the model supports streaming output"
+    },
+    "cost_per_1k_input": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Cost per 1,000 input tokens (USD)"
+    },
+    "cost_per_1k_output": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Cost per 1,000 output tokens (USD)"
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Default selection priority (higher = preferred)"
+    },
+    "strengths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Capability strengths of this model"
+    },
+    "weaknesses": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Known weaknesses or limitations"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata (provider-specific)"
+    }
+  },
+  "required": [
+    "id", "provider", "family", "name",
+    "context_window", "supports_tools", "supports_reasoning",
+    "supports_json", "supports_streaming",
+    "cost_per_1k_input", "cost_per_1k_output", "priority"
+  ],
+  "additionalProperties": false
+}
