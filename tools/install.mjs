@@ -1,11 +1,13 @@
 import { createInterface } from 'node:readline';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { existsSync, copyFileSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
+
+const VALID_PLATFORMS = ['opencode', 'claude-code', 'cursor', 'copilot', 'aider', 'gemini-cli'];
 
 const rl = createInterface({
   input: process.stdin,
@@ -95,10 +97,16 @@ async function main() {
   }
 
   const platform = opts.platform || 'opencode';
+
+  if (!VALID_PLATFORMS.includes(platform)) {
+    console.error(`Error: Invalid platform "${platform}". Valid platforms: ${VALID_PLATFORMS.join(', ')}`);
+    process.exit(1);
+  }
+
   console.log(`\nExporting agents for platform: ${platform}...`);
 
   try {
-    execSync(`node tools/export.mjs --platform ${platform}`, {
+    execFileSync('node', ['tools/export.mjs', '--platform', platform], {
       cwd: root,
       stdio: 'inherit',
     });
