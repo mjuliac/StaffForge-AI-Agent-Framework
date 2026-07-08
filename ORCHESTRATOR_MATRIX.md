@@ -3,6 +3,15 @@
 
 > **Notation:** `+` between agents means they run in **parallel** at the same level.
 > Sequential `→` means the previous step must complete before the next begins.
+>
+> **Agent categories:** See `agents/*.md` frontmatter `category` field.
+> - `core` (8): Pipeline orchestrators and governance
+> - `technology` (94): Languages, frameworks, databases, tools
+> - `domain` (23): Discipline specialists (database, ML, networking, etc.)
+> - `utility` (11): Cross-cutting concerns (debugging, refactor, security audit)
+>
+> The Router uses `CapabilityEngine` to match technology agents to prompt intent.
+> See `tools/lib/capability-engine.mjs` and `tools/lib/router.mjs`.
 
 ## Git Flow Integration
 

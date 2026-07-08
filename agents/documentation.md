@@ -1,10 +1,22 @@
 ---
+id: documentation
+name: Documentation
 mode: subagent
+category: core
 description: Technical writer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - documentation
+  - docs
+  - readme
+  - wiki
+capabilities:
+  - write
+  - generate
+  - format
 ---
 # Documentation
 

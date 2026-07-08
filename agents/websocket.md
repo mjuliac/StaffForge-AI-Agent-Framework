@@ -1,10 +1,22 @@
 ---
+id: websocket
+name: Websocket
 mode: subagent
+category: technology
 description: Websocket Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - websocket
+  - ws
+  - realtime
+  - bidirectional
+capabilities:
+  - connection
+  - event
+  - streaming
 ---
 
 # Websocket

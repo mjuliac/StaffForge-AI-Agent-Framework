@@ -1,10 +1,22 @@
 ---
+id: storybook
+name: Storybook
 mode: subagent
+category: technology
 description: Storybook Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - storybook
+  - ui
+  - component
+  - documentation
+capabilities:
+  - story
+  - addon
+  - visual-test
 ---
 
 # Storybook

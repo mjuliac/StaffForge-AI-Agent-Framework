@@ -1,10 +1,22 @@
 ---
+id: csharp
+name: Csharp
 mode: subagent
+category: technology
 description: C# Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - csharp
+  - c#
+  - dotnet
+  - programming
+capabilities:
+  - code
+  - lint
+  - test
 ---
 # Csharp
 

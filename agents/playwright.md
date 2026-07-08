@@ -1,10 +1,22 @@
 ---
+id: playwright
+name: Playwright
 mode: subagent
+category: technology
 description: Playwright Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - playwright
+  - e2e
+  - testing
+  - browser
+capabilities:
+  - test
+  - e2e
+  - browser-automation
 ---
 
 # Playwright

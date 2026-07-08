@@ -1,10 +1,22 @@
 ---
+id: ansible
+name: Ansible
 mode: subagent
+category: technology
 description: Ansible Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - ansible
+  - automation
+  - config-management
+  - devops
+capabilities:
+  - playbook
+  - provision
+  - deploy
 ---
 
 # Ansible

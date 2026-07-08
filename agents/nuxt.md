@@ -1,10 +1,21 @@
 ---
+id: nuxt
+name: Nuxt
 mode: subagent
+category: technology
 description: Nuxt Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - nuxt
+  - vue
+  - fullstack
+  - ssr
+capabilities:
+  - code
+  - server-side-rendering
 ---
 
 # Nuxt

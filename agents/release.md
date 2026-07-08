@@ -1,10 +1,22 @@
 ---
+id: release
+name: Release
 mode: subagent
+category: domain
 description: Release manager.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - release
+  - versioning
+  - changelog
+  - deploy
+capabilities:
+  - release
+  - tag
+  - changelog
 ---
 # Release
 

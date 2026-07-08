@@ -1,10 +1,22 @@
 ---
+id: ddd
+name: Ddd
 mode: subagent
+category: domain
 description: DDD specialist.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - ddd
+  - domain-driven-design
+  - architecture
+  - ubiquitous-language
+capabilities:
+  - model
+  - aggregate
+  - bounded-context
 ---
 # Ddd
 

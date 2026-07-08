@@ -1,10 +1,21 @@
 ---
+id: ruby
+name: Ruby
 mode: subagent
+category: technology
 description: Ruby Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - ruby
+  - programming
+  - web
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # Ruby

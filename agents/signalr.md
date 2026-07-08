@@ -1,10 +1,22 @@
 ---
+id: signalr
+name: Signalr
 mode: subagent
+category: technology
 description: SignalR Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - signalr
+  - dotnet
+  - websocket
+  - real-time
+capabilities:
+  - hub
+  - realtime
+  - push
 ---
 
 # SignalR

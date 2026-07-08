@@ -1,10 +1,22 @@
 ---
+id: sqlserver
+name: Sqlserver
 mode: subagent
+category: technology
 description: Sqlserver Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - sql-server
+  - mssql
+  - database
+  - sql
+capabilities:
+  - query
+  - schema
+  - migration
 ---
 
 # Sqlserver

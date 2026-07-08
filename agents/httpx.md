@@ -1,10 +1,22 @@
 ---
+id: httpx
+name: Httpx
 mode: subagent
+category: technology
 description: HTTPX Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - httpx
+  - python
+  - http
+  - client
+capabilities:
+  - http-client
+  - async
+  - request
 ---
 
 # HTTPX

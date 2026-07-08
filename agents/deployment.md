@@ -1,10 +1,22 @@
 ---
+id: deployment
+name: Deployment
 mode: subagent
+category: domain
 description: Deployment expert.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - deployment
+  - deploy
+  - cd
+  - release
+capabilities:
+  - deploy
+  - rollback
+  - canary
 ---
 # Deployment
 

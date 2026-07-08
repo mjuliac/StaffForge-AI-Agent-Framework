@@ -1,10 +1,22 @@
 ---
+id: logging
+name: Logging
 mode: subagent
+category: domain
 description: Logging and observability.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - logging
+  - log
+  - observability
+  - structured
+capabilities:
+  - log
+  - aggregate
+  - analyze
 ---
 # Logging
 

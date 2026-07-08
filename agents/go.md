@@ -1,10 +1,22 @@
 ---
+id: go
+name: Go
 mode: subagent
+category: technology
 description: Go Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - go
+  - golang
+  - programming
+  - backend
+capabilities:
+  - code
+  - lint
+  - test
 ---
 
 # Go

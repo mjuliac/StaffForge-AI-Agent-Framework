@@ -1,10 +1,22 @@
 ---
+id: entity-framework
+name: Entity Framework
 mode: subagent
+category: technology
 description: Entity Framework Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - entity-framework
+  - ef
+  - dotnet
+  - orm
+capabilities:
+  - schema
+  - query
+  - migration
 ---
 
 # Entity Framework

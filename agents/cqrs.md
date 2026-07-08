@@ -1,10 +1,22 @@
 ---
+id: cqrs
+name: Cqrs
 mode: subagent
+category: domain
 description: CQRS specialist.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - cqrs
+  - command-query
+  - architecture
+  - segregation
+capabilities:
+  - command
+  - query
+  - event
 ---
 # Cqrs
 

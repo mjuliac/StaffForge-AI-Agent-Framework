@@ -1,10 +1,22 @@
 ---
+id: refactor
+name: Refactor
 mode: subagent
+category: utility
 description: Safe refactoring specialist.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - refactor
+  - restructure
+  - clean-code
+  - tech-debt
+capabilities:
+  - refactor
+  - restructure
+  - migrate
 ---
 # Refactor
 

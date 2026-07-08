@@ -1,10 +1,22 @@
 ---
+id: secrets
+name: Secrets
 mode: subagent
+category: utility
 description: Secrets scanner.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - secrets
+  - credentials
+  - security
+  - vault
+capabilities:
+  - scan
+  - rotate
+  - protect
 ---
 # Secrets
 

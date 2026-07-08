@@ -1,10 +1,22 @@
 ---
+id: plan
+name: Plan
 mode: primary
+category: domain
 description: Creates execution plan. Read-only mode.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - plan
+  - planning
+  - roadmap
+  - estimation
+capabilities:
+  - plan
+  - estimate
+  - sequence
 ---
 # Plan
 

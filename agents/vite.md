@@ -1,10 +1,17 @@
 ---
+id: vite
+name: Vite
 mode: subagent
+category: technology
 description: Vite Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - vite
+capabilities:
+  - code
 ---
 
 # Vite

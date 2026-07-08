@@ -1,10 +1,22 @@
 ---
+id: oracle
+name: Oracle
 mode: subagent
+category: technology
 description: Oracle Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - oracle
+  - database
+  - sql
+  - enterprise
+capabilities:
+  - query
+  - schema
+  - plsql
 ---
 
 # Oracle

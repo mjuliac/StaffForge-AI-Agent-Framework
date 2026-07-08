@@ -1,10 +1,22 @@
 ---
+id: data-science
+name: Data Science
 mode: subagent
+category: domain
 description: Data Science Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - data-science
+  - data
+  - analytics
+  - ml
+capabilities:
+  - analyze
+  - visualize
+  - model
 ---
 
 # Data Science

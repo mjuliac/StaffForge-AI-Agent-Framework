@@ -1,10 +1,23 @@
 ---
+id: nextjs
+name: Nextjs
 mode: subagent
+category: technology
 description: Next.js Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - nextjs
+  - next.js
+  - react
+  - fullstack
+  - ssr
+capabilities:
+  - code
+  - server-component
+  - api-route
 ---
 
 # Next.js

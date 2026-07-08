@@ -1,10 +1,22 @@
 ---
+id: qt-designer
+name: Qt Designer
 mode: subagent
+category: technology
 description: Qt Designer specialist.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - qt-designer
+  - qt
+  - gui
+  - ui-designer
+capabilities:
+  - design
+  - widget
+  - layout
 ---
 # Qt-Designer
 

@@ -1,10 +1,23 @@
 ---
+id: pytest
+name: Pytest
 mode: subagent
+category: technology
 description: Pytest Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - pytest
+  - python
+  - testing
+  - unit-test
+capabilities:
+  - test
+  - fixture
+  - mock
+  - assert
 ---
 
 # Pytest

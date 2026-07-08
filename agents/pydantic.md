@@ -1,10 +1,22 @@
 ---
+id: pydantic
+name: Pydantic
 mode: subagent
+category: technology
 description: Pydantic Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - pydantic
+  - python
+  - validation
+  - schema
+capabilities:
+  - validation
+  - schema
+  - serialization
 ---
 
 # Pydantic

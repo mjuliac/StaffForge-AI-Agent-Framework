@@ -1,10 +1,22 @@
 ---
+id: clean-architecture
+name: Clean Architecture
 mode: subagent
+category: domain
 description: Clean Architecture guardian.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - clean-architecture
+  - architecture
+  - ddd
+  - solid
+capabilities:
+  - design
+  - layer
+  - separation-of-concerns
 ---
 # Clean-Architecture
 

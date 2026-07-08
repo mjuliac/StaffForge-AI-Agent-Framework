@@ -1,10 +1,17 @@
 ---
+id: nodejs
+name: Nodejs
 mode: subagent
+category: technology
 description: Node.js Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - nodejs
+capabilities:
+  - code
 ---
 
 # Node.js

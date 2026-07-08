@@ -1,10 +1,22 @@
 ---
+id: flask
+name: Flask
 mode: subagent
+category: technology
 description: Flask Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - flask
+  - python
+  - backend
+  - web
+capabilities:
+  - code
+  - route
+  - blueprint
 ---
 
 # Flask

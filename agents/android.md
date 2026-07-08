@@ -1,10 +1,22 @@
 ---
+id: android
+name: Android
 mode: subagent
+category: technology
 description: Android Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - android
+  - kotlin
+  - mobile
+  - java
+capabilities:
+  - code
+  - activity
+  - fragment
 ---
 
 # Android

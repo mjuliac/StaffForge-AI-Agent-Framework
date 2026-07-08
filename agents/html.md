@@ -1,10 +1,22 @@
 ---
+id: html
+name: Html
 mode: subagent
+category: technology
 description: HTML Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - html
+  - markup
+  - web
+  - structure
+capabilities:
+  - markup
+  - semantic
+  - seo
 ---
 
 # HTML

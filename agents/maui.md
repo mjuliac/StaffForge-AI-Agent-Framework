@@ -1,10 +1,23 @@
 ---
+id: maui
+name: Maui
 mode: subagent
+category: technology
 description: Maui Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - maui
+  - dotnet
+  - csharp
+  - mobile
+  - desktop
+capabilities:
+  - code
+  - ui
+  - cross-platform
 ---
 
 # Maui

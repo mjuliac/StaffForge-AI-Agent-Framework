@@ -1,10 +1,22 @@
 ---
+id: networking
+name: Networking
 mode: subagent
+category: domain
 description: Networking Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - networking
+  - network
+  - tcp
+  - dns
+capabilities:
+  - config
+  - firewall
+  - routing
 ---
 
 # Networking

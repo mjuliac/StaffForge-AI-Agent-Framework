@@ -1,10 +1,23 @@
 ---
+id: nginx
+name: Nginx
 mode: subagent
+category: technology
 description: Nginx Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - nginx
+  - reverse-proxy
+  - web-server
+  - load-balancer
+capabilities:
+  - proxy
+  - serve
+  - ssl
+  - config
 ---
 
 # Nginx

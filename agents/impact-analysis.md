@@ -1,10 +1,22 @@
 ---
+id: impact-analysis
+name: Impact Analysis
 mode: subagent
+category: domain
 description: Analyzes change impact.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - impact-analysis
+  - change-impact
+  - risk
+  - dependency
+capabilities:
+  - analyze
+  - trace
+  - risk-assessment
 ---
 # Impact-Analysis
 

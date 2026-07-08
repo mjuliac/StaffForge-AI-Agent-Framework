@@ -1,10 +1,22 @@
 ---
+id: tailwind
+name: Tailwind
 mode: subagent
+category: technology
 description: Tailwind CSS Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - tailwind
+  - css
+  - styling
+  - utility
+capabilities:
+  - style
+  - responsive
+  - design
 ---
 
 # Tailwind CSS

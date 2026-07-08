@@ -1,10 +1,22 @@
 ---
+id: cypress
+name: Cypress
 mode: subagent
+category: technology
 description: Cypress Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - cypress
+  - e2e
+  - testing
+  - browser
+capabilities:
+  - test
+  - e2e
+  - component-test
 ---
 
 # Cypress

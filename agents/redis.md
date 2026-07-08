@@ -1,10 +1,22 @@
 ---
+id: redis
+name: Redis
 mode: subagent
+category: technology
 description: Redis Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - redis
+  - cache
+  - database
+  - key-value
+capabilities:
+  - cache
+  - pubsub
+  - session
 ---
 
 # Redis

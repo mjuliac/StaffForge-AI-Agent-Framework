@@ -1,10 +1,22 @@
 ---
+id: express
+name: Express
 mode: subagent
+category: technology
 description: Express Staff Engineer.
 tools:
   write: false
   bash: false
   edit: false
+keywords:
+  - express
+  - nodejs
+  - backend
+  - api
+capabilities:
+  - code
+  - middleware
+  - route
 ---
 
 # Express

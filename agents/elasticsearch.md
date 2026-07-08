@@ -1,10 +1,22 @@
 ---
+id: elasticsearch
+name: Elasticsearch
 mode: subagent
+category: technology
 description: Elasticsearch Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - elasticsearch
+  - elastic
+  - search
+  - analytics
+capabilities:
+  - search
+  - index
+  - aggregation
 ---
 
 # Elasticsearch

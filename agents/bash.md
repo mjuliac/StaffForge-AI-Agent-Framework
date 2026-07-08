@@ -1,10 +1,17 @@
 ---
+id: bash
+name: Bash
 mode: subagent
+category: utility
 description: Bash Staff Engineer.
 tools:
   write: false
   bash: true
   edit: false
+keywords:
+  - bash
+capabilities:
+  - code
 ---
 
 # Bash
