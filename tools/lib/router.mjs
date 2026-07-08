@@ -1,5 +1,6 @@
 import { getAgentRegistry } from './agent-registry.mjs';
 import { getCapabilityEngine } from './capability-engine.mjs';
+import { getTaskMapper } from './task-mapper.mjs';
 
 const PIPELINE_TEMPLATES = {
   feature: {
@@ -67,9 +68,10 @@ const PIPELINE_LEVELS = {
 };
 
 export class Router {
-  constructor(agentRegistry = null, capabilityEngine = null) {
+  constructor(agentRegistry = null, capabilityEngine = null, taskMapper = null) {
     this._registry = agentRegistry || getAgentRegistry();
     this._engine = capabilityEngine || getCapabilityEngine(this._registry);
+    this._taskMapper = taskMapper || getTaskMapper();
   }
 
   resolveTask(taskType, prompt = '') {
@@ -79,9 +81,11 @@ export class Router {
     }
 
     const intent = this._engine.analyzeIntent(prompt);
+    const modelProfile = this._taskMapper.mapTaskType(taskType);
 
     const pipeline = {
       taskType,
+      modelProfile,
       description: template.description,
       agents: this._resolveAgentList(template.agents, intent),
       levels: this._resolveLevels(taskType, intent),
@@ -134,9 +138,15 @@ export class Router {
 
     const extraAgents = techAgents.map(s => s.agent);
 
-    return levels.map(level => {
+    return levels.map((level, i) => {
       const resolved = level.map(id => this._registry.findById(id)).filter(Boolean);
-      resolved.push(...extraAgents);
+      if (i === 0) {
+        for (const agent of extraAgents) {
+          if (!resolved.find(a => a.id === agent.id)) {
+            resolved.push(agent);
+          }
+        }
+      }
       return resolved;
     });
   }
