@@ -1,5 +1,7 @@
 import { getRouter } from './router.mjs';
 import { getScheduler } from './scheduler.mjs';
+import { getModelSelector } from './model-selector.mjs';
+import { TelemetryCollector } from './telemetry/collector.mjs';
 
 export class PipelineExecutor {
   constructor(router = null, scheduler = null) {
@@ -9,19 +11,48 @@ export class PipelineExecutor {
 
   execute(taskType, prompt = '', options = {}) {
     const pipeline = this._router.resolveTask(taskType, prompt);
-
     const plan = this._scheduler.fromRouterPipeline(pipeline);
 
-    return {
+    const result = {
       taskType,
       description: pipeline.description,
       modelProfile: pipeline.modelProfile || null,
+      model: null,
+      telemetry: null,
       agents: pipeline.agents,
       levels: plan.levels,
       summary: plan.totalLevels > 0
         ? plan.levels.map((l, i) => `Level ${i + 1}: [${l.parallel.map(p => p.name || p.id).join(', ')}]`)
         : [],
     };
+
+    if (options.selectModel !== false) {
+      const selector = getModelSelector();
+      result.model = selector.select(taskType, {
+        requireTools: options.requireTools ?? true,
+        preferFree: options.preferFree ?? false,
+        provider: options.provider || null,
+        minContext: options.minContext || null,
+      });
+    }
+
+    if (options.enableTelemetry) {
+      const collector = new TelemetryCollector();
+      const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+      collector.startRun(runId, taskType, {
+        prompt,
+        model: result.model?.id || null,
+        provider: result.model?.provider || null,
+        pipeline: pipeline.agents.map(a => a.id),
+      });
+      collector.endRun('dry_run');
+      result.telemetry = {
+        runId,
+        report: collector.getReport(),
+      };
+    }
+
+    return result;
   }
 }
 
