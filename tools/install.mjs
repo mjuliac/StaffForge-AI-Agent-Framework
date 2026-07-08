@@ -1,7 +1,7 @@
 import { createInterface } from 'node:readline';
 import { execSync } from 'node:child_process';
-import { existsSync, copyFileSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { existsSync, copyFileSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -57,6 +57,19 @@ function parseArgs() {
   return opts;
 }
 
+function copyDirRecursive(src, dest) {
+  mkdirSync(dest, { recursive: true });
+  for (const entry of readdirSync(src)) {
+    const srcPath = join(src, entry);
+    const dstPath = join(dest, entry);
+    if (statSync(srcPath).isDirectory()) {
+      copyDirRecursive(srcPath, dstPath);
+    } else {
+      copyFileSync(srcPath, dstPath);
+    }
+  }
+}
+
 async function promptDefaultAgent() {
   console.log('\nStaffForge AI Agent Framework - Installer\n');
   console.log('Select the default agent mode:\n');
@@ -94,25 +107,46 @@ async function main() {
     process.exit(1);
   }
 
-  const opencodeJsonPath = join(root, 'adapters', platform, 'output', 'opencode.json');
-  if (!existsSync(opencodeJsonPath)) {
-    console.error('Error: opencode.json not found after export.');
+  const outputDir = join(root, 'adapters', platform, 'output');
+  if (!existsSync(outputDir)) {
+    console.error(`Error: No output generated for platform "${platform}".`);
+    console.error(`  Expected output directory: ${outputDir}`);
     process.exit(1);
   }
 
-  const content = JSON.parse(readFileSync(opencodeJsonPath, 'utf-8'));
-  content.default_agent = defaultAgent;
-  writeFileSync(opencodeJsonPath, JSON.stringify(content, null, 2) + '\n');
+  if (platform === 'opencode') {
+    const jsonPath = join(outputDir, 'opencode.json');
+    if (!existsSync(jsonPath)) {
+      console.error('Error: opencode.json not found after export.');
+      process.exit(1);
+    }
+    const content = JSON.parse(readFileSync(jsonPath, 'utf-8'));
+    content.default_agent = defaultAgent;
+    writeFileSync(jsonPath, JSON.stringify(content, null, 2) + '\n');
+  }
 
   const outDir = opts.out || root;
   mkdirSync(outDir, { recursive: true });
 
-  const targetPath = join(outDir, 'opencode.json');
-  copyFileSync(opencodeJsonPath, targetPath);
+  const files = readdirSync(outputDir);
+  let copiedCount = 0;
 
-  console.log(`\n✓ Exported to: ${targetPath}`);
-  console.log(`✓ Default agent: ${defaultAgent}`);
-  console.log('\nUse Tab to switch between orchestrator, build, and plan modes.\n');
+  for (const file of files) {
+    const srcPath = join(outputDir, file);
+    const dstPath = join(outDir, file);
+    if (statSync(srcPath).isDirectory()) {
+      copyDirRecursive(srcPath, dstPath);
+    } else {
+      copyFileSync(srcPath, dstPath);
+    }
+    copiedCount++;
+  }
+
+  console.log(`\n✓ ${copiedCount} file(s) exported to: ${outDir}`);
+  if (platform === 'opencode') {
+    console.log(`✓ Default agent: ${defaultAgent}`);
+    console.log('\nUse Tab to switch between orchestrator, build, and plan modes.\n');
+  }
 
   rl.close();
 }

@@ -109,7 +109,7 @@ function runExport(fwDir, platform, agent, out) {
   console.log(`\n${bl('→')} Exporting for ${platform}...`);
   mkdirSync(out, { recursive: true });
   if (platform === 'opencode') {
-    execSync(`node "${join(tools, 'install.mjs')}" --agent ${agent} --out "${out}"`, { stdio: 'inherit', cwd: fwDir });
+    execSync(`node "${join(tools, 'install.mjs')}" --agent ${agent} --platform opencode --out "${out}"`, { stdio: 'inherit', cwd: fwDir });
   } else {
     execSync(`node "${join(tools, 'export.mjs')}" --platform ${platform} --out "${out}"`, { stdio: 'inherit', cwd: fwDir });
   }
@@ -228,7 +228,7 @@ async function main() {
     console.log(`\n${bl('→')} Cleaning up...`);
     rmSync(fw, { recursive: true, force: true });
   } else if (d.startsWith(CWD) && !d.includes('node_modules')) {
-    const name = process.platform === 'win32' ? 'install.ps1' : 'instala.sh';
+    const name = process.platform === 'win32' ? 'install.ps1' : 'install.sh';
     const sp = join(CWD, name);
     if (existsSync(sp) && !isTracked(sp)) rmSync(sp, { force: true });
     if (existsSync(d) && d !== CWD) rmSync(d, { recursive: true, force: true });
