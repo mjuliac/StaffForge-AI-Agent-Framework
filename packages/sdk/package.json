@@ -1,0 +1,17 @@
+{
+  "name": "@staffforge/sdk",
+  "version": "1.0.0",
+  "description": "StaffForge AI Agent Framework SDK for building plugins and integrations",
+  "type": "module",
+  "main": "index.mjs",
+  "exports": {
+    ".": "./index.mjs"
+  },
+  "keywords": ["staffforge", "sdk", "ai", "agents", "framework"],
+  "author": "StaffForge",
+  "license": "GPL-3.0",
+  "engines": { "node": ">=18.0.0" },
+  "dependencies": {
+    "@staffforge/plugin-sdk": "^1.0.0"
+  }
+}
