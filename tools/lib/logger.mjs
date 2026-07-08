@@ -36,7 +36,7 @@ export class Logger {
   }
 
   getLevel() {
-    return Object.keys(LEVELS).find(k => LEVELS[k] === this._level) || 'info';
+    return Object.keys(LEVELS).find((k) => LEVELS[k] === this._level) || 'info';
   }
 }
 

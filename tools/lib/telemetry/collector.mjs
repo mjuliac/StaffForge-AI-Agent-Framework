@@ -73,8 +73,8 @@ export class TelemetryCollector {
 
     const durationMs = this._now() - this._startTime;
     const totalTokens = this._agents.reduce((sum, a) => sum + (a.tokens || 0), 0);
-    const providers = [...new Set(this._agents.map(a => a.provider).filter(Boolean))];
-    const models = [...new Set(this._agents.map(a => a.model).filter(Boolean))];
+    const providers = [...new Set(this._agents.map((a) => a.provider).filter(Boolean))];
+    const models = [...new Set(this._agents.map((a) => a.model).filter(Boolean))];
 
     this._run.status = status;
     this._run.duration_ms = durationMs;
@@ -98,8 +98,8 @@ export class TelemetryCollector {
       agent_count: this._agents.length,
       error_count: this._errors.length,
       agent_summary: {
-        success: this._agents.filter(a => a.status === 'success').length,
-        error: this._agents.filter(a => a.status === 'error').length,
+        success: this._agents.filter((a) => a.status === 'success').length,
+        error: this._agents.filter((a) => a.status === 'error').length,
         total: this._agents.length,
       },
     };

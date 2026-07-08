@@ -23,7 +23,7 @@ export class ModelRegistry {
   load() {
     if (this._models) return this;
 
-    const files = readdirSync(this._modelsDir).filter(f => f.endsWith('.yaml') || f.endsWith('.yml'));
+    const files = readdirSync(this._modelsDir).filter((f) => f.endsWith('.yaml') || f.endsWith('.yml'));
     this._models = [];
     this._byProvider = {};
     this._byFamily = {};
@@ -64,7 +64,7 @@ export class ModelRegistry {
 
   findById(id) {
     this.load();
-    return this._models.find(m => m.id === id) || null;
+    return this._models.find((m) => m.id === id) || null;
   }
 
   findByProvider(provider) {
@@ -79,8 +79,8 @@ export class ModelRegistry {
 
   findByCapability(capability) {
     this.load();
-    return this._models.filter(m =>
-      (m.strengths || []).some(s => s.includes(capability) || capability.includes(s))
+    return this._models.filter((m) =>
+      (m.strengths || []).some((s) => s.includes(capability) || capability.includes(s)),
     );
   }
 
@@ -96,26 +96,22 @@ export class ModelRegistry {
       reasoning: ['reasoning', 'analysis', 'planning'],
     };
     const signals = taskMap[taskType] || [taskType];
-    return this._models.filter(m =>
-      (m.strengths || []).some(s => signals.some(sig => s.includes(sig)))
-    );
+    return this._models.filter((m) => (m.strengths || []).some((s) => signals.some((sig) => s.includes(sig))));
   }
 
   findWithTools() {
     this.load();
-    return this._models.filter(m => m.supports_tools === true);
+    return this._models.filter((m) => m.supports_tools === true);
   }
 
   findWithReasoning() {
     this.load();
-    return this._models.filter(m => m.supports_reasoning === true);
+    return this._models.filter((m) => m.supports_reasoning === true);
   }
 
   findFree() {
     this.load();
-    return this._models.filter(m =>
-      (m.cost_per_1k_input || 0) === 0 && (m.cost_per_1k_output || 0) === 0
-    );
+    return this._models.filter((m) => (m.cost_per_1k_input || 0) === 0 && (m.cost_per_1k_output || 0) === 0);
   }
 
   listProviders() {
@@ -130,7 +126,7 @@ export class ModelRegistry {
 
   register(model) {
     this.load();
-    if (this._models.find(m => m.id === model.id)) {
+    if (this._models.find((m) => m.id === model.id)) {
       throw new Error(`Model "${model.id}" already registered`);
     }
     this._models.push(model);
@@ -143,7 +139,7 @@ export class ModelRegistry {
 
   toJSON() {
     this.load();
-    return this._models.map(m => ({ ...m }));
+    return this._models.map((m) => ({ ...m }));
   }
 }
 

@@ -14,7 +14,7 @@ const rl = createInterface({
   output: process.stdout,
 });
 
-const question = (q) => new Promise(r => rl.question(q, r));
+const question = (q) => new Promise((r) => rl.question(q, r));
 
 function showHelp() {
   console.log(`
@@ -159,7 +159,7 @@ async function main() {
   rl.close();
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err);
   process.exit(1);
 });

@@ -6,10 +6,17 @@ import { getLogger } from './logger.mjs';
 const PIPELINE_TEMPLATES = {
   feature: {
     agents: [
-      'requirements', 'architect', 'knowledge', 'impact-analysis',
-      'security', 'testing', 'code-review', 'documentation',
+      'requirements',
+      'architect',
+      'knowledge',
+      'impact-analysis',
+      'security',
+      'testing',
+      'code-review',
+      'documentation',
     ],
-    description: 'Git → Planner → [Requirements+Architect] → Knowledge → Impact → [Language+Security+Testing] → [Code Review+Documentation] → Git merge',
+    description:
+      'Git → Planner → [Requirements+Architect] → Knowledge → Impact → [Language+Security+Testing] → [Code Review+Documentation] → Git merge',
   },
   bugfix: {
     agents: ['knowledge', 'impact-analysis', 'debugging', 'testing', 'code-review'],
@@ -41,31 +48,11 @@ const PIPELINE_LEVELS = {
     ['security', 'testing'],
     ['code-review', 'documentation'],
   ],
-  bugfix: [
-    ['knowledge', 'impact-analysis'],
-    ['debugging'],
-    ['testing'],
-    ['code-review'],
-  ],
-  refactor: [
-    ['architect'],
-    ['refactor', 'performance'],
-    ['code-review'],
-  ],
-  security: [
-    ['security'],
-    ['pentest'],
-    ['code-review'],
-  ],
-  deployment: [
-    ['docker', 'kubernetes'],
-    ['deployment', 'release'],
-    ['documentation'],
-  ],
-  hotfix: [
-    ['debugging'],
-    ['code-review'],
-  ],
+  bugfix: [['knowledge', 'impact-analysis'], ['debugging'], ['testing'], ['code-review']],
+  refactor: [['architect'], ['refactor', 'performance'], ['code-review']],
+  security: [['security'], ['pentest'], ['code-review']],
+  deployment: [['docker', 'kubernetes'], ['deployment', 'release'], ['documentation']],
+  hotfix: [['debugging'], ['code-review']],
 };
 
 export class Router {
@@ -97,13 +84,14 @@ export class Router {
   }
 
   _resolveAgentList(templateAgentIds, intent) {
-    const techAgents = intent.keywords.length > 0
-      ? this._engine.findBestMatch(intent, {
-          topN: 3,
-          minScore: 5,
-          mode: 'subagent',
-        })
-      : [];
+    const techAgents =
+      intent.keywords.length > 0
+        ? this._engine.findBestMatch(intent, {
+            topN: 3,
+            minScore: 5,
+            mode: 'subagent',
+          })
+        : [];
 
     const result = [];
     const seen = new Set();
@@ -130,21 +118,22 @@ export class Router {
     const levels = PIPELINE_LEVELS[taskType];
     if (!levels) return [];
 
-    const techAgents = intent.keywords.length > 0
-      ? this._engine.findBestMatch(intent, {
-          topN: 3,
-          minScore: 5,
-          mode: 'subagent',
-        })
-      : [];
+    const techAgents =
+      intent.keywords.length > 0
+        ? this._engine.findBestMatch(intent, {
+            topN: 3,
+            minScore: 5,
+            mode: 'subagent',
+          })
+        : [];
 
-    const extraAgents = techAgents.map(s => s.agent);
+    const extraAgents = techAgents.map((s) => s.agent);
 
     return levels.map((level, i) => {
-      const resolved = level.map(id => this._registry.findById(id)).filter(Boolean);
+      const resolved = level.map((id) => this._registry.findById(id)).filter(Boolean);
       if (i === 0) {
         for (const agent of extraAgents) {
-          if (!resolved.find(a => a.id === agent.id)) {
+          if (!resolved.find((a) => a.id === agent.id)) {
             resolved.push(agent);
           }
         }
@@ -168,7 +157,7 @@ export class Router {
 
     return {
       intent,
-      suggestions: matches.map(m => ({
+      suggestions: matches.map((m) => ({
         id: m.agent.id,
         name: m.agent.name,
         score: m.score,

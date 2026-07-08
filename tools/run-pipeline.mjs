@@ -26,15 +26,34 @@ function parseArgs() {
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--help': case '-h': console.log(USAGE); process.exit(0);
-      case '--task': opts.task = args[++i]; break;
-      case '--prompt': opts.prompt = args[++i]; break;
-      case '--model': opts.model = args[++i]; break;
-      case '--provider': opts.provider = args[++i]; break;
-      case '--dry-run': opts.dryRun = true; break;
-      case '--telemetry': opts.telemetry = true; break;
-      case '--json': opts.json = true; break;
-      case '--no-model': opts.noModel = true; break;
+      case '--help':
+      case '-h':
+        console.log(USAGE);
+        process.exit(0);
+      case '--task':
+        opts.task = args[++i];
+        break;
+      case '--prompt':
+        opts.prompt = args[++i];
+        break;
+      case '--model':
+        opts.model = args[++i];
+        break;
+      case '--provider':
+        opts.provider = args[++i];
+        break;
+      case '--dry-run':
+        opts.dryRun = true;
+        break;
+      case '--telemetry':
+        opts.telemetry = true;
+        break;
+      case '--json':
+        opts.json = true;
+        break;
+      case '--no-model':
+        opts.noModel = true;
+        break;
       default:
         console.error(`Unknown option: ${args[i]}`);
         console.log(USAGE);
