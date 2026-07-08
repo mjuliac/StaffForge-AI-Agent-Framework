@@ -3,11 +3,11 @@ id: build
 name: Build
 mode: primary
 category: domain
-description: Build systems expert. Full tool access.
+description: Build systems expert. Bash for compile/package only; no file write/edit or git.
 tools:
-  write: true
+  write: false
   bash: true
-  edit: true
+  edit: false
 keywords:
   - build
   - compile
