@@ -16,7 +16,7 @@
     "url": "git+https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git"
   },
   "homepage": "https://github.com/mjuliac/StaffForge-AI-Agent-Framework#readme",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "engines": {
     "node": ">=18"
   },
