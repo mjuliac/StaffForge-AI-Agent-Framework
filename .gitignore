@@ -1,5 +1,5 @@
 node_modules/
 adapters/*/output/
 opencode.json
-package-lock.json
+/package-lock.json
 .staffforge-install.json
