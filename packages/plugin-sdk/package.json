@@ -1,0 +1,15 @@
+{
+  "name": "@staffforge/plugin-sdk",
+  "version": "1.0.0",
+  "description": "Plugin SDK interfaces for StaffForge AI Agent Framework",
+  "type": "module",
+  "main": "index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./interfaces/*": "./interfaces/*.mjs"
+  },
+  "keywords": ["staffforge", "plugin", "sdk", "interfaces"],
+  "author": "StaffForge",
+  "license": "GPL-3.0",
+  "engines": { "node": ">=18.0.0" }
+}

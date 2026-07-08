@@ -1,0 +1,14 @@
+name: hotfix
+description: Emergency hotfix pipeline
+version: "1.0"
+levels:
+  - name: planning
+    agents:
+      - orchestrator
+      - debugging
+  - name: review
+    agents:
+      - code-review
+  - name: finalization
+    agents:
+      - git

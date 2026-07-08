@@ -4,6 +4,7 @@ import { getModelSelector } from './model-selector.mjs';
 import { getSelectionEngine } from './selection-engine.mjs';
 import { getLearningEngine } from './learning-engine.mjs';
 import { TelemetryCollector } from './telemetry/collector.mjs';
+import eventBus from './event-bus.mjs';
 
 export class PipelineExecutor {
   constructor(router = null, scheduler = null) {
@@ -14,6 +15,9 @@ export class PipelineExecutor {
   execute(taskType, prompt = '', options = {}) {
     const pipeline = this._router.resolveTask(taskType, prompt);
     const plan = this._scheduler.fromRouterPipeline(pipeline);
+    const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+
+    eventBus.emit('pipeline:start', { runId, taskType, description: pipeline.description });
 
     const result = {
       taskType,
@@ -59,7 +63,6 @@ export class PipelineExecutor {
 
     if (options.enableTelemetry) {
       const collector = new TelemetryCollector();
-      const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
       collector.startRun(runId, taskType, {
         prompt,
         model: result.model?.id || null,
@@ -72,6 +75,8 @@ export class PipelineExecutor {
         report: collector.getReport(),
       };
     }
+
+    eventBus.emit('pipeline:complete', { runId, taskType, duration: 0 });
 
     return result;
   }

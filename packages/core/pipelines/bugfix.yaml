@@ -1,0 +1,28 @@
+name: bugfix
+description: Bug fix pipeline with debugging focus
+version: "1.0"
+levels:
+  - name: planning
+    agents:
+      - orchestrator
+      - planner
+    parallel: true
+  - name: analysis
+    agents:
+      - knowledge
+      - impact-analysis
+    parallel: true
+  - name: debugging
+    agents:
+      - debugging
+  - name: implementation
+    agents:
+      - language
+      - testing
+    parallel: true
+  - name: review
+    agents:
+      - code-review
+  - name: finalization
+    agents:
+      - git
