@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
+import { getLogger } from './logger.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..', '..');
@@ -35,6 +36,7 @@ export class AgentRegistry {
   constructor(agentDir = null) {
     this._agentDir = agentDir || join(root, 'agents');
     this._agents = null;
+    this._log = getLogger();
   }
 
   load() {
@@ -46,7 +48,7 @@ export class AgentRegistry {
       try {
         this._agents.push(parseAgent(file, content));
       } catch (err) {
-        console.warn(`WARN  ${file}: ${err.message}`);
+        this._log.warn(`${file}: ${err.message}`);
       }
     }
     return this;
@@ -126,7 +128,7 @@ export class AgentRegistry {
       if (visited.has(id)) return;
       const agent = agentMap[id];
       if (!agent) {
-        console.warn(`WARN  resolveDependencies: agent "${id}" not found, skipping`);
+        this._log.warn(`resolveDependencies: agent "${id}" not found, skipping`);
         visited.add(id);
         return;
       }

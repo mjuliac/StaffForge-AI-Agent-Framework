@@ -21,9 +21,10 @@ StaffForge AI Agent Framework - Installer
 Usage: node tools/install.mjs [options]
 
 Options:
-  --help, -h          Show this help message
-  --agent <name>      Set default agent (orchestrator, build, or plan)
-  --out <dir>         Output directory (default: project root)
+  --help, -h             Show this help message
+  --agent <name>         Set default agent (orchestrator, build, or plan)
+  --platform <name>      Target platform (opencode, claude-code, cursor, copilot, aider, gemini-cli)
+  --out <dir>            Output directory (default: project root)
 
 Interactive mode:
   node tools/install.mjs
@@ -31,7 +32,8 @@ Interactive mode:
 Non-interactive mode:
   node tools/install.mjs --agent orchestrator
   node tools/install.mjs --agent build
-  node tools/install.mjs --agent plan
+  node tools/install.mjs --platform claude-code
+  node tools/install.mjs --agent orchestrator --platform cursor
 `);
 }
 
@@ -45,6 +47,8 @@ function parseArgs() {
       process.exit(0);
     } else if (args[i] === '--agent') {
       opts.agent = args[++i];
+    } else if (args[i] === '--platform') {
+      opts.platform = args[++i];
     } else if (args[i] === '--out') {
       opts.out = args[++i];
     }
@@ -77,10 +81,11 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`\nExporting agents for platform: opencode...`);
+  const platform = opts.platform || 'opencode';
+  console.log(`\nExporting agents for platform: ${platform}...`);
 
   try {
-    execSync('node tools/export.mjs --platform opencode', {
+    execSync(`node tools/export.mjs --platform ${platform}`, {
       cwd: root,
       stdio: 'inherit',
     });
@@ -89,7 +94,7 @@ async function main() {
     process.exit(1);
   }
 
-  const opencodeJsonPath = join(root, 'adapters', 'opencode', 'output', 'opencode.json');
+  const opencodeJsonPath = join(root, 'adapters', platform, 'output', 'opencode.json');
   if (!existsSync(opencodeJsonPath)) {
     console.error('Error: opencode.json not found after export.');
     process.exit(1);
