@@ -268,7 +268,128 @@ Child agent.
   fs.rmSync(dir, { recursive: true });
 }
 
-// Test 17: extends with missing parent logs warning
+// Test 17: extends with missing parent loads own body
+{
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-registry-test-'));
+  fs.writeFileSync(path.join(dir, 'orphan.md'), `---
+id: orphan
+name: Orphan
+mode: subagent
+category: technology
+description: Orphan agent.
+tools:
+  write: false
+  bash: false
+  edit: false
+extends: nonexistent
+---
+# Orphan
+`, 'utf-8');
+  const reg = new AgentRegistry(dir);
+  const orphan = reg.findById('orphan');
+  assert(orphan !== null, 'extends missing parent still loads');
+  assert(orphan.body === '# Orphan', 'extends missing parent keeps own body');
+  fs.rmSync(dir, { recursive: true });
+}
+
+// Test 18: multi-level extends (child → parent → grandparent)
+{
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-registry-test-'));
+  fs.writeFileSync(path.join(dir, 'grandpa.md'), `---
+id: grandpa
+name: Grandpa
+mode: subagent
+category: core
+description: Grandparent agent.
+tools:
+  write: false
+  bash: false
+  edit: false
+---
+## Shared
+- base rule
+`, 'utf-8');
+  fs.writeFileSync(path.join(dir, 'parent.md'), `---
+id: parent
+name: Parent
+mode: subagent
+category: core
+description: Parent agent.
+tools:
+  write: false
+  bash: false
+  edit: false
+extends: grandpa
+---
+## Parent Rules
+- parent specific
+`, 'utf-8');
+  fs.writeFileSync(path.join(dir, 'child.md'), `---
+id: child
+name: Child
+mode: subagent
+category: technology
+description: Child agent.
+tools:
+  write: false
+  bash: false
+  edit: false
+extends: parent
+---
+# Child
+`, 'utf-8');
+  const reg = new AgentRegistry(dir);
+  const child = reg.findById('child');
+  assert(child.body.includes('# Child'), 'multi-level child body');
+  assert(child.body.includes('## Parent Rules'), 'multi-level parent body');
+  assert(child.body.includes('## Shared'), 'multi-level grandparent body');
+  assert(child.body.startsWith('# Child'), 'multi-level child comes first');
+  assert(!child.frontmatter.extends, 'multi-level extends removed');
+  const parent = reg.findById('parent');
+  assert(!parent.frontmatter.extends, 'multi-level intermediate extends removed');
+  fs.rmSync(dir, { recursive: true });
+}
+
+// Test 19: circular extends detected
+{
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-registry-test-'));
+  fs.writeFileSync(path.join(dir, 'a.md'), `---
+id: a
+name: A
+mode: subagent
+category: core
+description: Agent A.
+tools:
+  write: false
+  bash: false
+  edit: false
+extends: b
+---
+# A
+`, 'utf-8');
+  fs.writeFileSync(path.join(dir, 'b.md'), `---
+id: b
+name: B
+mode: subagent
+category: core
+description: Agent B.
+tools:
+  write: false
+  bash: false
+  edit: false
+extends: a
+---
+# B
+`, 'utf-8');
+  const reg = new AgentRegistry(dir);
+  const a = reg.findById('a');
+  const b = reg.findById('b');
+  assert(a.body === '# A', 'circular a keeps own body');
+  assert(b.body === '# B', 'circular b keeps own body');
+  assert(!a.frontmatter.extends, 'circular a extends removed');
+  assert(!b.frontmatter.extends, 'circular b extends removed');
+  fs.rmSync(dir, { recursive: true });
+}
 {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-registry-test-'));
   fs.writeFileSync(path.join(dir, 'orphan.md'), `---
