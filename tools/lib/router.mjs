@@ -1,6 +1,7 @@
 import { getAgentRegistry } from './agent-registry.mjs';
 import { getCapabilityEngine } from './capability-engine.mjs';
 import { getTaskMapper } from './task-mapper.mjs';
+import { getLogger } from './logger.mjs';
 
 const PIPELINE_TEMPLATES = {
   feature: {
@@ -72,6 +73,7 @@ export class Router {
     this._registry = agentRegistry || getAgentRegistry();
     this._engine = capabilityEngine || getCapabilityEngine(this._registry);
     this._taskMapper = taskMapper || getTaskMapper();
+    this._log = getLogger();
   }
 
   resolveTask(taskType, prompt = '') {
@@ -155,7 +157,7 @@ export class Router {
     try {
       return this._registry.resolveDependencies(agentIds);
     } catch (err) {
-      console.error(`ERROR: ${err.message}`);
+      this._log.error(`${err.message}`);
       return agentIds;
     }
   }
@@ -176,8 +178,8 @@ export class Router {
   }
 }
 
-export function getRouter(registry = null, engine = null) {
-  return new Router(registry, engine);
+export function getRouter(registry = null, engine = null, taskMapper = null) {
+  return new Router(registry, engine, taskMapper);
 }
 
 export default getRouter;
