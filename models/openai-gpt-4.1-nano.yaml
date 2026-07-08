@@ -1,0 +1,18 @@
+id: gpt-4.1-nano
+provider: openai
+family: gpt-4
+name: GPT-4.1 Nano
+version: "2026-05"
+context_window: 1048576
+supports_tools: true
+supports_reasoning: false
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.0001
+cost_per_1k_output: 0.0004
+priority: 60
+strengths: [speed, cost, long-context, simple-tasks]
+weaknesses: [reasoning, complex-coding, planning]
+metadata:
+  release_date: "2026-05"
+  provider_url: "https://platform.openai.com"

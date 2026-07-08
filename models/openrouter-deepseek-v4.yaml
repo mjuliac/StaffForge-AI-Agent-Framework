@@ -1,0 +1,18 @@
+id: deepseek-v4
+provider: openrouter
+family: deepseek
+name: DeepSeek V4
+version: "2026-01"
+context_window: 131072
+supports_tools: true
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.0005
+cost_per_1k_output: 0.0015
+priority: 85
+strengths: [coding, reasoning, architecture, planning]
+weaknesses: [creative-writing, multimodal]
+metadata:
+  release_date: "2026-01"
+  provider_url: "https://openrouter.ai"

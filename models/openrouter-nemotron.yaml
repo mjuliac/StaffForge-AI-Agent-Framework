@@ -1,0 +1,18 @@
+id: nemotron
+provider: openrouter
+family: nemotron
+name: Nemotron
+version: "1.0"
+context_window: 131072
+supports_tools: true
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.0002
+cost_per_1k_output: 0.0006
+priority: 55
+strengths: [reasoning, architecture, planning, cost-efficient]
+weaknesses: [coding, creative]
+metadata:
+  release_date: "2026-01"
+  provider_url: "https://openrouter.ai"

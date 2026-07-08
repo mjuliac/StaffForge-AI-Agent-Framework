@@ -5,12 +5,11 @@ OpenCode multi-provider agent framework. Canonical agents in `agents/*.md`.
 ## Structure
 
 ```
-agents/           — 40 agent definitions with YAML frontmatter (mode, description, tools)
+agents/           — 136 agent definitions with YAML frontmatter (mode, description, tools)
 adapters/          — Platform exporters per platform (opencode, claude-code, cursor, copilot, aider, gemini-cli)
-schemas/           — JSON Schema for agent validation (agent.schema.json)
-templates/         — Scaffolding for new agents (agent.md)
-tools/             — Node.js CLI: validate, export, init-agent, install
-examples/          — Sample outputs and export commands
+schemas/           — JSON Schema for agent validation (agent.schema.json, model.schema.json)
+tools/             — Node.js CLI: validate, export, init-agent, install, test
+models/            — Model definitions (22 files, 7 providers) + task profiles
 ORCHESTRATOR_MATRIX.md — task → pipeline routing with Git Flow integration
 ```
 
@@ -53,10 +52,23 @@ tools:
 ## Commands
 
 ```bash
-npm install    # in tools/
-node tools/validate.mjs              # validate all agents
-node tools/export.mjs --platform <name>   # export for a platform
-node tools/init-agent.mjs <name>     # create a new agent from template
+npm install               # Install all dependencies
+npm run setup             # Interactive installer (any platform)
+npm run validate          # Validate all agents against JSON Schema
+npm test                  # Run all tests (19 suites, 462+ tests)
+npm run export:opencode   # Export for OpenCode
+npm run export:claude     # Export for Claude Code
+npm run export:cursor     # Export for Cursor
+npm run export:copilot    # Export for GitHub Copilot
+npm run export:aider      # Export for Aider
+npm run export:gemini     # Export for Gemini CLI
+npm run init-agent <name> # Create a new agent from template
+
+# Low-level
+node tools/export.mjs --platform <name>   # Export for any platform
+node tools/validate.mjs                   # Validate all agents
+node tools/init-agent.mjs <name>          # Create a new agent
+node install.mjs --platform <name>        # Install for a platform
 ```
 
 ## Adapting to a new platform

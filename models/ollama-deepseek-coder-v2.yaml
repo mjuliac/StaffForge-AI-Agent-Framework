@@ -1,0 +1,18 @@
+id: deepseek-coder-v2
+provider: ollama
+family: deepseek
+name: DeepSeek Coder V2
+version: "2025-06"
+context_window: 131072
+supports_tools: true
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0
+cost_per_1k_output: 0
+priority: 75
+strengths: [coding, code-generation, local, cost-free]
+weaknesses: [general-knowledge, creative-writing]
+metadata:
+  release_date: "2025-06"
+  provider_url: "https://ollama.ai"

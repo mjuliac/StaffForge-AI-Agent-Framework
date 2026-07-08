@@ -1,7 +1,7 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state at Phase 7 (Testing + Documentación Automática).  
-> Active branch: `feature/rfc-001-architecture`
+> Current state: RFC-002 (Model Intelligence Layer) + Phase 1 improvements.  
+> Active branch: `develop`
 
 ---
 
@@ -59,6 +59,16 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 | Telemetry Collector | `tools/lib/telemetry/collector.mjs` | `TelemetryCollector`, `getCollector()` |
 | Telemetry Storage | `tools/lib/telemetry/storage.mjs` | `TelemetryStorage`, `getStorage()` |
 | Telemetry Reporter | `tools/lib/telemetry/reporter.mjs` | `TelemetryReporter`, `getReporter()` |
+| Model Registry | `tools/lib/model-registry.mjs` | `ModelRegistry`, `getModelRegistry()` |
+| Model Profile | `tools/lib/model-profile.mjs` | `ModelProfile`, `getModelProfile()` |
+| Model Discovery | `tools/lib/model-discovery.mjs` | `ModelDiscovery`, `getModelDiscovery()` |
+| Selection Engine | `tools/lib/selection-engine.mjs` | `SelectionEngine`, `getSelectionEngine()` |
+| Fallback Engine | `tools/lib/fallback-engine.mjs` | `FallbackEngine`, `getFallbackEngine()` |
+| Learning Engine | `tools/lib/learning-engine.mjs` | `LearningEngine`, `getLearningEngine()` |
+| Model Selector | `tools/lib/model-selector.mjs` | `ModelSelector`, `getModelSelector()` |
+| Pipeline Executor | `tools/lib/pipeline-executor.mjs` | `PipelineExecutor`, `getPipelineExecutor()` |
+| Task Mapper | `tools/lib/task-mapper.mjs` | `TaskMapper`, `getTaskMapper()` |
+| Logger | `tools/lib/logger.mjs` | `Logger`, `getLogger()` |
 
 **Capability Engine** (`CapabilityEngine`):
 - `analyzeIntent(text)` — extract keywords + detect task type
@@ -116,10 +126,55 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
     { "id": "architect", "duration_ms": 8500, "tokens": 4200, "status": "success" }
   ],
   "status": "success",
-  "errors": [],
-  "timestamp": "2026-07-07T12:00:00Z"
 }
-```
+
+**Model Registry** (`ModelRegistry`):
+- `load()` — parse all models from `models/*.yaml`
+- `findById(id)` / `findByProvider(provider)` / `findByFamily(family)` — lookup
+- `findByCapability(capability)` / `findByTaskType(taskType)` — filter
+- `findWithTools()` / `findWithReasoning()` / `findFree()` — feature filters
+- `listProviders()` / `listFamilies()` — distinct values
+- `register(model)` — add model at runtime
+- `toJSON()` — serialize all models
+
+**Model Profile** (`ModelProfile`):
+- `load()` — parse task profiles from `models/profiles.yaml`
+- `getProfile(taskType)` / `listProfiles()` — profile lookup
+- `matchProfile(taskType, model)` — weighted scoring (family, tools, reasoning, context, cost)
+- `rankModels(taskType, models)` — sorted by profile match
+- `registerProfile(taskType, profile)` — add profile at runtime
+
+**Model Discovery** (`ModelDiscovery`):
+- `registerAdapter(provider, adapterFn)` — register custom discovery
+- `discoverAll()` / `discoverProvider(provider)` — run discovery
+- `listProviders()` — registered + file-based adapters
+- Auto-loads adapters from `tools/lib/discovery/*.mjs`
+
+**Selection Engine** (`SelectionEngine`):
+- `select(taskType, options?)` — best model for task
+- `selectTopN(taskType, options?)` — top N ranked models
+- `rankModels(taskType, options?)` — scored and sorted
+- `scoreModel(model, taskType, capabilities?)` — normalized 0-1 score
+- Weighted scoring: profile (35%), capability (25%), priority (15%), cost (15%), reasoning (10%)
+
+**Fallback Engine** (`FallbackEngine`):
+- `executeWithFallback(agentFn, context, primaryModel)` — primary → same-provider → other-provider → free
+- `getNextModel(failedModel, taskType)` — next available alternative
+- `recordFailure(modelId, error)` / `recordSuccess(modelId, taskType)` — in-memory counters
+
+**Learning Engine** (`LearningEngine`):
+- `recordExecution({modelId, taskType, duration, success})` — store execution
+- `getModelRanking(taskType, {topN})` — sorted by success rate (60%) + speed (20%) + tokens (20%)
+- `getSuccessRate(modelId, taskType)` / `getAverageCost(modelId)` — stats
+- `clearHistory()` — reset data
+
+**Model Selector** (`ModelSelector`):
+- `select(taskType, {strategy, provider, requireTools})` — pick model (intelligent/free/cheapest/fastest)
+- `execute(taskType, agentFn)` — run with optional fallback + learning
+- `estimateCost(model, inputTokens, outputTokens)` — USD cost
+- `listAvailable(options)` — filtered model list
+- `getRanking(taskType)` — learning-backed or selection-backed ranking
+- `configure(policy)` — set strategy, prefer_free, fallback, learning, etc.
 
 **Agent Registry** (`AgentRegistry`):
 - `load()` — parse all agents from disk
@@ -130,6 +185,19 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 - `resolveDependencies(agentIds)` — topological sort with cycle detection
 - `getCategories()` / `getModes()` — distinct values
 - `toJSON()` — serialize all agents
+
+**Pipeline Executor** (`PipelineExecutor`):
+- `execute(taskType, prompt, options?)` — resolves pipeline via Router and converts to DAG-based execution plan via Scheduler
+- Returns `{taskType, description, modelProfile, agents, levels, summary}`
+
+**Task Mapper** (`TaskMapper`):
+- `mapTaskType(taskType)` — maps pipeline task type to model profile (feature→coding, bugfix→coding, refactor→architecture, security→security, deployment→coding, hotfix→quick)
+- `getAllMappings()` — returns all task→profile mappings
+
+**Logger** (`Logger`):
+- `debug/info/warn/error(...args)` — structured logging with level prefixes
+- `setLevel(level)` — runtime log level (debug/info/warn/error/silent)
+- Controlled via `STAFFFORGE_LOG_LEVEL` env var (default: `info`)
 
 **Adapter Registry** (`AdapterRegistry`):
 - `listAdapters()` — auto-discover platform adapters
@@ -233,43 +301,63 @@ Defines 6 task types with DAG pipelines:
 │   ├── copilot/index.mjs
 │   ├── aider/index.mjs
 │   └── gemini-cli/index.mjs
+├── models/                  # Model definitions (22 YAML)
+│   ├── profiles.yaml        # 8 task profiles
+│   ├── openai-gpt-4o.yaml   # Model example
+│   └── ...
 ├── schemas/
-│   ├── agent.schema.json   # Current active schema
-│   └── agent.schema.v0.json # Frozen pre-RFC schema
+│   ├── agent.schema.json    # Current active schema
+│   ├── agent.schema.v0.json # Frozen pre-RFC schema
+│   └── model.schema.json    # Model manifest schema
 ├── templates/
 │   └── agent.md
 ├── tests/
 │   ├── unit/
-│   │   ├── dag.test.mjs         # DAG unit tests
-│   │   └── scheduler.test.mjs   # Scheduler unit tests
+│   │   ├── dag.test.mjs           # DAG unit tests
+│   │   ├── scheduler.test.mjs     # Scheduler unit tests
+│   │   ├── pipeline-executor.test.mjs  # Pipeline executor tests
+│   │   ├── registry/              # 8 MIL test files
+│   │   ├── router/                # 2 router test files
+│   │   └── telemetry.test.mjs     # Telemetry tests
+│   ├── integration/
+│   │   ├── export.test.mjs        # Export integration
+│   │   ├── mil-pipeline.test.mjs  # MIL integration
+│   │   └── pipeline.test.mjs      # Pipeline integration
+│   ├── e2e/
+│   │   └── mil-lifecycle.test.mjs # End-to-end MIL lifecycle
+│   └── run-all.mjs                # Test runner
 ├── tools/
 │   ├── lib/
-│   │   ├── agent-registry.mjs    # Programmatic Agent Registry API
-│   │   ├── adapter-registry.mjs  # Programmatic Adapter Registry API
-│   │   ├── capability-engine.mjs # Intent analysis + scoring
-│   │   ├── router.mjs            # Declarative pipeline router
-│   │   ├── dag.mjs               # Directed acyclic graph
-│   │   ├── scheduler.mjs         # Pipeline execution planner
+│   │   ├── agent-registry.mjs     # Programmatic Agent Registry API
+│   │   ├── adapter-registry.mjs   # Programmatic Adapter Registry API
+│   │   ├── capability-engine.mjs  # Intent analysis + scoring
+│   │   ├── router.mjs             # Declarative pipeline router
+│   │   ├── dag.mjs                # Directed acyclic graph
+│   │   ├── scheduler.mjs          # Pipeline execution planner
+│   │   ├── pipeline-executor.mjs  # Router→Scheduler integration
+│   │   ├── task-mapper.mjs        # Task-type → model-profile mapping
+│   │   ├── logger.mjs             # Structured logger
+│   │   ├── model-registry.mjs     # Model definitions
+│   │   ├── model-profile.mjs      # Task profiles
+│   │   ├── model-discovery.mjs    # Provider discovery
+│   │   ├── selection-engine.mjs   # Weighted model scoring
+│   │   ├── fallback-engine.mjs    # 4-level fallback chain
+│   │   ├── learning-engine.mjs    # Execution history
+│   │   ├── model-selector.mjs     # Model selection facade
 │   │   └── telemetry/
-│   │       ├── collector.mjs     # TelemetryCollector
-│   │       ├── storage.mjs       # JSON Lines persistence
-│   │       ├── reporter.mjs      # Markdown/JSON report generator
-│   │       └── index.mjs         # Public exports
-│   ├── export.mjs          # Multi-platform exporter
-│   ├── validate.mjs        # JSON Schema validation
-│   ├── init-agent.mjs      # Scaffolding tool
-│   ├── migrate-frontmatter.mjs # Schema migration tool
-│   └── install.mjs         # OpenCode-specific installer
-├── packages/
-│   └── cli/
-│       ├── install.mjs     # Universal installer
-│       ├── package.json    # @staffforge/cli (v0.1.0)
-│       └── README.md
-├── install.mjs             # Root symlink to packages/cli install
-├── ORCHESTRATOR_MATRIX.md  # Pipeline routing definitions
-├── AGENTS.md               # Framework overview
-├── README.md               # User documentation
-└── RFC-001-RESPONSE.md     # Architectural evolution plan
+│   │       ├── collector.mjs      # TelemetryCollector
+│   │       ├── storage.mjs        # JSON Lines persistence
+│   │       ├── reporter.mjs       # Markdown/JSON report generator
+│   │       └── index.mjs          # Public exports
+│   ├── export.mjs           # Multi-platform exporter
+│   ├── validate.mjs         # JSON Schema validation
+│   ├── init-agent.mjs       # Scaffolding tool
+│   ├── generate-docs.mjs    # Documentation generator
+│   └── install.mjs          # Platform installer
+├── install.mjs              # Root installer (alias to tools/install.mjs)
+├── ORCHESTRATOR_MATRIX.md   # Pipeline routing definitions
+├── AGENTS.md                # Framework overview
+├── README.md                # User documentation
 ```
 
 ---
@@ -286,8 +374,10 @@ Orchestrator (agents/orchestrator.md)
     ├─ 2. Detect technologies from prompt (python → @python, docker → @docker)
     ├─ 3. Consult ORCHESTRATOR_MATRIX.md for pipeline
     ├─ 4. Delegate to @git for branch creation
-    ├─ 5. Execute pipeline levels (parallel where possible)
-    └─ 6. Delegate final merge/tag to @git
+    ├─ 5. Select optimal model via ModelSelector (MIL)
+    ├─ 6. Execute pipeline levels (parallel where possible, with fallback)
+    ├─ 7. Record execution in LearningEngine + Telemetry
+    └─ 8. Delegate final merge/tag to @git
 ```
 
 ---
@@ -338,12 +428,33 @@ Orchestrator (agents/orchestrator.md)
 | `tests/integration/pipeline.test.mjs` | ✅ 22/22 passed |
 | `tests/integration/export.test.mjs` | ✅ 13/13 passed |
 | `tests/run-all.mjs` | ✅ 201/201 passed (9 suites) |
-| `tools/migrate-categories.mjs` | ✅ Assigned category to all 136 agents |
 | `tools/generate-docs.mjs` | ✅ DocumentationGenerator (catalog, capabilities, DAG, matrix, architecture) |
+| Tools/lib/logger.mjs | ✅ Logger (debug/info/warn/error, env config) |
+| `tools/lib/pipeline-executor.mjs` | ✅ PipelineExecutor (Router→Scheduler wiring) |
+| `tools/lib/task-mapper.mjs` | ✅ TaskMapper (task-type → model-profile mapping) |
+| `tests/unit/pipeline-executor.test.mjs` | ✅ 38/38 passed |
+| `tools/lib/model-registry.mjs` | ✅ ModelRegistry |
+| `tools/lib/model-profile.mjs` | ✅ ModelProfile (matchProfile weighted scoring) |
+| `tools/lib/model-discovery.mjs` | ✅ ModelDiscovery (registerAdapter, discoverAll, auto-load) |
+| `tools/lib/selection-engine.mjs` | ✅ SelectionEngine (select, rankModels, scoreModel) |
+| `tools/lib/fallback-engine.mjs` | ✅ FallbackEngine (4-level chain, executeWithFallback) |
+| `tools/lib/learning-engine.mjs` | ✅ LearningEngine (recordExecution, getModelRanking) |
+| `tools/lib/model-selector.mjs` | ✅ ModelSelector (facade, 4 strategies, execute, estimateCost) |
+| `tests/unit/registry/ModelRegistry.test.mjs` | ✅ 29/29 passed |
+| `tests/unit/registry/ModelProfile.test.mjs` | ✅ 21/21 passed |
+| `tests/unit/registry/ModelDiscovery.test.mjs` | ✅ 15/15 passed |
+| `tests/unit/registry/SelectionEngine.test.mjs` | ✅ 24/24 passed |
+| `tests/unit/registry/FallbackEngine.test.mjs` | ✅ 31/31 passed |
+| `tests/unit/registry/LearningEngine.test.mjs` | ✅ 33/33 passed |
+| `tests/unit/registry/ModelSelector.test.mjs` | ✅ 27/27 passed |
+| `tests/integration/mil-pipeline.test.mjs` | ✅ 13/13 passed |
+| `tests/e2e/mil-lifecycle.test.mjs` | ✅ 35/35 passed |
+| `tests/run-all.mjs` | ✅ 462/462 passed (19 suites) |
 | Agent categories | ✅ core=8, technology=94, domain=23, utility=11 |
-| Git working tree | ✅ On `feature/rfc-001-architecture` |
+| Models | ✅ 22 YAML files, 7 providers |
+| Git working tree | ✅ On `develop` |
 
 ---
 
-*Generated at Phase 2 of RFC-001 implementation (Agent Registry + Adapter Registry).*
-*Last updated: 2026-07-07*
+*Generated at RFC-002 implementation (Model Intelligence Layer) + Phase 1 improvements.*
+*Last updated: 2026-07-08 (Phase 1: pipeline-executor, task-mapper, logger, 7 new models)*

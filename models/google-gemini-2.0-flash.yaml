@@ -1,0 +1,18 @@
+id: gemini-2.0-flash
+provider: google
+family: gemini
+name: Gemini 2.0 Flash
+version: "2025-04"
+context_window: 1048576
+supports_tools: true
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.0001
+cost_per_1k_output: 0.0004
+priority: 70
+strengths: [fast, cost-efficient, long-context, coding, multimodal]
+weaknesses: [complex-reasoning, architecture]
+metadata:
+  release_date: "2025-04"
+  provider_url: "https://ai.google.dev"

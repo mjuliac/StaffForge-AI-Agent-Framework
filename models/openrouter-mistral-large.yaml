@@ -1,0 +1,18 @@
+id: mistral-large
+provider: openrouter
+family: mistral
+name: Mistral Large
+version: "2025-11"
+context_window: 131072
+supports_tools: true
+supports_reasoning: true
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0.002
+cost_per_1k_output: 0.006
+priority: 70
+strengths: [coding, reasoning, multilingual, instruction-following]
+weaknesses: [long-context, consistency]
+metadata:
+  release_date: "2025-11"
+  provider_url: "https://openrouter.ai"

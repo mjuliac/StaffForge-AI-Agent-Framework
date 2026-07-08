@@ -1,0 +1,18 @@
+id: big-pickle
+provider: opencode
+family: big-pickle
+name: Big Pickle
+version: "1.0"
+context_window: 32768
+supports_tools: true
+supports_reasoning: false
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0
+cost_per_1k_output: 0
+priority: 50
+strengths: [documentation, analysis, cost-efficient]
+weaknesses: [no-reasoning, coding]
+metadata:
+  release_date: "2026-01"
+  source: opencode-free
