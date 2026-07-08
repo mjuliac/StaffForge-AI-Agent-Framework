@@ -223,5 +223,74 @@ depends_on: [architect]
   assert(reg1 === reg2, 'singleton same instance');
 }
 
+// Test 16: extends merges parent body
+{
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-registry-test-'));
+  fs.writeFileSync(path.join(dir, 'base.md'), `---
+id: base
+name: Base
+mode: subagent
+category: core
+description: Base agent.
+tools:
+  write: false
+  bash: false
+  edit: false
+---
+## Shared
+- rule 1
+- rule 2
+`, 'utf-8');
+  fs.writeFileSync(path.join(dir, 'child.md'), `---
+id: child
+name: Child
+mode: subagent
+category: technology
+description: Child agent.
+tools:
+  write: false
+  bash: false
+  edit: false
+keywords: [test]
+extends: base
+---
+# Child
+
+## Mission
+Child agent.
+`, 'utf-8');
+  const reg = new AgentRegistry(dir);
+  const child = reg.findById('child');
+  assert(child.body.includes('## Shared'), 'extends inherits parent body');
+  assert(child.body.includes('## Mission'), 'extends keeps child body');
+  assert(child.body.startsWith('# Child'), 'extends child body comes first');
+  assert(!child.frontmatter.extends, 'extends field removed from frontmatter');
+  fs.rmSync(dir, { recursive: true });
+}
+
+// Test 17: extends with missing parent logs warning
+{
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-registry-test-'));
+  fs.writeFileSync(path.join(dir, 'orphan.md'), `---
+id: orphan
+name: Orphan
+mode: subagent
+category: technology
+description: Orphan agent.
+tools:
+  write: false
+  bash: false
+  edit: false
+extends: nonexistent
+---
+# Orphan
+`, 'utf-8');
+  const reg = new AgentRegistry(dir);
+  const orphan = reg.findById('orphan');
+  assert(orphan !== null, 'extends missing parent still loads');
+  assert(orphan.body === '# Orphan', 'extends missing parent keeps own body');
+  fs.rmSync(dir, { recursive: true });
+}
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

@@ -121,6 +121,11 @@
     "owner": {
       "type": "string",
       "description": "Owner or team responsible for this agent"
+    },
+    "extends": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Parent agent ID to inherit body content from"
     }
   },
   "required": ["description", "mode", "tools"],

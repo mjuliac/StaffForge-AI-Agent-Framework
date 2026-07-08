@@ -51,7 +51,34 @@ export class AgentRegistry {
         this._log.warn(`${file}: ${err.message}`);
       }
     }
+    this._resolveExtends();
     return this;
+  }
+
+  _resolveExtends() {
+    const agentMap = {};
+    for (const a of this._agents) {
+      agentMap[a.id] = a;
+    }
+
+    for (const a of this._agents) {
+      const parentId = a.frontmatter.extends;
+      if (!parentId) continue;
+
+      const parent = agentMap[parentId];
+      if (!parent) {
+        this._log.warn(`${a.file}: extends "${parentId}" not found`);
+        continue;
+      }
+
+      if (parent.frontmatter.extends) {
+        this._log.warn(`${a.file}: multi-level extends not supported (${parentId} has extends itself)`);
+        continue;
+      }
+
+      a.body = a.body + '\n\n' + parent.body;
+      delete a.frontmatter.extends;
+    }
   }
 
   all() {
