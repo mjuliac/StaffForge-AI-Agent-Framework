@@ -10,8 +10,8 @@ export class Scheduler {
     const levels = dag.getLevels();
     return {
       type: 'dag',
-      levels: levels.map(level => ({
-        parallel: level.map(id => {
+      levels: levels.map((level) => ({
+        parallel: level.map((id) => {
           const agent = dag.getNode(id);
           return { id, agent };
         }),
@@ -32,10 +32,7 @@ export class Scheduler {
     for (const id of agentIds) {
       const agent = this._registry.findById(id);
       if (!agent) continue;
-      const prereqs = [
-        ...(agent.frontmatter.depends_on || []),
-        ...(agent.frontmatter.after || []),
-      ];
+      const prereqs = [...(agent.frontmatter.depends_on || []), ...(agent.frontmatter.after || [])];
       for (const dep of prereqs) {
         if (dag.hasNode(dep)) {
           dag.addEdge(dep, id);
@@ -48,7 +45,7 @@ export class Scheduler {
   fromRouterPipeline(pipeline) {
     const allAgentIds = [];
     if (pipeline.agents) {
-      allAgentIds.push(...pipeline.agents.map(a => a.id || a));
+      allAgentIds.push(...pipeline.agents.map((a) => a.id || a));
     }
     if (pipeline.levels) {
       for (const level of pipeline.levels) {
@@ -71,7 +68,7 @@ export class Scheduler {
       totalAgents: execution.totalAgents,
       levels: execution.levels.map((level, i) => ({
         level: i + 1,
-        parallel: level.parallel.map(p => ({
+        parallel: level.parallel.map((p) => ({
           id: p.id,
           name: p.agent?.name || p.id,
         })),
@@ -82,17 +79,13 @@ export class Scheduler {
 
   _summarizeLevels(levels) {
     return levels.map((level, i) => {
-      const names = level.parallel
-        .filter(p => p.agent)
-        .map(p => p.agent.name || p.id);
+      const names = level.parallel.filter((p) => p.agent).map((p) => p.agent.name || p.id);
       return `Level ${i + 1}: [${names.join(', ')}]`;
     });
   }
 
   validatePipeline(agentIds) {
-    const dag = DAG.fromAgents(
-      agentIds.map(id => this._registry.findById(id)).filter(Boolean)
-    );
+    const dag = DAG.fromAgents(agentIds.map((id) => this._registry.findById(id)).filter(Boolean));
     return dag.validate();
   }
 }

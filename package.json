@@ -1,6 +1,6 @@
 {
   "name": "staffforge-ai-agent-framework",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "private": true,
   "license": "GPL-3.0-only",
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
@@ -20,6 +20,9 @@
     "export:gemini": "node tools/export.mjs --platform gemini-cli",
     "validate": "node tools/validate.mjs",
     "test": "node tests/run-all.mjs",
+    "lint": "eslint 'tools/**/*.mjs'",
+    "format": "prettier --check 'tools/**/*.mjs'",
+    "format:fix": "prettier --write 'tools/**/*.mjs'",
     "init-agent": "node tools/init-agent.mjs",
     "docs": "node tools/generate-docs.mjs",
     "publish:cli": "cd packages/cli && npm publish"
@@ -37,6 +40,10 @@
     "AGENTS.md",
     "ORCHESTRATOR_MATRIX.md"
   ],
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git"

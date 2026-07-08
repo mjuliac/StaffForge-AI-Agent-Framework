@@ -106,7 +106,7 @@ export class ModelSelector {
       preferFree: options.preferFree ?? this._policy.prefer_free,
       topN: options.topN || 50,
     });
-    return results.map(r => r.model);
+    return results.map((r) => r.model);
   }
 
   getRanking(taskType) {
@@ -115,7 +115,7 @@ export class ModelSelector {
       if (ranking.length > 0) return ranking;
     }
     const results = this._selection.selectTopN(taskType, { topN: 10 });
-    return results.map(r => ({
+    return results.map((r) => ({
       modelId: r.model.id,
       score: r.score,
       provider: r.model.provider,

@@ -76,7 +76,18 @@ export class DocumentationGenerator {
     lines.push('graph TD');
 
     const taskPipelines = pipelines || {
-      feature: ['Git', 'Planner', 'Requirements', 'Architect', 'Knowledge', 'Impact', 'Security', 'Testing', 'CodeReview', 'Documentation'],
+      feature: [
+        'Git',
+        'Planner',
+        'Requirements',
+        'Architect',
+        'Knowledge',
+        'Impact',
+        'Security',
+        'Testing',
+        'CodeReview',
+        'Documentation',
+      ],
       bugfix: ['Git', 'Planner', 'Knowledge', 'Impact', 'Debugging', 'Testing', 'CodeReview'],
       refactor: ['Git', 'Architect', 'Refactor', 'Performance', 'CodeReview'],
       security: ['Git', 'Security', 'Pentest', 'CodeReview'],
@@ -110,7 +121,7 @@ export class DocumentationGenerator {
 
     for (const a of list.sort((x, y) => x.id.localeCompare(y.id))) {
       const compat = a.frontmatter.compatible_platforms || platforms;
-      const row = platforms.map(p => compat.includes(p) ? '✅' : '❌').join(' | ');
+      const row = platforms.map((p) => (compat.includes(p) ? '✅' : '❌')).join(' | ');
       lines.push(`| ${a.id} | ${row} |`);
     }
 

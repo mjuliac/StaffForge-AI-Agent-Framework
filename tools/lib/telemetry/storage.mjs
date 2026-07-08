@@ -1,11 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const DEFAULT_DIR = path.join(
-  process.env.HOME || process.env.USERPROFILE || '/tmp',
-  '.staffforge',
-  'telemetry'
-);
+const DEFAULT_DIR = path.join(process.env.HOME || process.env.USERPROFILE || '/tmp', '.staffforge', 'telemetry');
 
 export class TelemetryStorage {
   constructor(dir = null) {

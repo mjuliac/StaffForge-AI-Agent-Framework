@@ -16,9 +16,9 @@ const CATEGORIES = ['core', 'technology', 'domain', 'platform', 'utility'];
 
 function ask(query, defaultValue = '') {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const prompt = defaultValue ? `${query} [${defaultValue}]: ` : `${query}: `;
-    rl.question(prompt, answer => {
+    rl.question(prompt, (answer) => {
       rl.close();
       resolve(answer.trim() || defaultValue);
     });
@@ -26,7 +26,10 @@ function ask(query, defaultValue = '') {
 }
 
 function toTitle(name) {
-  return name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return name
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 }
 
 async function main() {
@@ -44,12 +47,15 @@ async function main() {
   const category = await ask(`Category (${CATEGORIES.join('/')})`, 'utility');
   const priority = await ask('Priority (0–100)', '50');
   const keywordsRaw = await ask('Keywords (comma-separated, optional)', '');
-  const keywords = keywordsRaw ? keywordsRaw.split(',').map(k => k.trim()).filter(Boolean) : [];
+  const keywords = keywordsRaw
+    ? keywordsRaw
+        .split(',')
+        .map((k) => k.trim())
+        .filter(Boolean)
+    : [];
 
   const template = readFileSync(join(root, 'templates', 'agent.md'), 'utf-8');
-  let content = template
-    .replace(/__NAME__/g, name)
-    .replace(/__TITLE__/g, title);
+  let content = template.replace(/__NAME__/g, name).replace(/__TITLE__/g, title);
 
   // Customize frontmatter values
   content = content
@@ -59,7 +65,7 @@ async function main() {
     .replace(/^priority: .*/m, `priority: ${priority}`);
 
   if (keywords.length) {
-    const keywordsYaml = keywords.map(k => `  - ${k}`).join('\n');
+    const keywordsYaml = keywords.map((k) => `  - ${k}`).join('\n');
     content = content.replace(/^keywords:.*\n?/m, '');
     content = content.replace(/^---\n/m, `---\nkeywords:\n${keywordsYaml}\n`);
   }
