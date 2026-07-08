@@ -59,11 +59,9 @@ npm run export:aider       # Aider
 npm run export:gemini      # Gemini CLI
 ```
 
-### Legacy installers
-
-The old platform-specific scripts (`instala.sh` for bash, `install.ps1` for PowerShell) still work but are deprecated. They now redirect to the unified Node.js installer.
-
 ---
+
+
 
 ## Installation per platform
 
@@ -84,7 +82,7 @@ node tools/export.mjs --platform opencode
 | `opencode.json` | Agent config (modes, permissions) |
 
 Agents with `mode: primary` appear in the **Tab** cycle (orchestrator, build, plan).
-Agents with `mode: subagent` appear in the **@** autocomplete menu (38 specialized agents).
+Agents with `mode: subagent` appear in the **@** autocomplete menu (133 specialized agents).
 
 > The `--out` flag copies the generated file elsewhere. For normal use, run without `--out` — the file is placed at `adapters/opencode/output/` and then copied to the project root by the installer.
 
@@ -141,7 +139,7 @@ node tools/export.mjs --platform copilot
 |--------|---------|
 | `.github/copilot-instructions.md` | All agents concatenated as instructions |
 
-Copilot reads `.github/copilot-instructions.md` automatically when it exists in the project. All 40 agents are included in a single file with `---` separators.
+Copilot reads `.github/copilot-instructions.md` automatically when it exists in the project. All 136 agents are included in a single file with `---` separators.
 
 Copy the output to your project root:
 
@@ -282,13 +280,21 @@ npm run export:copilot   # Export to GitHub Copilot
 npm run export:aider     # Export to Aider
 npm run export:gemini    # Export to Gemini CLI
 npm run validate         # Validate all agents
+npm test                 # Run all 462 tests (18 suites)
 
 # Low-level (node)
-node install.mjs                      # Interactive installer (any platform)
-node install.mjs --platform opencode --agent orchestrator -y
+node install.mjs                          # Interactive installer (any platform)
+node install.mjs --platform opencode      # Non-interactive: OpenCode
+node install.mjs --platform claude-code   # Non-interactive: Claude Code
+node install.mjs --agent orchestrator -y  # Non-interactive with defaults
 node tools/export.mjs --platform <name>   # Export agents for any platform
-node tools/validate.mjs              # Validate all agent definitions
-node tools/init-agent.mjs <name>     # Create a new agent from template
+node tools/validate.mjs                   # Validate all agent definitions
+node tools/init-agent.mjs <name>          # Create a new agent from template
+node tests/run-all.mjs                    # Run test suite
+
+# Environment variables
+STAFFFORGE_LOG_LEVEL=debug node tools/export.mjs --platform opencode  # Verbose logging
+STAFFFORGE_LOG_LEVEL=error node tools/validate.mjs                    # Errors only
 ```
 
 ## Adapting to a new platform
@@ -300,3 +306,16 @@ node tools/init-agent.mjs <name>     # Create a new agent from template
 ## opencode.json
 
 Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:mjuliac/StaffForge-AI-Agent-Framework`.
+
+## Model Intelligence Layer
+
+The framework includes a Model Intelligence Layer (MIL) for optimal model selection:
+
+- **22 model definitions** across 7 providers (OpenAI, Anthropic, Google, OpenRouter, Ollama, OpenCode)
+- **8 task profiles** in `models/profiles.yaml` mapping task types to preferred model families
+- **Selection Engine**: weighted scoring (profile fit, capabilities, priority, cost, reasoning)
+- **Fallback Engine**: 4-level chain (primary → same-provider → other-provider → free)
+- **Learning Engine**: tracks execution history and adjusts rankings by success rate
+- **Model Selector facade**: 4 strategies (intelligent, cheapest, fastest, free)
+
+See `ARCHITECTURE.md` §2 for full API reference.
