@@ -61,23 +61,34 @@ export class AgentRegistry {
       agentMap[a.id] = a;
     }
 
+    let changed;
+    do {
+      changed = false;
+      for (const a of this._agents) {
+        const parentId = a.frontmatter.extends;
+        if (!parentId) continue;
+
+        const parent = agentMap[parentId];
+        if (!parent) {
+          this._log.warn(`${a.id}: extends "${parentId}" not found`);
+          delete a.frontmatter.extends;
+          changed = true;
+          continue;
+        }
+
+        if (parent.frontmatter.extends) continue;
+
+        a.body = a.body + '\n\n' + parent.body;
+        delete a.frontmatter.extends;
+        changed = true;
+      }
+    } while (changed);
+
     for (const a of this._agents) {
-      const parentId = a.frontmatter.extends;
-      if (!parentId) continue;
-
-      const parent = agentMap[parentId];
-      if (!parent) {
-        this._log.warn(`${a.file}: extends "${parentId}" not found`);
-        continue;
+      if (a.frontmatter.extends) {
+        this._log.warn(`${a.id}: unresolvable extends "${a.frontmatter.extends}" (circular or missing chain)`);
+        delete a.frontmatter.extends;
       }
-
-      if (parent.frontmatter.extends) {
-        this._log.warn(`${a.file}: multi-level extends not supported (${parentId} has extends itself)`);
-        continue;
-      }
-
-      a.body = a.body + '\n\n' + parent.body;
-      delete a.frontmatter.extends;
     }
   }
 
