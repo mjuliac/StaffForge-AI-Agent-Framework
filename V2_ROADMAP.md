@@ -33,9 +33,7 @@ StaffForge/
 │   │   └── package.json         ← @staffforge/plugin-sdk
 │   │
 │   └── enterprise/              ← Licencia Comercial StaffForge
-│       ├── storage/
-│       │   ├── sqlite-storage.mjs
-│       │   └── postgres-storage.mjs
+│       ├── sqlite-storage.mjs   ← ✅ implementado (v2.1)
 │       ├── analytics.mjs
 │       ├── policy-engine.mjs
 │       ├── observability.mjs
@@ -138,16 +136,16 @@ interface IPlugin {
 - SDK Package (@staffforge/sdk)
 - Storage Abstraction (MemoryStorage, JsonStorage)
 
-### v2.1 — Plugins + Hooks + Learning + Storage
-- PluginManager — loads plugins from ~/.staffforge/plugins/
-- PipelineExecutor hooks — emit events at 12 pipeline points
+### v2.1 — Plugins + Hooks + Learning + Storage ✅ COMPLETADO
+- PluginManager — loads plugins from ~/.staffforge/plugins/ (`packages/core/lib/plugin-manager.mjs`)
+- PipelineExecutor hooks — emit events at 12 pipeline points (pipeline/agent/level/subagent lifecycle)
 - LearningEngine persistence — wire with storage by default
-- SQLite Storage (Enterprise)
+- SQLite Storage (Enterprise) — `packages/enterprise/sqlite-storage.mjs` (Licencia Comercial StaffForge)
 
-### v2.2 — Marketplace Open Source
+### v2.2 — Marketplace Open Source ✅ COMPLETADO
 - RemoteLoader — download pipelines from URL
-- Marketplace registry — public pipeline catalog
-- CLI: staffforge marketplace — search/install pipelines
+- Marketplace registry — public pipeline catalog (MarketplaceLoader)
+- CLI: `staffforge marketplace search|install <id>` — search/install pipelines (`packages/cli/marketplace.mjs`)
 
 ### v2.3 — Remote Registry
 - RegistryServer — discover agents, pipelines, plugins remotely
