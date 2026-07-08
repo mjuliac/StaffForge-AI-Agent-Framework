@@ -55,7 +55,7 @@ tools:
 npm install               # Install all dependencies
 npm run setup             # Interactive installer (any platform)
 npm run validate          # Validate all agents against JSON Schema
-npm test                  # Run all tests (19 suites, 462+ tests)
+npm test                  # Run all tests (21 suites, 526+ tests)
 npm run export:opencode   # Export for OpenCode
 npm run export:claude     # Export for Claude Code
 npm run export:cursor     # Export for Cursor

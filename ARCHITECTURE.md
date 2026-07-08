@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state: RFC-002 (Model Intelligence Layer) + Phase 1 improvements.  
+> Current state: RFC-002 (Model Selection Layer) + Phase 1 improvements.  
 > Active branch: `develop`
 
 ---
@@ -162,6 +162,8 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 - `getNextModel(failedModel, taskType)` — next available alternative
 - `recordFailure(modelId, error)` / `recordSuccess(modelId, taskType)` — in-memory counters
 
+> **Note:** `agentFn` is provided by the caller. This engine selects models and orchestrates fallback order, but does not call LLM APIs directly.
+
 **Learning Engine** (`LearningEngine`):
 - `recordExecution({modelId, taskType, duration, success})` — store execution
 - `getModelRanking(taskType, {topN})` — sorted by success rate (60%) + speed (20%) + tokens (20%)
@@ -175,6 +177,8 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 - `listAvailable(options)` — filtered model list
 - `getRanking(taskType)` — learning-backed or selection-backed ranking
 - `configure(policy)` — set strategy, prefer_free, fallback, learning, etc.
+
+> **Note:** This is a selection layer. `execute()` accepts a caller-provided `agentFn` but does not include an implementation. The MIL selects models and manages fallback; actual API execution is handled outside this layer.
 
 **Agent Registry** (`AgentRegistry`):
 - `load()` — parse all agents from disk
@@ -390,7 +394,7 @@ Orchestrator (agents/orchestrator.md)
 - **No discovery**: Adding an agent doesn't auto-register it anywhere
 - **No dependency engine**: Pipeline order is hardcoded in matrix, not machine-readable
 - **No scheduler**: Parallel execution is a documented strategy, not executable code
-- ~~**No tests**: Zero test infrastructure~~ ✅ 201 tests across 9 suites
+- ~~**No tests**: Zero test infrastructure~~ ✅ 526 tests across 21 suites
 - ~~**No telemetry**: No metrics, no pipeline reports~~ ✅ TelemetryCollector + Storage + Reporter
 - ~~**No auto-documentation**: Catalogs, DAGs, and compatibility matrices are manual~~ ✅ DocumentationGenerator
 - **Single version**: Framework, agents, and adapters share one version
@@ -398,6 +402,9 @@ Orchestrator (agents/orchestrator.md)
 ---
 
 ## 6. Validation Baseline
+
+> **Legend:** ✅ = tested (unit/integration coverage). Integrated = wired into `run-pipeline.mjs` runtime.
+> MIL components (SelectionEngine, FallbackEngine, LearningEngine, ModelSelector) are tested as a library but are not integrated into an LLM execution runtime.
 
 | Check | Status |
 |---|---|
@@ -449,12 +456,12 @@ Orchestrator (agents/orchestrator.md)
 | `tests/unit/registry/ModelSelector.test.mjs` | ✅ 27/27 passed |
 | `tests/integration/mil-pipeline.test.mjs` | ✅ 13/13 passed |
 | `tests/e2e/mil-lifecycle.test.mjs` | ✅ 35/35 passed |
-| `tests/run-all.mjs` | ✅ 462/462 passed (19 suites) |
+| `tests/run-all.mjs` | ✅ 526/526 passed (21 suites) |
 | Agent categories | ✅ core=8, technology=94, domain=23, utility=11 |
 | Models | ✅ 22 YAML files, 7 providers |
 | Git working tree | ✅ On `develop` |
 
 ---
 
-*Generated at RFC-002 implementation (Model Intelligence Layer) + Phase 1 improvements.*
+*Generated at RFC-002 implementation (Model Selection Layer) + Phase 1 improvements.*
 *Last updated: 2026-07-08 (Phase 1: pipeline-executor, task-mapper, logger, 7 new models)*

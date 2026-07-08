@@ -1,5 +1,7 @@
 # StaffForge AI Agent Framework
 
+[![CI](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
+
 Multi-provider agent framework. Write agents once, deploy anywhere.
 
 ```
@@ -280,7 +282,7 @@ npm run export:copilot   # Export to GitHub Copilot
 npm run export:aider     # Export to Aider
 npm run export:gemini    # Export to Gemini CLI
 npm run validate         # Validate all agents
-npm test                 # Run all 462 tests (18 suites)
+npm test                 # Run all 526 tests (21 suites)
 
 # Low-level (node)
 node install.mjs                          # Interactive installer (any platform)
@@ -307,9 +309,9 @@ STAFFFORGE_LOG_LEVEL=error node tools/validate.mjs                    # Errors o
 
 Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:mjuliac/StaffForge-AI-Agent-Framework`.
 
-## Model Intelligence Layer
+## Model Selection Layer
 
-The framework includes a Model Intelligence Layer (MIL) for optimal model selection:
+The framework includes a Model Selection Layer for optimal model selection:
 
 - **22 model definitions** across 7 providers (OpenAI, Anthropic, Google, OpenRouter, Ollama, OpenCode)
 - **8 task profiles** in `models/profiles.yaml` mapping task types to preferred model families
@@ -317,5 +319,7 @@ The framework includes a Model Intelligence Layer (MIL) for optimal model select
 - **Fallback Engine**: 4-level chain (primary → same-provider → other-provider → free)
 - **Learning Engine**: tracks execution history and adjusts rankings by success rate
 - **Model Selector facade**: 4 strategies (intelligent, cheapest, fastest, free)
+
+> **Note:** This is a pure selection layer — it chooses the optimal model and returns it. It does not invoke LLM APIs directly. The `agentFn` parameter in FallbackEngine and ModelSelector is provided for callers to supply their own execution logic.
 
 See `ARCHITECTURE.md` §2 for full API reference.
