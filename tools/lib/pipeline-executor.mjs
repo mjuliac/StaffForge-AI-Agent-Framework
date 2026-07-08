@@ -1,6 +1,8 @@
 import { getRouter } from './router.mjs';
 import { getScheduler } from './scheduler.mjs';
 import { getModelSelector } from './model-selector.mjs';
+import { getSelectionEngine } from './selection-engine.mjs';
+import { getLearningEngine } from './learning-engine.mjs';
 import { TelemetryCollector } from './telemetry/collector.mjs';
 
 export class PipelineExecutor {
@@ -28,11 +30,29 @@ export class PipelineExecutor {
 
     if (options.selectModel !== false) {
       const selector = getModelSelector();
+      const selectionEngine = getSelectionEngine();
+      const learningEngine = getLearningEngine();
+
+      if (options.learningFeedback && learningEngine.getTotalRuns() >= 10) {
+        const adjusted = learningEngine.getAdjustedWeights(selectionEngine.getWeights());
+        selectionEngine.setWeights(adjusted);
+      }
+
       result.model = selector.select(taskType, {
         requireTools: options.requireTools ?? true,
         preferFree: options.preferFree ?? false,
         provider: options.provider || null,
         minContext: options.minContext || null,
+      });
+
+      learningEngine.recordExecution({
+        modelId: result.model?.id || 'none',
+        taskType,
+        success: true,
+        duration: 0,
+        tokens: 0,
+        cost: 0,
+        retries: 0,
       });
     }
 
