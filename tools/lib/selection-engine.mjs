@@ -5,7 +5,7 @@ export class SelectionEngine {
   constructor(modelRegistry = null, modelProfile = null) {
     this._registry = modelRegistry || getModelRegistry();
     this._profile = modelProfile || getModelProfile();
-    this._weights = { profile: 0.35, capability: 0.25, priority: 0.15, cost: 0.15, reasoning: 0.10 };
+    this._weights = { profile: 0.35, capability: 0.25, priority: 0.15, cost: 0.15, reasoning: 0.1 };
   }
 
   select(taskType, options = {}) {
@@ -32,30 +32,28 @@ export class SelectionEngine {
     let models = this._registry.all();
 
     if (provider) {
-      models = models.filter(m => m.provider === provider);
+      models = models.filter((m) => m.provider === provider);
     }
     if (requireTools) {
-      models = models.filter(m => m.supports_tools === true);
+      models = models.filter((m) => m.supports_tools === true);
     }
     if (requireReasoning) {
-      models = models.filter(m => m.supports_reasoning === true);
+      models = models.filter((m) => m.supports_reasoning === true);
     }
     if (minContext) {
-      models = models.filter(m => (m.context_window || 0) >= minContext);
+      models = models.filter((m) => (m.context_window || 0) >= minContext);
     }
     if (maxCost !== null) {
-      models = models.filter(m => {
+      models = models.filter((m) => {
         const cost = (m.cost_per_1k_input || 0) + (m.cost_per_1k_output || 0);
         return cost <= maxCost;
       });
     }
     if (preferFree) {
-      models = models.filter(m =>
-        (m.cost_per_1k_input || 0) === 0 && (m.cost_per_1k_output || 0) === 0
-      );
+      models = models.filter((m) => (m.cost_per_1k_input || 0) === 0 && (m.cost_per_1k_output || 0) === 0);
     }
 
-    const scored = models.map(m => ({
+    const scored = models.map((m) => ({
       model: m,
       score: this._calculateScore(m, taskType, capabilities),
     }));
@@ -99,9 +97,9 @@ export class SelectionEngine {
 
   _capabilityScore(model, capabilities) {
     if (!capabilities || capabilities.length === 0) return 0.7;
-    const strengths = (model.strengths || []).map(s => s.toLowerCase());
-    const caps = capabilities.map(c => c.toLowerCase());
-    const matches = caps.filter(c => strengths.some(s => s.includes(c) || c.includes(s)));
+    const strengths = (model.strengths || []).map((s) => s.toLowerCase());
+    const caps = capabilities.map((c) => c.toLowerCase());
+    const matches = caps.filter((c) => strengths.some((s) => s.includes(c) || c.includes(s)));
     return matches.length / caps.length;
   }
 

@@ -13,27 +13,24 @@ export class TelemetryReporter {
       total: agents.length,
       byStatus,
       stats: {
-        success: agents.filter(a => a.status === 'success').length,
-        error: agents.filter(a => a.status === 'error').length,
+        success: agents.filter((a) => a.status === 'success').length,
+        error: agents.filter((a) => a.status === 'error').length,
         totalTokens: agents.reduce((s, a) => s + (a.tokens || 0), 0),
         totalDuration: agents.reduce((s, a) => s + (a.duration_ms || 0), 0),
-        avgTokens: agents.length > 0
-          ? Math.round(agents.reduce((s, a) => s + (a.tokens || 0), 0) / agents.length)
-          : 0,
-        avgDuration: agents.length > 0
-          ? Math.round(agents.reduce((s, a) => s + (a.duration_ms || 0), 0) / agents.length)
-          : 0,
+        avgTokens: agents.length > 0 ? Math.round(agents.reduce((s, a) => s + (a.tokens || 0), 0) / agents.length) : 0,
+        avgDuration:
+          agents.length > 0 ? Math.round(agents.reduce((s, a) => s + (a.duration_ms || 0), 0) / agents.length) : 0,
       },
       slowest: agents
-        .filter(a => a.duration_ms)
+        .filter((a) => a.duration_ms)
         .sort((a, b) => b.duration_ms - a.duration_ms)
         .slice(0, 3)
-        .map(a => ({ id: a.id, duration_ms: a.duration_ms })),
+        .map((a) => ({ id: a.id, duration_ms: a.duration_ms })),
       topTokens: agents
-        .filter(a => a.tokens)
+        .filter((a) => a.tokens)
         .sort((a, b) => b.tokens - a.tokens)
         .slice(0, 3)
-        .map(a => ({ id: a.id, tokens: a.tokens })),
+        .map((a) => ({ id: a.id, tokens: a.tokens })),
     };
   }
 
@@ -59,9 +56,7 @@ export class TelemetryReporter {
       lines.push('| Agent | Status | Duration (ms) | Tokens |');
       lines.push('|-------|--------|---------------|--------|');
       for (const agent of agents) {
-        lines.push(
-          `| ${agent.id} | ${agent.status || 'N/A'} | ${agent.duration_ms || '-'} | ${agent.tokens || '-'} |`
-        );
+        lines.push(`| ${agent.id} | ${agent.status || 'N/A'} | ${agent.duration_ms || '-'} | ${agent.tokens || '-'} |`);
       }
       lines.push('');
 
@@ -103,13 +98,15 @@ export class TelemetryReporter {
   generateJSON(report) {
     if (!report) return JSON.stringify({ error: 'No data' }, null, 2);
 
-    return JSON.stringify({
-      ...report,
-      agent_summary: report.agents
-        ? this.generateSummary(report.agents)
-        : null,
-      _generated_at: new Date().toISOString(),
-    }, null, 2);
+    return JSON.stringify(
+      {
+        ...report,
+        agent_summary: report.agents ? this.generateSummary(report.agents) : null,
+        _generated_at: new Date().toISOString(),
+      },
+      null,
+      2,
+    );
   }
 }
 

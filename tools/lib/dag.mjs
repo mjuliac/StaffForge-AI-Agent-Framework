@@ -84,7 +84,7 @@ export class DAG {
     }
 
     if (sorted.length !== this._nodes.size) {
-      const missing = [...this._nodes.keys()].filter(id => !sorted.includes(id));
+      const missing = [...this._nodes.keys()].filter((id) => !sorted.includes(id));
       throw new Error(`Cycle detected involving: ${missing.join(', ')}`);
     }
 
@@ -120,7 +120,7 @@ export class DAG {
 
     const executed = new Set(levels.flat());
     if (executed.size !== this._nodes.size) {
-      const missing = [...this._nodes.keys()].filter(id => !executed.has(id));
+      const missing = [...this._nodes.keys()].filter((id) => !executed.has(id));
       throw new Error(`Cycle detected involving: ${missing.join(', ')}`);
     }
 
@@ -155,10 +155,7 @@ export class DAG {
       dag.addNode(agent.id, agent);
     }
     for (const agent of agents) {
-      const prereqs = [
-        ...(agent.frontmatter.depends_on || []),
-        ...(agent.frontmatter.after || []),
-      ];
+      const prereqs = [...(agent.frontmatter.depends_on || []), ...(agent.frontmatter.after || [])];
       for (const dep of prereqs) {
         if (dag.hasNode(dep)) {
           dag.addEdge(dep, agent.id);

@@ -23,9 +23,10 @@ export class PipelineExecutor {
       telemetry: null,
       agents: pipeline.agents,
       levels: plan.levels,
-      summary: plan.totalLevels > 0
-        ? plan.levels.map((l, i) => `Level ${i + 1}: [${l.parallel.map(p => p.name || p.id).join(', ')}]`)
-        : [],
+      summary:
+        plan.totalLevels > 0
+          ? plan.levels.map((l, i) => `Level ${i + 1}: [${l.parallel.map((p) => p.name || p.id).join(', ')}]`)
+          : [],
     };
 
     if (options.selectModel !== false) {
@@ -63,7 +64,7 @@ export class PipelineExecutor {
         prompt,
         model: result.model?.id || null,
         provider: result.model?.provider || null,
-        pipeline: pipeline.agents.map(a => a.id),
+        pipeline: pipeline.agents.map((a) => a.id),
       });
       collector.endRun('dry_run');
       result.telemetry = {

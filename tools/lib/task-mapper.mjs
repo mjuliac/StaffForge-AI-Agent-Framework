@@ -41,7 +41,7 @@ export class TaskMapper {
   }
 
   getAllMappings() {
-    return { ...this._mapping, ...Object.fromEntries(Object.keys(PROFILE_SIGNALS).map(k => [k, k])) };
+    return { ...this._mapping, ...Object.fromEntries(Object.keys(PROFILE_SIGNALS).map((k) => [k, k])) };
   }
 }
 

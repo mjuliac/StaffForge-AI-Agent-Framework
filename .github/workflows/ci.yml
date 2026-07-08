@@ -29,8 +29,14 @@ jobs:
       - name: Security audit
         run: npm audit --audit-level=high
 
-      - name: Validate agents
+      - name: Validate agents and models
         run: npm run validate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format
 
       - name: Run tests
         run: npm test

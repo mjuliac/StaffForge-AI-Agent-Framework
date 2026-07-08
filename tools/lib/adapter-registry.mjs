@@ -13,7 +13,7 @@ export class AdapterRegistry {
 
   listAdapters() {
     return readdirSync(this._adaptersDir)
-      .filter(f => {
+      .filter((f) => {
         try {
           return existsSync(join(this._adaptersDir, f, 'index.mjs'));
         } catch {

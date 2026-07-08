@@ -1,17 +1,93 @@
 import { getAgentRegistry } from './agent-registry.mjs';
 
 const STOP_WORDS = new Set([
-  'the', 'a', 'an', 'in', 'on', 'at', 'to', 'for', 'of', 'with',
-  'and', 'or', 'but', 'is', 'are', 'was', 'were', 'be', 'been',
-  'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
-  'would', 'could', 'should', 'may', 'might', 'shall', 'can',
-  'this', 'that', 'these', 'those', 'it', 'its', 'we', 'you',
-  'they', 'them', 'their', 'my', 'your', 'our', 'its', 'from',
-  'as', 'by', 'using', 'use', 'used', 'via', 'how', 'what',
-  'why', 'when', 'where', 'which', 'who', 'whom', 'whose',
-  'please', 'need', 'want', 'help', 'create', 'add', 'implement',
-  'build', 'make', 'write', 'fix', 'change', 'update', 'remove',
-  'delete', 'new', 'get', 'set', 'run', 'show', 'tell', 'give',
+  'the',
+  'a',
+  'an',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'of',
+  'with',
+  'and',
+  'or',
+  'but',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'have',
+  'has',
+  'had',
+  'do',
+  'does',
+  'did',
+  'will',
+  'would',
+  'could',
+  'should',
+  'may',
+  'might',
+  'shall',
+  'can',
+  'this',
+  'that',
+  'these',
+  'those',
+  'it',
+  'its',
+  'we',
+  'you',
+  'they',
+  'them',
+  'their',
+  'my',
+  'your',
+  'our',
+  'its',
+  'from',
+  'as',
+  'by',
+  'using',
+  'use',
+  'used',
+  'via',
+  'how',
+  'what',
+  'why',
+  'when',
+  'where',
+  'which',
+  'who',
+  'whom',
+  'whose',
+  'please',
+  'need',
+  'want',
+  'help',
+  'create',
+  'add',
+  'implement',
+  'build',
+  'make',
+  'write',
+  'fix',
+  'change',
+  'update',
+  'remove',
+  'delete',
+  'new',
+  'get',
+  'set',
+  'run',
+  'show',
+  'tell',
+  'give',
 ]);
 
 const CAPABILITY_ALIASES = {
@@ -41,10 +117,11 @@ export class CapabilityEngine {
   }
 
   analyzeIntent(text) {
-    const tokens = text.toLowerCase()
+    const tokens = text
+      .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, ' ')
       .split(/\s+/)
-      .filter(t => t.length > 1 && !STOP_WORDS.has(t));
+      .filter((t) => t.length > 1 && !STOP_WORDS.has(t));
 
     const keywords = [...new Set(tokens)];
 
@@ -56,7 +133,7 @@ export class CapabilityEngine {
   _detectTaskType(keywords, rawText) {
     let best = { type: null, score: 0 };
     for (const [type, signals] of Object.entries(TASK_TYPE_SIGNALS)) {
-      const score = signals.filter(s => rawText.includes(s)).length;
+      const score = signals.filter((s) => rawText.includes(s)).length;
       if (score > best.score) {
         best = { type, score };
       }
@@ -69,8 +146,8 @@ export class CapabilityEngine {
     const { keywords } = intent;
 
     const desc = (agent.frontmatter.description || '').toLowerCase();
-    const agentKw = (agent.frontmatter.keywords || []).map(k => k.toLowerCase());
-    const agentCaps = (agent.frontmatter.capabilities || []).map(c => c.toLowerCase());
+    const agentKw = (agent.frontmatter.keywords || []).map((k) => k.toLowerCase());
+    const agentCaps = (agent.frontmatter.capabilities || []).map((c) => c.toLowerCase());
     const agentName = agent.name.toLowerCase();
     const agentId = agent.id.toLowerCase();
 
@@ -79,17 +156,17 @@ export class CapabilityEngine {
       else if (agentId.includes(kw) || agentName.includes(kw)) score += 5;
 
       if (agentKw.includes(kw)) score += 3;
-      else if (agentKw.some(k => k.includes(kw) || kw.includes(k))) score += 1;
+      else if (agentKw.some((k) => k.includes(kw) || kw.includes(k))) score += 1;
 
       if (agentCaps.includes(kw)) score += 4;
-      else if (agentCaps.some(c => c.includes(kw) || kw.includes(c))) score += 1;
+      else if (agentCaps.some((c) => c.includes(kw) || kw.includes(c))) score += 1;
 
       if (desc.includes(kw)) score += 1;
     }
 
     for (const [cap, aliases] of Object.entries(CAPABILITY_ALIASES)) {
       const hasCap = agentCaps.includes(cap);
-      const matchesAlias = aliases.some(a => keywords.includes(a));
+      const matchesAlias = aliases.some((a) => keywords.includes(a));
       if (hasCap && matchesAlias) score += 2;
     }
 
@@ -100,20 +177,16 @@ export class CapabilityEngine {
   }
 
   findBestMatch(intent, { topN = 5, minScore = 0, mode = null } = {}) {
-    const agents = mode
-      ? this._registry.findByMode(mode)
-      : this._registry.all();
+    const agents = mode ? this._registry.findByMode(mode) : this._registry.all();
 
-    const scored = agents.map(a => ({
+    const scored = agents.map((a) => ({
       agent: a,
       score: this.scoreAgent(a, intent),
     }));
 
     scored.sort((a, b) => b.score - a.score);
 
-    return scored
-      .filter(s => s.score >= minScore)
-      .slice(0, topN);
+    return scored.filter((s) => s.score >= minScore).slice(0, topN);
   }
 
   expandCapabilities(text) {
@@ -121,7 +194,7 @@ export class CapabilityEngine {
     const found = [];
     for (const [cap, aliases] of Object.entries(CAPABILITY_ALIASES)) {
       if (cap.includes(q) || q.includes(cap)) found.push(cap, ...aliases);
-      else if (aliases.some(a => a.includes(q) || q.includes(a))) found.push(cap, ...aliases);
+      else if (aliases.some((a) => a.includes(q) || q.includes(a))) found.push(cap, ...aliases);
     }
     return [...new Set(found)];
   }

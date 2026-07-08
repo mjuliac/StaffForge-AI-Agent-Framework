@@ -8,7 +8,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..', '..');
 
 function toTitle(id) {
-  return id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return id
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 }
 
 function parseAgent(file, content) {
@@ -41,7 +44,7 @@ export class AgentRegistry {
 
   load() {
     if (this._agents) return this;
-    const files = readdirSync(this._agentDir).filter(f => f.endsWith('.md'));
+    const files = readdirSync(this._agentDir).filter((f) => f.endsWith('.md'));
     this._agents = [];
     for (const file of files.sort()) {
       const content = readFileSync(join(this._agentDir, file), 'utf-8');
@@ -104,47 +107,47 @@ export class AgentRegistry {
 
   findById(id) {
     this.load();
-    return this._agents.find(a => a.id === id) || null;
+    return this._agents.find((a) => a.id === id) || null;
   }
 
   findByName(name) {
     this.load();
-    return this._agents.find(a => a.name === name) || null;
+    return this._agents.find((a) => a.name === name) || null;
   }
 
   findByMode(mode) {
     this.load();
-    return this._agents.filter(a => a.frontmatter.mode === mode);
+    return this._agents.filter((a) => a.frontmatter.mode === mode);
   }
 
   findByCategory(category) {
     this.load();
-    return this._agents.filter(a => a.frontmatter.category === category);
+    return this._agents.filter((a) => a.frontmatter.category === category);
   }
 
   search(query) {
     this.load();
     const q = query.toLowerCase();
-    return this._agents.filter(a => {
+    return this._agents.filter((a) => {
       if (a.id.includes(q) || a.name.toLowerCase().includes(q)) return true;
       if ((a.frontmatter.description || '').toLowerCase().includes(q)) return true;
       const keywords = a.frontmatter.keywords || [];
-      if (keywords.some(k => k.toLowerCase().includes(q))) return true;
+      if (keywords.some((k) => k.toLowerCase().includes(q))) return true;
       const capabilities = a.frontmatter.capabilities || [];
-      if (capabilities.some(c => c.toLowerCase().includes(q))) return true;
+      if (capabilities.some((c) => c.toLowerCase().includes(q))) return true;
       return false;
     });
   }
 
   getCategories() {
     this.load();
-    const cats = new Set(this._agents.map(a => a.frontmatter.category).filter(Boolean));
+    const cats = new Set(this._agents.map((a) => a.frontmatter.category).filter(Boolean));
     return [...cats].sort();
   }
 
   getModes() {
     this.load();
-    const modes = new Set(this._agents.map(a => a.frontmatter.mode).filter(Boolean));
+    const modes = new Set(this._agents.map((a) => a.frontmatter.mode).filter(Boolean));
     return [...modes].sort();
   }
 
@@ -172,10 +175,7 @@ export class AgentRegistry {
       }
       inStack.add(id);
 
-      const prereqs = [
-        ...(agent.frontmatter.depends_on || []),
-        ...(agent.frontmatter.after || []),
-      ];
+      const prereqs = [...(agent.frontmatter.depends_on || []), ...(agent.frontmatter.after || [])];
       for (const depId of prereqs) {
         visit(depId);
       }
@@ -194,7 +194,7 @@ export class AgentRegistry {
 
   toJSON() {
     this.load();
-    return this._agents.map(a => ({
+    return this._agents.map((a) => ({
       id: a.id,
       name: a.name,
       file: a.file,

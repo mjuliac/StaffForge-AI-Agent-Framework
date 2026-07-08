@@ -3,7 +3,6 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '..', '..');
 
 export class ModelDiscovery {
   constructor(discoveryDir = null) {
@@ -42,7 +41,7 @@ export class ModelDiscovery {
     if (this._fileAdaptersLoaded) return;
     if (!existsSync(this._discoveryDir)) return;
 
-    const files = readdirSync(this._discoveryDir).filter(f => f.endsWith('.mjs'));
+    const files = readdirSync(this._discoveryDir).filter((f) => f.endsWith('.mjs'));
     for (const file of files) {
       const provider = file.replace(/\.mjs$/, '');
       if (!this._adapters[provider]) {

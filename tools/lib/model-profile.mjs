@@ -71,7 +71,7 @@ export class ModelProfile {
 
   rankModels(taskType, models) {
     this.load();
-    const scored = models.map(m => ({
+    const scored = models.map((m) => ({
       model: m,
       score: this.matchProfile(taskType, m),
     }));

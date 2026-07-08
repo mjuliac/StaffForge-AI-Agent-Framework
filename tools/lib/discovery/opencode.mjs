@@ -94,7 +94,7 @@ async function discoverOpenCodeModels() {
         strengths: ['documentation', 'analysis', 'cost-efficient'],
         weaknesses: ['no-reasoning', 'coding'],
         metadata: { source: 'opencode-free' },
-      }
+      },
     );
   }
 

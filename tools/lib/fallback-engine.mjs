@@ -44,17 +44,13 @@ export class FallbackEngine {
       }
     }
 
-    throw new FallbackExhaustedError(
-      `All ${attempt} model(s) exhausted`,
-      errors,
-    );
+    throw new FallbackExhaustedError(`All ${attempt} model(s) exhausted`, errors);
   }
 
   getNextModel(failedModel, taskType, options = {}) {
     const engine = this._selectionEngine;
 
-    const notTried = candidates =>
-      candidates.find(c => !this._triedModels.has(c.model.id));
+    const notTried = (candidates) => candidates.find((c) => !this._triedModels.has(c.model.id));
 
     let candidates = engine.selectTopN(taskType, {
       ...options,
