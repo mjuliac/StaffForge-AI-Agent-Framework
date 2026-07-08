@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state at Phase 6 (Taxonomía + Reorganización).  
+> Current state at Phase 7 (Testing + Documentación Automática).  
 > Active branch: `feature/rfc-001-architecture`
 
 ---
@@ -300,9 +300,9 @@ Orchestrator (agents/orchestrator.md)
 - **No discovery**: Adding an agent doesn't auto-register it anywhere
 - **No dependency engine**: Pipeline order is hardcoded in matrix, not machine-readable
 - **No scheduler**: Parallel execution is a documented strategy, not executable code
-- **No tests**: Zero test infrastructure
-- **No telemetry**: No metrics, no pipeline reports
-- **No auto-documentation**: Catalogs, DAGs, and compatibility matrices are manual
+- ~~**No tests**: Zero test infrastructure~~ ✅ 201 tests across 9 suites
+- ~~**No telemetry**: No metrics, no pipeline reports~~ ✅ TelemetryCollector + Storage + Reporter
+- ~~**No auto-documentation**: Catalogs, DAGs, and compatibility matrices are manual~~ ✅ DocumentationGenerator
 - **Single version**: Framework, agents, and adapters share one version
 
 ---
@@ -331,7 +331,15 @@ Orchestrator (agents/orchestrator.md)
 | `tools/lib/telemetry/storage.mjs` | ✅ TelemetryStorage (JSON Lines save/load/list/count) |
 | `tools/lib/telemetry/reporter.mjs` | ✅ TelemetryReporter (generateSummary, generateMarkdown, generateJSON) |
 | `tests/unit/telemetry.test.mjs` | ✅ 50/50 passed |
+| `tests/unit/registry/AgentRegistry.test.mjs` | ✅ 26/26 passed |
+| `tests/unit/registry/AdapterRegistry.test.mjs` | ✅ 12/12 passed |
+| `tests/unit/router/CapabilityEngine.test.mjs` | ✅ 21/21 passed |
+| `tests/unit/router/Router.test.mjs` | ✅ 16/16 passed |
+| `tests/integration/pipeline.test.mjs` | ✅ 22/22 passed |
+| `tests/integration/export.test.mjs` | ✅ 13/13 passed |
+| `tests/run-all.mjs` | ✅ 201/201 passed (9 suites) |
 | `tools/migrate-categories.mjs` | ✅ Assigned category to all 136 agents |
+| `tools/generate-docs.mjs` | ✅ DocumentationGenerator (catalog, capabilities, DAG, matrix, architecture) |
 | Agent categories | ✅ core=8, technology=94, domain=23, utility=11 |
 | Git working tree | ✅ On `feature/rfc-001-architecture` |
 
