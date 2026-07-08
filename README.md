@@ -84,7 +84,7 @@ node tools/export.mjs --platform opencode
 | `opencode.json` | Agent config (modes, permissions) |
 
 Agents with `mode: primary` appear in the **Tab** cycle (orchestrator, build, plan).
-Agents with `mode: subagent` appear in the **@** autocomplete menu (133 specialized agents).
+Agents with `mode: subagent` appear in the **@** autocomplete menu (134 specialized agents).
 
 > The `--out` flag copies the generated file elsewhere. For normal use, run without `--out` — the file is placed at `adapters/opencode/output/` and then copied to the project root by the installer.
 
@@ -213,7 +213,7 @@ node install.mjs -y                                 # defaults (opencode, orches
 | **orchestrator** | ✓ default | ✓ | Full tools |
 | **build** | ✓ | ✓ | Full tools |
 | **plan** | ✓ | ✓ | Read-only |
-| 133 subagents | — | ✓ | Varies |
+| 134 subagents | — | ✓ | Varies |
 
 - **Tab** — Cycle: orchestrator → build → plan
 - **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@docker`, `@flask`, `@react`, `@postgres`)
@@ -222,7 +222,7 @@ node install.mjs -y                                 # defaults (opencode, orches
 ## Architecture
 
 - **Orchestrator** (default agent) — receives all requests, detects task type and technologies, creates git flow branches, routes pipelines, communicates with the user
-- **Subagents** (133) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, etc.)
+- **Subagents** (134) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, etc.)
 - **Only the orchestrator** may talk to the user, write files, or manage git
 - Subagents run in **parallel** when they have no dependency on each other (DAG-based execution)
 

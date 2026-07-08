@@ -84,7 +84,7 @@ export class LearningEngine {
   }
 
   getAdjustedWeights(baseWeights = null) {
-    const weights = baseWeights || { profile: 0.35, capability: 0.25, priority: 0.15, cost: 0.15, reasoning: 0.10 };
+    const weights = { ...(baseWeights || { profile: 0.35, capability: 0.25, priority: 0.15, cost: 0.15, reasoning: 0.10 }) };
     const totalRuns = this._executions.length;
     if (totalRuns < 10) return weights;
 

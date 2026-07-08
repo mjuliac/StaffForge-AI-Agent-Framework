@@ -1,5 +1,27 @@
 # Changelog
 
+## [v1.4.1] — 2026-07-08
+
+### Changed
+- License: MIT → GPL-3.0-only
+
+## [v1.4.0] — 2026-07-08
+
+### Added
+- Agent `extends` mechanism: body inheritance from parent agent (schema + registry)
+- `agents/technology-agent.md` base template for technology subagents
+- CI/CD badges in README
+- GitHub Actions CI and publish workflows (committed as v1.3.0, released v1.4.0)
+
+### Changed
+- Security fix: `execSync` → `execFileSync` + platform whitelist in install.mjs
+- 4 subagents (react, vue, svelte, angular) use `extends: technology-agent`
+- Tests: 526→532 (6 new AgentRegistry extends tests)
+- Pinned dependencies in tools/package.json (^ → ~)
+
+### Removed
+- Hotfix and feature branches cleaned up
+
 ## [v1.3.0] — 2026-07-08
 
 ### Added

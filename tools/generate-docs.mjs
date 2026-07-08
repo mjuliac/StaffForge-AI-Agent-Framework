@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { getAgentRegistry } from './lib/agent-registry.mjs';
 import { getAdapterRegistry } from './lib/adapter-registry.mjs';
 
@@ -169,14 +170,12 @@ graph TB
   }
 
   saveTo(dir) {
-    import('node:fs').then(fs => {
-      const docs = this.generateAll();
-      for (const [name, content] of Object.entries(docs)) {
-        const filePath = dir + '/' + name + '.md';
-        fs.writeFileSync(filePath, content, 'utf-8');
-        console.log(`Wrote ${filePath}`);
-      }
-    });
+    const docs = this.generateAll();
+    for (const [name, content] of Object.entries(docs)) {
+      const filePath = dir + '/' + name + '.md';
+      fs.writeFileSync(filePath, content, 'utf-8');
+      console.log(`Wrote ${filePath}`);
+    }
   }
 }
 

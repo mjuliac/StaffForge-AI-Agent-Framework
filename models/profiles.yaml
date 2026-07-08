@@ -50,7 +50,7 @@ profiles:
     description: "Complex reasoning, analysis, planning"
 
   quick:
-    prefer: [miMo, north-mini-code, gemini-flash]
+    prefer: [miMo, north-mini-code, gemini-2.0-flash]
     require_tools: false
     min_context: 8192
     max_cost: 0
