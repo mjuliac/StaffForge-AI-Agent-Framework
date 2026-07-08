@@ -148,7 +148,7 @@ export class AgentRegistry {
     const inStack = new Set();
     const order = [];
 
-    function visit(id) {
+    const visit = (id) => {
       if (inStack.has(id)) {
         throw new Error(`Cycle detected involving "${id}"`);
       }
@@ -172,7 +172,7 @@ export class AgentRegistry {
       visited.add(id);
       inStack.delete(id);
       order.push(id);
-    }
+    };
 
     for (const id of agentIds) {
       visit(id);

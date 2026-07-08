@@ -10,7 +10,7 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    agents/*.md                           │
-│  136 agent definitions (YAML frontmatter + Markdown body)│
+│  137 agent definitions (YAML frontmatter + Markdown body)│
 └──────────────────────┬──────────────────────────────────┘
                        │
                        ▼
@@ -211,7 +211,7 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 
 ### 2.1 Agent Definitions (`agents/`)
 
-136 Markdown files, each with YAML frontmatter and a body.
+137 Markdown files, each with YAML frontmatter and a body.
 
 **Frontmatter schema** (`schemas/agent.schema.json`):
 
@@ -250,16 +250,16 @@ Each exports a default function: `(agents[]) → [{path, content}]`
 | Platform | Output | Format |
 |---|---|---|
 | opencode | 1 file | `opencode.json` |
-| claude-code | 136 files | `CLAUDE.md` + `.claude/rules/*.md` |
-| cursor | 136 files | `.cursor/rules/*.mdc` |
+| claude-code | 137 files | `CLAUDE.md` + `.claude/rules/*.md` |
+| cursor | 137 files | `.cursor/rules/*.mdc` |
 | copilot | 1 file | `.github/copilot-instructions.md` |
 | aider | 1 file | `.aider.rules.md` |
-| gemini-cli | 136 files | `.gemini/*.md` |
+| gemini-cli | 137 files | `.gemini/*.md` |
 
 ### 2.5 Exporter (`tools/export.mjs`)
 
 - CLI: `node tools/export.mjs --platform <name> [--out <dir>]`
-- Loads all 136 agents
+- Loads all 137 agents
 - Dynamic imports adapter
 - Calls adapter.default(agents)
 - Writes output files
@@ -297,7 +297,7 @@ Defines 6 task types with DAG pipelines:
 
 ```
 /
-├── agents/                 # 136 agent *.md files
+├── agents/                 # 137 agent *.md files
 ├── adapters/               # 6 platform adapters
 │   ├── opencode/index.mjs
 │   ├── claude-code/index.mjs
@@ -408,14 +408,14 @@ Orchestrator (agents/orchestrator.md)
 
 | Check | Status |
 |---|---|
-| `node tools/validate.mjs` | ✅ 136/136 agents valid |
+| `node tools/validate.mjs` | ✅ 137/137 agents valid |
 | `node tools/export.mjs --all` | ✅ 6 platforms, all pass |
 | `node tools/export.mjs --platform opencode` | ✅ 1 file |
-| `node tools/export.mjs --platform claude-code` | ✅ 136 files |
-| `node tools/export.mjs --platform cursor` | ✅ 136 files |
+| `node tools/export.mjs --platform claude-code` | ✅ 137 files |
+| `node tools/export.mjs --platform cursor` | ✅ 137 files |
 | `node tools/export.mjs --platform copilot` | ✅ 1 file |
 | `node tools/export.mjs --platform aider` | ✅ 1 file |
-| `node tools/export.mjs --platform gemini-cli` | ✅ 136 files |
+| `node tools/export.mjs --platform gemini-cli` | ✅ 137 files |
 | `tools/lib/agent-registry.mjs` | ✅ AgentRegistry API (load, query, search, resolveDependencies) |
 | `tools/lib/adapter-registry.mjs` | ✅ AdapterRegistry API (lazy-load, export, exportToAll) |
 | `tools/lib/capability-engine.mjs` | ✅ CapabilityEngine (analyzeIntent, scoreAgent, findBestMatch) |
