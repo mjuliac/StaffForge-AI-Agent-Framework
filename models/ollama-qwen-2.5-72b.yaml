@@ -1,0 +1,18 @@
+id: qwen-2.5-72b
+provider: ollama
+family: qwen
+name: Qwen 2.5 72B
+version: "2025-09"
+context_window: 32768
+supports_tools: true
+supports_reasoning: false
+supports_json: true
+supports_streaming: true
+cost_per_1k_input: 0
+cost_per_1k_output: 0
+priority: 65
+strengths: [coding, local, cost-free, math, multilingual]
+weaknesses: [reasoning, long-context, creative]
+metadata:
+  release_date: "2025-09"
+  provider_url: "https://ollama.ai"
