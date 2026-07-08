@@ -1,0 +1,25 @@
+{
+  "name": "@staffforge/core",
+  "version": "2.0.0",
+  "description": "StaffForge AI Agent Framework - Core library",
+  "type": "module",
+  "main": "./index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./interfaces/*": "./lib/interfaces/*.mjs",
+    "./registries/*": "./lib/registries/*.mjs",
+    "./engines/*": "./lib/engines/*.mjs",
+    "./storage/*": "./lib/storage/*.mjs",
+    "./loaders/*": "./lib/loaders/*.mjs"
+  },
+  "scripts": {
+    "test": "node ../../tests/run-all.mjs"
+  },
+  "keywords": ["ai", "agents", "framework", "staffforge"],
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "ajv": "~8.17.1",
+    "glob": "~11.0.0",
+    "js-yaml": "~4.1.0"
+  }
+}

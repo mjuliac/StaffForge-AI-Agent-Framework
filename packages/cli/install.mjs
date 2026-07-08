@@ -15,10 +15,7 @@
  */
 
 import { execSync } from 'node:child_process';
-import {
-  existsSync, copyFileSync, readFileSync, writeFileSync,
-  mkdirSync, rmSync, renameSync
-} from 'node:fs';
+import { existsSync, copyFileSync, readFileSync, writeFileSync, mkdirSync, rmSync, renameSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline';
@@ -34,9 +31,9 @@ const CONFIG = join(CWD, '.staffforge-install.json');
 const ME = __dirname;
 
 // ── Colors ──
-const b = s => `\x1b[1m${s}\x1b[0m`;
-const g = s => `\x1b[32m${s}\x1b[0m`;
-const bl = s => `\x1b[34m${s}\x1b[0m`;
+const b = (s) => `\x1b[1m${s}\x1b[0m`;
+const g = (s) => `\x1b[32m${s}\x1b[0m`;
+const bl = (s) => `\x1b[34m${s}\x1b[0m`;
 
 // ── Help ──
 function help() {
@@ -63,26 +60,36 @@ function parseArgs() {
   const o = {};
   for (let i = 0; i < a.length; i++) {
     switch (a[i]) {
-      case '--help': case '-h': help(); exit(0);
-      case '--platform': o.platform = a[++i]; break;
-      case '--agent': o.agent = a[++i]; break;
-      case '--out': o.out = a[++i]; break;
-      case '--yes': case '-y': o.yes = true; break;
-      default: console.error(`Unknown: ${a[i]}`); exit(1);
+      case '--help':
+      case '-h':
+        help();
+        exit(0);
+      case '--platform':
+        o.platform = a[++i];
+        break;
+      case '--agent':
+        o.agent = a[++i];
+        break;
+      case '--out':
+        o.out = a[++i];
+        break;
+      case '--yes':
+      case '-y':
+        o.yes = true;
+        break;
+      default:
+        console.error(`Unknown: ${a[i]}`);
+        exit(1);
     }
   }
   return o;
 }
 
 const rl = createInterface({ input: process.stdin, output: process.stdout });
-const ask = q => new Promise(r => rl.question(q, r));
+const ask = (q) => new Promise((r) => rl.question(q, r));
 
 function findFrameworkDir() {
-  const candidates = [
-    ME,
-    resolve(ME, '..', '..'),
-    CWD,
-  ];
+  const candidates = [ME, resolve(ME, '..', '..'), CWD];
   for (const dir of candidates) {
     if (existsSync(join(dir, 'tools', 'export.mjs'))) return dir;
   }
@@ -99,25 +106,42 @@ function download(target) {
 }
 
 function loadPrev() {
-  try { return existsSync(CONFIG) ? JSON.parse(readFileSync(CONFIG, 'utf-8')) : null; }
-  catch { return null; }
+  try {
+    return existsSync(CONFIG) ? JSON.parse(readFileSync(CONFIG, 'utf-8')) : null;
+  } catch {
+    return null;
+  }
 }
-function savePrev(d) { writeFileSync(CONFIG, JSON.stringify(d, null, 2) + '\n'); }
+function savePrev(d) {
+  writeFileSync(CONFIG, JSON.stringify(d, null, 2) + '\n');
+}
 
 function runExport(fwDir, platform, agent, out) {
   const tools = join(fwDir, 'tools');
   console.log(`\n${bl('→')} Exporting for ${platform}...`);
   mkdirSync(out, { recursive: true });
   if (platform === 'opencode') {
-    execSync(`node "${join(tools, 'install.mjs')}" --agent ${agent} --platform opencode --out "${out}"`, { stdio: 'inherit', cwd: fwDir });
+    execSync(`node "${join(tools, 'install.mjs')}" --agent ${agent} --platform opencode --out "${out}"`, {
+      stdio: 'inherit',
+      cwd: fwDir,
+    });
   } else {
-    execSync(`node "${join(tools, 'export.mjs')}" --platform ${platform} --out "${out}"`, { stdio: 'inherit', cwd: fwDir });
+    execSync(`node "${join(tools, 'export.mjs')}" --platform ${platform} --out "${out}"`, {
+      stdio: 'inherit',
+      cwd: fwDir,
+    });
   }
 }
 
 function copyResult(platform, src, dest) {
-  const cp = (f, d) => { copyFileSync(f, d); };
-  const mv = (f, d) => { rmSync(d, { recursive: true, force: true }); mkdirSync(dirname(d), { recursive: true }); renameSync(f, d); };
+  const cp = (f, d) => {
+    copyFileSync(f, d);
+  };
+  const mv = (f, d) => {
+    rmSync(d, { recursive: true, force: true });
+    mkdirSync(dirname(d), { recursive: true });
+    renameSync(f, d);
+  };
   switch (platform) {
     case 'opencode':
       cp(join(src, 'opencode.json'), join(dest, 'opencode.json'));
@@ -134,7 +158,8 @@ function copyResult(platform, src, dest) {
       break;
     case 'copilot':
       mkdirSync(join(dest, '.github'), { recursive: true });
-      if (existsSync(join(src, '.github/copilot-instructions.md'))) cp(join(src, '.github/copilot-instructions.md'), join(dest, '.github/copilot-instructions.md'));
+      if (existsSync(join(src, '.github/copilot-instructions.md')))
+        cp(join(src, '.github/copilot-instructions.md'), join(dest, '.github/copilot-instructions.md'));
       console.log(`  ${g('✓')} .github/copilot-instructions.md`);
       break;
     case 'aider':
@@ -149,8 +174,12 @@ function copyResult(platform, src, dest) {
 }
 
 function isTracked(f) {
-  try { execSync(`git -C "${CWD}" ls-files --error-unmatch "${f}"`, { stdio: 'pipe' }); return true; }
-  catch { return false; }
+  try {
+    execSync(`git -C "${CWD}" ls-files --error-unmatch "${f}"`, { stdio: 'pipe' });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // ── Main ──
@@ -162,10 +191,15 @@ async function main() {
   const isLocal = fw !== null;
   let downloaded = false;
 
-  if (!isLocal) { fw = TMP; download(fw); downloaded = true; }
-  else console.log(`${bl('→')} Using local StaffForge`);
+  if (!isLocal) {
+    fw = TMP;
+    download(fw);
+    downloaded = true;
+  } else console.log(`${bl('→')} Using local StaffForge`);
 
-  let p = o.platform, a = o.agent, d = o.out;
+  let p = o.platform,
+    a = o.agent,
+    d = o.out;
   const prev = loadPrev();
 
   // ── Auto defaults with --yes ──
@@ -178,25 +212,29 @@ async function main() {
   if (!o.yes && prev && !p && !a && !d) {
     console.log(`${bl('→')} Previous: ${prev.platform} (agent: ${prev.defaultAgent})`);
     const r = await ask('  Reinstall? [Y/n]: ');
-    if (r.toLowerCase() !== 'n' && r !== 'no') { p = prev.platform; a = prev.defaultAgent; d = prev.installDir; }
+    if (r.toLowerCase() !== 'n' && r !== 'no') {
+      p = prev.platform;
+      a = prev.defaultAgent;
+      d = prev.installDir;
+    }
   }
 
   if (!p) {
     console.log('\nPlatform:');
     console.log('  1) opencode    2) claude-code  3) cursor  4) copilot  5) aider  6) gemini-cli  7) all');
     const c = (await ask('\n? [1]: ')).trim();
-    const m = { '2': 'claude-code', '3': 'cursor', '4': 'copilot', '5': 'aider', '6': 'gemini-cli', '7': 'all' };
+    const m = { 2: 'claude-code', 3: 'cursor', 4: 'copilot', 5: 'aider', 6: 'gemini-cli', 7: 'all' };
     p = m[c] || c || 'opencode';
-    if (!['opencode','claude-code','cursor','copilot','aider','gemini-cli','all'].includes(p)) p = 'opencode';
+    if (!['opencode', 'claude-code', 'cursor', 'copilot', 'aider', 'gemini-cli', 'all'].includes(p)) p = 'opencode';
   }
 
   if (!a) {
     console.log('\nDefault agent:');
     console.log('  1) orchestrator  2) build  3) plan');
     const c = (await ask('\n? [1]: ')).trim();
-    const m = { '2': 'build', '3': 'plan' };
+    const m = { 2: 'build', 3: 'plan' };
     a = m[c] || c || 'orchestrator';
-    if (!['orchestrator','build','plan'].includes(a)) a = 'orchestrator';
+    if (!['orchestrator', 'build', 'plan'].includes(a)) a = 'orchestrator';
   }
 
   if (!d) {
@@ -208,7 +246,7 @@ async function main() {
   }
 
   d = resolve(d);
-  const platforms = p === 'all' ? ['opencode','claude-code','cursor','copilot','aider','gemini-cli'] : [p];
+  const platforms = p === 'all' ? ['opencode', 'claude-code', 'cursor', 'copilot', 'aider', 'gemini-cli'] : [p];
 
   for (const pl of platforms) {
     runExport(fw, pl, a, join(d, pl === p || p === 'all' ? '' : pl));
@@ -238,4 +276,7 @@ async function main() {
   rl.close();
 }
 
-main().catch(e => { console.error(e); exit(1); });
+main().catch((e) => {
+  console.error(e);
+  exit(1);
+});

@@ -14,13 +14,13 @@
  *   });
  */
 
-import { IPlugin } from '@staffforge/plugin-sdk';
-import { IEventBus } from '@staffforge/plugin-sdk';
-import { IAdapterProvider } from '@staffforge/plugin-sdk';
-import { IModelProvider } from '@staffforge/plugin-sdk';
-import { IPipelineProvider } from '@staffforge/plugin-sdk';
-import { IAgentProvider } from '@staffforge/plugin-sdk';
-import { ITelemetryStorage } from '@staffforge/plugin-sdk';
+import { IPlugin } from '@staffforge/core';
+import { IEventBus } from '@staffforge/core';
+import { IAdapterProvider } from '@staffforge/core';
+import { IModelProvider } from '@staffforge/core';
+import { IPipelineProvider } from '@staffforge/core';
+import { IAgentProvider } from '@staffforge/core';
+import { ITelemetryStorage } from '@staffforge/core';
 
 /**
  * Create a plugin from a configuration object.

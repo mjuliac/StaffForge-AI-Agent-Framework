@@ -1,0 +1,25 @@
+name: deployment
+description: Deployment pipeline with build and release
+version: "1.0"
+levels:
+  - name: planning
+    agents:
+      - orchestrator
+      - deployment
+    parallel: true
+  - name: infrastructure
+    agents:
+      - docker
+      - kubernetes
+    parallel: true
+  - name: build
+    agents:
+      - build
+      - release
+    parallel: true
+  - name: documentation
+    agents:
+      - documentation
+  - name: finalization
+    agents:
+      - git
