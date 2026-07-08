@@ -17,7 +17,7 @@ export default function opencodeAdapter(agents) {
     };
   }
 
-  const orchestrator = agents.find(a => a.name === "orchestrator");
+  const orchestrator = agents.find(a => a.id === "orchestrator");
   const defaultAgent = orchestrator?.name
     || agents.find(a => a.frontmatter.mode === "primary")?.name
     || "build";
