@@ -2,6 +2,7 @@
 id: blazor
 name: Blazor
 mode: subagent
+category: technology
 description: Blazor Staff Engineer.
 tools:
   write: false

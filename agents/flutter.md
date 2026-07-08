@@ -2,6 +2,7 @@
 id: flutter
 name: Flutter
 mode: subagent
+category: technology
 description: Flutter Staff Engineer.
 tools:
   write: false

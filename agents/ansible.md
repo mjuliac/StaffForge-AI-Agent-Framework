@@ -2,6 +2,7 @@
 id: ansible
 name: Ansible
 mode: subagent
+category: technology
 description: Ansible Staff Engineer.
 tools:
   write: false

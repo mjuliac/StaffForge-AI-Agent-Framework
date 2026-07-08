@@ -2,6 +2,7 @@
 id: celery
 name: Celery
 mode: subagent
+category: technology
 description: Celery Staff Engineer.
 tools:
   write: false

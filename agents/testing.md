@@ -2,6 +2,7 @@
 id: testing
 name: Testing
 mode: subagent
+category: core
 description: Testing strategy specialist.
 tools:
   write: false

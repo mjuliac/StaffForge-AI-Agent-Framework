@@ -2,6 +2,7 @@
 id: aws
 name: Aws
 mode: subagent
+category: technology
 description: Aws Staff Engineer.
 tools:
   write: false

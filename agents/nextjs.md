@@ -2,6 +2,7 @@
 id: nextjs
 name: Nextjs
 mode: subagent
+category: technology
 description: Next.js Staff Engineer.
 tools:
   write: false

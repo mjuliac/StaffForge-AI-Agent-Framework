@@ -2,6 +2,7 @@
 id: express
 name: Express
 mode: subagent
+category: technology
 description: Express Staff Engineer.
 tools:
   write: false

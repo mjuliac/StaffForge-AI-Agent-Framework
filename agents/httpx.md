@@ -2,6 +2,7 @@
 id: httpx
 name: Httpx
 mode: subagent
+category: technology
 description: HTTPX Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: build
 name: Build
 mode: primary
+category: domain
 description: Build systems expert. Full tool access.
 tools:
   write: true

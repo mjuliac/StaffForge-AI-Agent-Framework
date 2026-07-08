@@ -2,6 +2,7 @@
 id: typescript
 name: Typescript
 mode: subagent
+category: technology
 description: TypeScript Staff Engineer.
 tools:
   write: false

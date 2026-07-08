@@ -2,6 +2,7 @@
 id: gatsby
 name: Gatsby
 mode: subagent
+category: technology
 description: Gatsby Staff Engineer.
 tools:
   write: false

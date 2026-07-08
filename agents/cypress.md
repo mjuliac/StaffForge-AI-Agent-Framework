@@ -2,6 +2,7 @@
 id: cypress
 name: Cypress
 mode: subagent
+category: technology
 description: Cypress Staff Engineer.
 tools:
   write: false

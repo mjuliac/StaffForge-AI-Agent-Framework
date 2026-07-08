@@ -2,6 +2,7 @@
 id: cqrs
 name: Cqrs
 mode: subagent
+category: domain
 description: CQRS specialist.
 tools:
   write: false

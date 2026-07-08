@@ -2,6 +2,7 @@
 id: gunicorn
 name: Gunicorn
 mode: subagent
+category: technology
 description: Gunicorn Staff Engineer.
 tools:
   write: false

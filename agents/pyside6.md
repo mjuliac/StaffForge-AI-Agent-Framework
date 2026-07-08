@@ -2,6 +2,7 @@
 id: pyside6
 name: Pyside6
 mode: subagent
+category: technology
 description: PySide6 Staff Engineer.
 tools:
   write: false

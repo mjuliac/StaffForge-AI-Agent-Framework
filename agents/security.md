@@ -2,6 +2,7 @@
 id: security
 name: Security
 mode: subagent
+category: core
 description: OWASP and secure coding reviewer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: entity-framework
 name: Entity Framework
 mode: subagent
+category: technology
 description: Entity Framework Staff Engineer.
 tools:
   write: false

@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state at Phase 5 (Telemetría + Pipeline Reports).  
+> Current state at Phase 6 (Taxonomía + Reorganización).  
 > Active branch: `feature/rfc-001-architecture`
 
 ---
@@ -331,6 +331,8 @@ Orchestrator (agents/orchestrator.md)
 | `tools/lib/telemetry/storage.mjs` | ✅ TelemetryStorage (JSON Lines save/load/list/count) |
 | `tools/lib/telemetry/reporter.mjs` | ✅ TelemetryReporter (generateSummary, generateMarkdown, generateJSON) |
 | `tests/unit/telemetry.test.mjs` | ✅ 50/50 passed |
+| `tools/migrate-categories.mjs` | ✅ Assigned category to all 136 agents |
+| Agent categories | ✅ core=8, technology=94, domain=23, utility=11 |
 | Git working tree | ✅ On `feature/rfc-001-architecture` |
 
 ---

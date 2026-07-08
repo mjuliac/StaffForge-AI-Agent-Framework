@@ -2,6 +2,7 @@
 id: uvicorn
 name: Uvicorn
 mode: subagent
+category: technology
 description: Uvicorn Staff Engineer.
 tools:
   write: false

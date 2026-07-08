@@ -2,6 +2,7 @@
 id: sqlite
 name: Sqlite
 mode: subagent
+category: technology
 description: SQLite expert.
 tools:
   write: false

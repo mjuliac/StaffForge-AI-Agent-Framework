@@ -2,6 +2,7 @@
 id: shadcn-ui
 name: Shadcn Ui
 mode: subagent
+category: technology
 description: shadcn/ui Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: dotnet
 name: Dotnet
 mode: subagent
+category: technology
 description: .NET Staff Engineer.
 tools:
   write: false

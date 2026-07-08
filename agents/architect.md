@@ -2,6 +2,7 @@
 id: architect
 name: Architect
 mode: subagent
+category: core
 description: Protects architecture.
 tools:
   write: false

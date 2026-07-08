@@ -2,6 +2,7 @@
 id: ruby
 name: Ruby
 mode: subagent
+category: technology
 description: Ruby Staff Engineer.
 tools:
   write: false

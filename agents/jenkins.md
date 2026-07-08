@@ -2,6 +2,7 @@
 id: jenkins
 name: Jenkins
 mode: subagent
+category: technology
 description: Jenkins Staff Engineer.
 tools:
   write: false

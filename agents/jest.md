@@ -2,6 +2,7 @@
 id: jest
 name: Jest
 mode: subagent
+category: technology
 description: Jest Staff Engineer.
 tools:
   write: false

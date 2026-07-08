@@ -2,6 +2,7 @@
 id: nginx
 name: Nginx
 mode: subagent
+category: technology
 description: Nginx Staff Engineer.
 tools:
   write: false

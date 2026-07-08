@@ -2,6 +2,7 @@
 id: secrets
 name: Secrets
 mode: subagent
+category: utility
 description: Secrets scanner.
 tools:
   write: false

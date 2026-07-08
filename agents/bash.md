@@ -2,6 +2,7 @@
 id: bash
 name: Bash
 mode: subagent
+category: utility
 description: Bash Staff Engineer.
 tools:
   write: false

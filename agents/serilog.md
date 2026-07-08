@@ -2,6 +2,7 @@
 id: serilog
 name: Serilog
 mode: subagent
+category: technology
 description: Serilog Staff Engineer.
 tools:
   write: false

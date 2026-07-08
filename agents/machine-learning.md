@@ -2,6 +2,7 @@
 id: machine-learning
 name: Machine Learning
 mode: subagent
+category: domain
 description: Machine Learning Staff Engineer.
 tools:
   write: false

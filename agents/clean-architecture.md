@@ -2,6 +2,7 @@
 id: clean-architecture
 name: Clean Architecture
 mode: subagent
+category: domain
 description: Clean Architecture guardian.
 tools:
   write: false

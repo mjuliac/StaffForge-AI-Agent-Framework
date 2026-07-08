@@ -2,6 +2,7 @@
 id: github-actions
 name: Github Actions
 mode: subagent
+category: technology
 description: GitHub Actions Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: pytest
 name: Pytest
 mode: subagent
+category: technology
 description: Pytest Staff Engineer.
 tools:
   write: false

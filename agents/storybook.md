@@ -2,6 +2,7 @@
 id: storybook
 name: Storybook
 mode: subagent
+category: technology
 description: Storybook Staff Engineer.
 tools:
   write: false

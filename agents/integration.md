@@ -2,6 +2,7 @@
 id: integration
 name: Integration
 mode: subagent
+category: domain
 description: Integration Staff Engineer.
 tools:
   write: false

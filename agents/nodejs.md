@@ -2,6 +2,7 @@
 id: nodejs
 name: Nodejs
 mode: subagent
+category: technology
 description: Node.js Staff Engineer.
 tools:
   write: false

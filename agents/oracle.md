@@ -2,6 +2,7 @@
 id: oracle
 name: Oracle
 mode: subagent
+category: technology
 description: Oracle Staff Engineer.
 tools:
   write: false

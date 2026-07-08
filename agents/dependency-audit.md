@@ -2,6 +2,7 @@
 id: dependency-audit
 name: Dependency Audit
 mode: subagent
+category: utility
 description: Dependency/CVE auditor.
 tools:
   write: false

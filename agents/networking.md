@@ -2,6 +2,7 @@
 id: networking
 name: Networking
 mode: subagent
+category: domain
 description: Networking Staff Engineer.
 tools:
   write: false

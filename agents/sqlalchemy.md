@@ -2,6 +2,7 @@
 id: sqlalchemy
 name: Sqlalchemy
 mode: subagent
+category: technology
 description: SQLAlchemy expert.
 tools:
   write: false

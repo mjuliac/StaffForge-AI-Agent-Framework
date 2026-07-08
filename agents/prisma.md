@@ -2,6 +2,7 @@
 id: prisma
 name: Prisma
 mode: subagent
+category: technology
 description: Prisma Staff Engineer.
 tools:
   write: false

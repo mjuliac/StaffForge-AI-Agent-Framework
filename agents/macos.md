@@ -2,6 +2,7 @@
 id: macos
 name: Macos
 mode: subagent
+category: utility
 description: Macos Staff Engineer.
 tools:
   write: false

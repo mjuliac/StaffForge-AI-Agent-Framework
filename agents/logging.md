@@ -2,6 +2,7 @@
 id: logging
 name: Logging
 mode: subagent
+category: domain
 description: Logging and observability.
 tools:
   write: false

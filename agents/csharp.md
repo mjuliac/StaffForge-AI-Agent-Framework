@@ -2,6 +2,7 @@
 id: csharp
 name: Csharp
 mode: subagent
+category: technology
 description: C# Staff Engineer.
 tools:
   write: false

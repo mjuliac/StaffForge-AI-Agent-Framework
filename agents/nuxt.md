@@ -2,6 +2,7 @@
 id: nuxt
 name: Nuxt
 mode: subagent
+category: technology
 description: Nuxt Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: maui
 name: Maui
 mode: subagent
+category: technology
 description: Maui Staff Engineer.
 tools:
   write: false

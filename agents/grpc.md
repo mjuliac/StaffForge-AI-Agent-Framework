@@ -2,6 +2,7 @@
 id: grpc
 name: Grpc
 mode: subagent
+category: technology
 description: Grpc Staff Engineer.
 tools:
   write: false

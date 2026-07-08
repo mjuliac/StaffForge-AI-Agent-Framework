@@ -2,6 +2,7 @@
 id: dapper
 name: Dapper
 mode: subagent
+category: technology
 description: Dapper Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: javascript
 name: Javascript
 mode: subagent
+category: technology
 description: JavaScript Staff Engineer.
 tools:
   write: false

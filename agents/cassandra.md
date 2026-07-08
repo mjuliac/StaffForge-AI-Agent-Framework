@@ -2,6 +2,7 @@
 id: cassandra
 name: Cassandra
 mode: subagent
+category: technology
 description: Cassandra Staff Engineer.
 tools:
   write: false

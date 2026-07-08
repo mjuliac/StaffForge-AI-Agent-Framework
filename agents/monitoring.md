@@ -2,6 +2,7 @@
 id: monitoring
 name: Monitoring
 mode: subagent
+category: domain
 description: Monitoring Staff Engineer.
 tools:
   write: false

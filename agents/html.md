@@ -2,6 +2,7 @@
 id: html
 name: Html
 mode: subagent
+category: technology
 description: HTML Staff Engineer.
 tools:
   write: false

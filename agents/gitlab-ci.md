@@ -2,6 +2,7 @@
 id: gitlab-ci
 name: Gitlab Ci
 mode: subagent
+category: technology
 description: GitLab CI Staff Engineer.
 tools:
   write: false

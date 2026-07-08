@@ -2,6 +2,7 @@
 id: gcp
 name: Gcp
 mode: subagent
+category: technology
 description: Gcp Staff Engineer.
 tools:
   write: false

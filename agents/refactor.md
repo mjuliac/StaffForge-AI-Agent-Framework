@@ -2,6 +2,7 @@
 id: refactor
 name: Refactor
 mode: subagent
+category: utility
 description: Safe refactoring specialist.
 tools:
   write: false

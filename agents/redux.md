@@ -2,6 +2,7 @@
 id: redux
 name: Redux
 mode: subagent
+category: technology
 description: Redux Staff Engineer.
 tools:
   write: false

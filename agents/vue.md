@@ -2,6 +2,7 @@
 id: vue
 name: Vue
 mode: subagent
+category: technology
 description: Vue.js Staff Engineer.
 tools:
   write: false

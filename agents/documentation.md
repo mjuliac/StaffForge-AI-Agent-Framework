@@ -2,6 +2,7 @@
 id: documentation
 name: Documentation
 mode: subagent
+category: core
 description: Technical writer.
 tools:
   write: false

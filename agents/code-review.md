@@ -2,6 +2,7 @@
 id: code-review
 name: Code Review
 mode: subagent
+category: core
 description: Final reviewer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: python
 name: Python
 mode: subagent
+category: technology
 description: Python Staff Engineer.
 tools:
   write: false

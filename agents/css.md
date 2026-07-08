@@ -2,6 +2,7 @@
 id: css
 name: Css
 mode: subagent
+category: technology
 description: Css Staff Engineer.
 tools:
   write: false

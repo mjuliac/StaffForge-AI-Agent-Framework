@@ -2,6 +2,7 @@
 id: tailwind
 name: Tailwind
 mode: subagent
+category: technology
 description: Tailwind CSS Staff Engineer.
 tools:
   write: false

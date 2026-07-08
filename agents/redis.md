@@ -2,6 +2,7 @@
 id: redis
 name: Redis
 mode: subagent
+category: technology
 description: Redis Staff Engineer.
 tools:
   write: false

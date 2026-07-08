@@ -2,6 +2,7 @@
 id: go
 name: Go
 mode: subagent
+category: technology
 description: Go Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: linux
 name: Linux
 mode: subagent
+category: utility
 description: Linux specialist.
 tools:
   write: false

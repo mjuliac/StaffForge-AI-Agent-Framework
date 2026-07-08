@@ -2,6 +2,7 @@
 id: sass
 name: Sass
 mode: subagent
+category: technology
 description: Sass Staff Engineer.
 tools:
   write: false

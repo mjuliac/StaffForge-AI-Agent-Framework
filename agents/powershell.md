@@ -2,6 +2,7 @@
 id: powershell
 name: Powershell
 mode: subagent
+category: utility
 description: Powershell Staff Engineer.
 tools:
   write: false

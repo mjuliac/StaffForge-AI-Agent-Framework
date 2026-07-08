@@ -2,6 +2,7 @@
 id: react-query
 name: React Query
 mode: subagent
+category: technology
 description: React Query Staff Engineer.
 tools:
   write: false

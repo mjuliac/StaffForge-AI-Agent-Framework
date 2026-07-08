@@ -2,6 +2,7 @@
 id: terraform
 name: Terraform
 mode: subagent
+category: technology
 description: Terraform Staff Engineer.
 tools:
   write: false

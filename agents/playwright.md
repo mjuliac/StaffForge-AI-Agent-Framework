@@ -2,6 +2,7 @@
 id: playwright
 name: Playwright
 mode: subagent
+category: technology
 description: Playwright Staff Engineer.
 tools:
   write: false

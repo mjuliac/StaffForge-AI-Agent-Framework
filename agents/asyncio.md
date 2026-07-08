@@ -2,6 +2,7 @@
 id: asyncio
 name: Asyncio
 mode: subagent
+category: technology
 description: asyncio Staff Engineer.
 tools:
   write: false

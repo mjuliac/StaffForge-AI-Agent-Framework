@@ -2,6 +2,7 @@
 id: react-router
 name: React Router
 mode: subagent
+category: technology
 description: React Router Staff Engineer.
 tools:
   write: false

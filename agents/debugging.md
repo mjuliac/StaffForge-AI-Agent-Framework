@@ -2,6 +2,7 @@
 id: debugging
 name: Debugging
 mode: subagent
+category: utility
 description: Root-cause analysis specialist.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: performance
 name: Performance
 mode: subagent
+category: core
 description: Performance optimization specialist.
 tools:
   write: false

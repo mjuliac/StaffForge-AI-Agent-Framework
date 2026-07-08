@@ -2,6 +2,7 @@
 id: winforms
 name: Winforms
 mode: subagent
+category: technology
 description: Windows Forms Staff Engineer.
 tools:
   write: false

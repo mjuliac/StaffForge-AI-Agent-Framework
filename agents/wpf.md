@@ -2,6 +2,7 @@
 id: wpf
 name: Wpf
 mode: subagent
+category: technology
 description: WPF Staff Engineer.
 tools:
   write: false

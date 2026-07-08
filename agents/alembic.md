@@ -2,6 +2,7 @@
 id: alembic
 name: Alembic
 mode: subagent
+category: technology
 description: Alembic Staff Engineer.
 tools:
   write: false

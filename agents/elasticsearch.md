@@ -2,6 +2,7 @@
 id: elasticsearch
 name: Elasticsearch
 mode: subagent
+category: technology
 description: Elasticsearch Staff Engineer.
 tools:
   write: false

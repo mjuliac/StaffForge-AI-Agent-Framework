@@ -2,6 +2,7 @@
 id: angular
 name: Angular
 mode: subagent
+category: technology
 description: Angular Staff Engineer.
 tools:
   write: false

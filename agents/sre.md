@@ -2,6 +2,7 @@
 id: sre
 name: Sre
 mode: subagent
+category: domain
 description: Site Reliability Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: android
 name: Android
 mode: subagent
+category: technology
 description: Android Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: react-native
 name: React Native
 mode: subagent
+category: technology
 description: React Native Staff Engineer.
 tools:
   write: false

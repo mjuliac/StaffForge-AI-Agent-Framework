@@ -2,6 +2,7 @@
 id: php
 name: Php
 mode: subagent
+category: technology
 description: Php Staff Engineer.
 tools:
   write: false

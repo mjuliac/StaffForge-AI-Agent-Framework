@@ -2,6 +2,7 @@
 id: svelte
 name: Svelte
 mode: subagent
+category: technology
 description: Svelte Staff Engineer.
 tools:
   write: false

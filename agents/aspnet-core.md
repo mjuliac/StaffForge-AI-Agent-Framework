@@ -2,6 +2,7 @@
 id: aspnet-core
 name: Aspnet Core
 mode: subagent
+category: technology
 description: ASP.NET Core Staff Engineer.
 tools:
   write: false

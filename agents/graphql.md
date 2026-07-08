@@ -2,6 +2,7 @@
 id: graphql
 name: Graphql
 mode: subagent
+category: technology
 description: Graphql Staff Engineer.
 tools:
   write: false

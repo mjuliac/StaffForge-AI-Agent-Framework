@@ -2,6 +2,7 @@
 id: knowledge
 name: Knowledge
 mode: subagent
+category: domain
 description: Finds existing implementations.
 tools:
   write: false

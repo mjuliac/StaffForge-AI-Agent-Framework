@@ -2,6 +2,7 @@
 id: fastapi
 name: Fastapi
 mode: subagent
+category: technology
 description: FastAPI Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: remix
 name: Remix
 mode: subagent
+category: technology
 description: Remix Staff Engineer.
 tools:
   write: false

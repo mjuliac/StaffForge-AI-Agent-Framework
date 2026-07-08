@@ -2,6 +2,7 @@
 id: azure
 name: Azure
 mode: subagent
+category: technology
 description: Azure Staff Engineer.
 tools:
   write: false

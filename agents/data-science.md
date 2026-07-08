@@ -2,6 +2,7 @@
 id: data-science
 name: Data Science
 mode: subagent
+category: domain
 description: Data Science Staff Engineer.
 tools:
   write: false

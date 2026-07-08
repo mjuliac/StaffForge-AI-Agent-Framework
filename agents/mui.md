@@ -2,6 +2,7 @@
 id: mui
 name: Mui
 mode: subagent
+category: technology
 description: Material UI Staff Engineer.
 tools:
   write: false

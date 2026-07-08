@@ -2,6 +2,7 @@
 id: django
 name: Django
 mode: subagent
+category: technology
 description: Django Staff Engineer.
 tools:
   write: false

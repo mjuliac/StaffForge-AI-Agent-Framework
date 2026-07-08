@@ -2,6 +2,7 @@
 id: microservices
 name: Microservices
 mode: subagent
+category: domain
 description: Microservices architect.
 tools:
   write: false

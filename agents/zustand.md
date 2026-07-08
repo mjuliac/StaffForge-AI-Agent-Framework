@@ -2,6 +2,7 @@
 id: zustand
 name: Zustand
 mode: subagent
+category: technology
 description: Zustand Staff Engineer.
 tools:
   write: false

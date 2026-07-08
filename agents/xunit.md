@@ -2,6 +2,7 @@
 id: xunit
 name: Xunit
 mode: subagent
+category: technology
 description: xUnit Staff Engineer.
 tools:
   write: false

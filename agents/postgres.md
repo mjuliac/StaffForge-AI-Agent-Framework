@@ -2,6 +2,7 @@
 id: postgres
 name: Postgres
 mode: subagent
+category: technology
 description: PostgreSQL expert.
 tools:
   write: false

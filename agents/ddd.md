@@ -2,6 +2,7 @@
 id: ddd
 name: Ddd
 mode: subagent
+category: domain
 description: DDD specialist.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: e2e
 name: E2e
 mode: subagent
+category: utility
 description: End-to-End Testing Staff Engineer.
 tools:
   write: false

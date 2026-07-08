@@ -2,6 +2,7 @@
 id: react
 name: React
 mode: subagent
+category: technology
 description: React Staff Engineer.
 tools:
   write: false

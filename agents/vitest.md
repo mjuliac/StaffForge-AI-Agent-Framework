@@ -2,6 +2,7 @@
 id: vitest
 name: Vitest
 mode: subagent
+category: technology
 description: Vitest Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: requirements
 name: Requirements
 mode: subagent
+category: domain
 description: Extracts requirements.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: mongodb
 name: Mongodb
 mode: subagent
+category: technology
 description: Mongodb Staff Engineer.
 tools:
   write: false

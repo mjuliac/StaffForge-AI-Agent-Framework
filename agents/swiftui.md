@@ -2,6 +2,7 @@
 id: swiftui
 name: Swiftui
 mode: subagent
+category: technology
 description: SwiftUI Staff Engineer.
 tools:
   write: false

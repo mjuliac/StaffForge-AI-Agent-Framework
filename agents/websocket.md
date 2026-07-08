@@ -2,6 +2,7 @@
 id: websocket
 name: Websocket
 mode: subagent
+category: technology
 description: Websocket Staff Engineer.
 tools:
   write: false

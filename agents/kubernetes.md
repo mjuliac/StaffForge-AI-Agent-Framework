@@ -2,6 +2,7 @@
 id: kubernetes
 name: Kubernetes
 mode: subagent
+category: technology
 description: Kubernetes expert.
 tools:
   write: false

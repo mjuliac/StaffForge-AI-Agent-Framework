@@ -2,6 +2,7 @@
 id: rust
 name: Rust
 mode: subagent
+category: technology
 description: Rust Staff Engineer.
 tools:
   write: false

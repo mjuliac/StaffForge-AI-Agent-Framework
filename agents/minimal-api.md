@@ -2,6 +2,7 @@
 id: minimal-api
 name: Minimal Api
 mode: subagent
+category: technology
 description: Minimal API Staff Engineer.
 tools:
   write: false

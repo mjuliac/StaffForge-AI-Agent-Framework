@@ -2,6 +2,7 @@
 id: astro
 name: Astro
 mode: subagent
+category: technology
 description: Astro Staff Engineer.
 tools:
   write: false

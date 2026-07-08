@@ -2,6 +2,7 @@
 id: deployment
 name: Deployment
 mode: subagent
+category: domain
 description: Deployment expert.
 tools:
   write: false

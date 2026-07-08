@@ -2,6 +2,7 @@
 id: release
 name: Release
 mode: subagent
+category: domain
 description: Release manager.
 tools:
   write: false

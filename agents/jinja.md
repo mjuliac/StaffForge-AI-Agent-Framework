@@ -2,6 +2,7 @@
 id: jinja
 name: Jinja
 mode: subagent
+category: technology
 description: Jinja Staff Engineer.
 tools:
   write: false

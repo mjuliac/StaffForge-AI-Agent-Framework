@@ -2,6 +2,7 @@
 id: flask
 name: Flask
 mode: subagent
+category: technology
 description: Flask Staff Engineer.
 tools:
   write: false

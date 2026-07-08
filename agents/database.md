@@ -2,6 +2,7 @@
 id: database
 name: Database
 mode: subagent
+category: domain
 description: Database design specialist.
 tools:
   write: false

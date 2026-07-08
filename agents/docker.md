@@ -2,6 +2,7 @@
 id: docker
 name: Docker
 mode: subagent
+category: technology
 description: Docker expert.
 tools:
   write: false

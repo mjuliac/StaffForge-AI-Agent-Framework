@@ -2,6 +2,7 @@
 id: starlette
 name: Starlette
 mode: subagent
+category: technology
 description: Starlette Staff Engineer.
 tools:
   write: false

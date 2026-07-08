@@ -2,6 +2,7 @@
 id: signalr
 name: Signalr
 mode: subagent
+category: technology
 description: SignalR Staff Engineer.
 tools:
   write: false

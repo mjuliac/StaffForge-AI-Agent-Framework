@@ -2,6 +2,7 @@
 id: sqlserver
 name: Sqlserver
 mode: subagent
+category: technology
 description: Sqlserver Staff Engineer.
 tools:
   write: false

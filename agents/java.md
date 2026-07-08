@@ -2,6 +2,7 @@
 id: java
 name: Java
 mode: subagent
+category: technology
 description: Java Staff Engineer.
 tools:
   write: false

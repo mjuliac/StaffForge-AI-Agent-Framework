@@ -2,6 +2,7 @@
 id: impact-analysis
 name: Impact Analysis
 mode: subagent
+category: domain
 description: Analyzes change impact.
 tools:
   write: false

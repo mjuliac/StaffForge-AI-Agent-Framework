@@ -2,6 +2,7 @@
 id: qt-designer
 name: Qt Designer
 mode: subagent
+category: technology
 description: Qt Designer specialist.
 tools:
   write: false

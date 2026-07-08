@@ -2,6 +2,7 @@
 id: api-design
 name: Api Design
 mode: subagent
+category: domain
 description: REST/gRPC/OpenAPI specialist.
 tools:
   write: false

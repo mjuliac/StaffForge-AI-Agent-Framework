@@ -2,6 +2,7 @@
 id: tkinter
 name: Tkinter
 mode: subagent
+category: technology
 description: Tkinter Staff Engineer.
 tools:
   write: false

@@ -2,6 +2,7 @@
 id: mysql
 name: Mysql
 mode: subagent
+category: technology
 description: Mysql Staff Engineer.
 tools:
   write: false

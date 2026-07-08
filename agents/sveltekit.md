@@ -2,6 +2,7 @@
 id: sveltekit
 name: Sveltekit
 mode: subagent
+category: technology
 description: SvelteKit Staff Engineer.
 tools:
   write: false
