@@ -8,9 +8,7 @@ const root = join(__dirname, '..', '..');
 
 function parseModel(file, content) {
   const data = yaml.load(content);
-  if (!data || !data.id) {
-    throw new Error(`${file}: missing required field "id"`);
-  }
+  if (!data || !data.id) return null;
   return data;
 }
 
@@ -34,6 +32,7 @@ export class ModelRegistry {
       const content = readFileSync(join(this._modelsDir, file), 'utf-8');
       try {
         const model = parseModel(file, content);
+        if (!model) continue;
         this._models.push(model);
 
         if (!this._byProvider[model.provider]) {
@@ -45,8 +44,8 @@ export class ModelRegistry {
           this._byFamily[model.family] = [];
         }
         this._byFamily[model.family].push(model);
-      } catch (err) {
-        console.warn(`WARN  ${file}: ${err.message}`);
+      } catch {
+        // skip non-model files (profiles.yaml, etc.)
       }
     }
 
