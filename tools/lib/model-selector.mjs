@@ -103,7 +103,7 @@ export class ModelSelector {
       provider: options.provider || null,
       minContext: options.minContext || null,
       requireTools: options.requireTools || false,
-      preferFree: this._policy.prefer_free,
+      preferFree: options.preferFree ?? this._policy.prefer_free,
       topN: options.topN || 50,
     });
     return results.map(r => r.model);
