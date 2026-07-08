@@ -20,6 +20,7 @@ import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline';
 import { env, argv, exit, cwd } from 'node:process';
+import { search as marketplaceSearch, install as marketplaceInstall } from './marketplace.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CWD = cwd();
@@ -73,13 +74,23 @@ function parseArgs() {
       case '--out':
         o.out = a[++i];
         break;
+      case '--catalog':
+        o.catalog = a[++i];
+        break;
       case '--yes':
       case '-y':
         o.yes = true;
         break;
       default:
-        console.error(`Unknown: ${a[i]}`);
-        exit(1);
+        if (a[i] === 'marketplace' && !o.command) {
+          o.command = 'marketplace';
+          o.args = a.slice(i + 1).filter((x) => !x.startsWith('--'));
+          break;
+        }
+        if (!o.command) {
+          console.error(`Unknown: ${a[i]}`);
+          exit(1);
+        }
     }
   }
   return o;
@@ -185,6 +196,28 @@ function isTracked(f) {
 // ── Main ──
 async function main() {
   const o = parseArgs();
+
+  // ── Marketplace subcommand ──
+  if (o.command === 'marketplace') {
+    const [sub, arg] = o.args || [];
+    if (sub === 'search') {
+      const results = await marketplaceSearch(arg || '', o.catalog);
+      if (!results.length) return console.log('No pipelines found.');
+      for (const r of results) console.log(`• ${r.name} — ${r.description || ''} (${r.version || '?'})`);
+      return;
+    }
+    if (sub === 'install') {
+      if (!arg) {
+        console.error('Usage: staffforge marketplace install <pipeline-id> [--out <dir>]');
+        return exit(1);
+      }
+      const outPath = await marketplaceInstall(arg, { out: o.out, catalogUrl: o.catalog });
+      return console.log(`✓ Installed pipeline to ${outPath}`);
+    }
+    console.log('Usage: staffforge marketplace <search|install> [query|pipeline-id]');
+    return;
+  }
+
   console.log(`\n${b('StaffForge AI Agent Framework — Installer')}\n`);
 
   let fw = findFrameworkDir();

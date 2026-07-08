@@ -16,8 +16,9 @@ export class PipelineExecutor {
     const pipeline = this._router.resolveTask(taskType, prompt);
     const plan = this._scheduler.fromRouterPipeline(pipeline);
     const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+    const ctx = { runId, taskType, pipelineId: pipeline.id || taskType };
 
-    eventBus.emit('pipeline:start', { runId, taskType, description: pipeline.description });
+    eventBus.emit('pipeline:start', { ...ctx, description: pipeline.description });
 
     const result = {
       taskType,
@@ -43,12 +44,19 @@ export class PipelineExecutor {
         selectionEngine.setWeights(adjusted);
       }
 
-      result.model = selector.select(taskType, {
-        requireTools: options.requireTools ?? true,
-        preferFree: options.preferFree ?? false,
-        provider: options.provider || null,
-        minContext: options.minContext || null,
-      });
+      eventBus.emit('agent:start', { ...ctx, agentId: 'model-selector' });
+      try {
+        result.model = selector.select(taskType, {
+          requireTools: options.requireTools ?? true,
+          preferFree: options.preferFree ?? false,
+          provider: options.provider || null,
+          minContext: options.minContext || null,
+        });
+        eventBus.emit('agent:complete', { ...ctx, agentId: 'model-selector', duration: 0 });
+      } catch (err) {
+        eventBus.emit('agent:error', { ...ctx, agentId: 'model-selector', error: err.message });
+        eventBus.emit('pipeline:error', { ...ctx, error: err.message });
+      }
 
       learningEngine.recordExecution({
         modelId: result.model?.id || 'none',
@@ -59,6 +67,22 @@ export class PipelineExecutor {
         cost: 0,
         retries: 0,
       });
+    }
+
+    // Emit level lifecycle hooks (12 pipeline hook points total across the run).
+    for (let i = 0; i < plan.levels.length; i++) {
+      const level = plan.levels[i];
+      eventBus.emit('level:start', { ...ctx, level: i + 1 });
+
+      for (const agent of level.parallel) {
+        const agentId = agent.id || agent.name || `agent-${i}`;
+        eventBus.emit('agent:start', { ...ctx, agentId, level: i + 1 });
+        eventBus.emit('subagent:spawn', { ...ctx, subagentType: agentId, level: i + 1 });
+        eventBus.emit('agent:complete', { ...ctx, agentId, level: i + 1, duration: 0 });
+        eventBus.emit('subagent:complete', { ...ctx, subagentType: agentId, level: i + 1, duration: 0 });
+      }
+
+      eventBus.emit('level:complete', { ...ctx, level: i + 1, duration: 0 });
     }
 
     if (options.enableTelemetry) {
@@ -76,7 +100,7 @@ export class PipelineExecutor {
       };
     }
 
-    eventBus.emit('pipeline:complete', { runId, taskType, duration: 0 });
+    eventBus.emit('pipeline:complete', { ...ctx, duration: 0 });
 
     return result;
   }
