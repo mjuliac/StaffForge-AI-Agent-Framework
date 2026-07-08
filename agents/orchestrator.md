@@ -148,6 +148,23 @@ The prompt MUST use the correct template for each task type:
 - `feature/*`, `bugfix/*`, and `refactor/*` branches always merge **only** into `develop`.
 - Commits on `develop` are not automatically release-ready.
 
+## Verifying Pipeline Routing via CLI
+
+You can verify your routing decisions without launching agents:
+
+```bash
+node tools/run-pipeline.mjs --task feature --prompt "<prompt>" --dry-run
+```
+
+This returns the pipeline plan: task type, detected model profile, selected model, agents, and execution levels. Use it to confirm the Router's agent selection before launching subagents.
+
+```bash
+# Example — verify a feature request:
+node tools/run-pipeline.mjs --task feature --prompt "Add Flask REST API with PostgreSQL" --dry-run --json
+```
+
+The `--json` flag outputs machine-readable JSON if you need to parse the plan programmatically.
+
 ## Pipeline Execution
 
 Consult `ORCHESTRATOR_MATRIX.md` for the base pipeline of the detected task type.

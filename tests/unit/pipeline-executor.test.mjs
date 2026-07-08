@@ -88,6 +88,19 @@ const mapper = getTaskMapper();
   assert(mapper.mapTaskType('') === 'coding', 'empty defaults to coding');
 }
 
+// Test 11: TaskMapper detects profile from prompt keywords
+{
+  assert(mapper.mapTaskType('feature', 'write API documentation') === 'documentation', 'doc prompt → documentation');
+  assert(mapper.mapTaskType('bugfix', 'add unit test') === 'testing', 'test prompt → testing');
+  assert(mapper.mapTaskType('feature', 'code review the PR') === 'review', 'review prompt → review');
+  assert(mapper.mapTaskType('feature', 'design the architecture') === 'reasoning', 'design prompt → reasoning');
+}
+
+// Test 12: TaskMapper prompt detection does not override explicit task type
+{
+  assert(mapper.mapTaskType('security', 'write a test') === 'security', 'security task with test prompt still security');
+}
+
 // Test 10: PipelineExecutor levels do not duplicate tech agents
 {
   const result = executor.execute('bugfix', 'fix docker networking issue');

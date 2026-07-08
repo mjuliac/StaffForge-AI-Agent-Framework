@@ -83,7 +83,7 @@ export class Router {
     }
 
     const intent = this._engine.analyzeIntent(prompt);
-    const modelProfile = this._taskMapper.mapTaskType(taskType);
+    const modelProfile = this._taskMapper.mapTaskType(taskType, prompt);
 
     const pipeline = {
       taskType,

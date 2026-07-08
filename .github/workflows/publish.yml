@@ -1,0 +1,41 @@
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate agents
+        run: npm run validate
+
+      - name: Run tests
+        run: npm test
+
+      - name: Export all platforms
+        run: |
+          npm run export:opencode
+          npm run export:claude
+          npm run export:cursor
+          npm run export:copilot
+          npm run export:aider
+          npm run export:gemini
+
+      - name: Publish CLI package
+        run: npm publish
+        working-directory: packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
