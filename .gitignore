@@ -3,3 +3,4 @@ adapters/*/output/
 opencode.json
 /package-lock.json
 .staffforge-install.json
+packages/core/adapters/*/output
