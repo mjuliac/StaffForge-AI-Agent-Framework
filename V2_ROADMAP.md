@@ -206,6 +206,28 @@ v2.3 ─────────────────────────
 v2.5 ────────────────────────────────────────────────────────
   Dashboard Community (read-only)
 
+v2.6 ────────────────────────────────────────────────────────
+  Multi Version Control System (VCS) Support
+    Interactive Installer
+      Select Version Control System
+        Git (default)
+        Subversion (SVN)
+        Mercurial (Hg)
+        Azure DevOps TFVC
+        Perforce
+        Custom Provider
+
+    Configure Workflow
+        Git Flow
+        GitHub Flow
+        GitLab Flow
+        Trunk Based Development
+        Custom
+
+    Provider Architecture (Plugin-based)
+    Provider Plugin SDK
+    Version Control Abstraction Layer
+
 v3.0 ────────────────────────────────────────────────────────
   Enterprise:
   - Postgres storage

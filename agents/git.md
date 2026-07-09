@@ -124,13 +124,14 @@ git branch -d release/<version>
 - Escalate ambiguity to the orchestrator.
 - Think as a Staff Engineer.
 - Consider maintainability, scalability, security and technical debt.
+- **🔴 GIT INIT ES OBLIGATORIO.** Siempre que se invoque a `@git`, verificar si existe `.git`. Si no existe, bootstrap el repo COMPLETO antes de hacer cualquier otra operación. Esto NO es opcional. No hay excepción para proyectos nuevos.
 
-## Pre-Flight Checks
+## Pre-Flight Checks ⚠️ OBLIGATORIOS — Siempre se ejecutan al inicio
 
-These run automatically at the start of every invocation, before any git operation.
+Estos pasos se ejecutan automáticamente al inicio de CADA invocación, antes de cualquier operación git. Si falla alguno, no se continúa.
 
-### 1. No git repo → Bootstrap full git flow
-If the project directory has no `.git` folder, bootstrap the full git flow structure:
+### 1. No git repo → Bootstrap full git flow (OBLIGATORIO)
+Si el directorio del proyecto NO tiene carpeta `.git`, bootstrap la estructura completa de git flow:
 
 ```bash
 git init                                                        # create repo
@@ -142,11 +143,12 @@ git branch develop                                              # create develop
 git checkout develop                                            # switch to develop
 ```
 
-After bootstrapping, proceed to create the task-specific branch (feature/bugfix/etc.) as instructed by the orchestrator.
-Log the action and proceed.
+Registrar la acción: `"Git repo initialized at {path}"`.
+Después del bootstrap, proceder a crear la rama específica (feature/bugfix/etc.) según lo instruido por el orchestrator.
+**No continuar sin confirmar que el repo existe.**
 
 ### 2. No remote → Ask user
-If no remote (`origin`) is configured after init, ask the user:
+Si después del init no hay remote (`origin`) configurado, preguntar al usuario:
 ```
 This project has no git remote. Add one now? [y/N]:
 ```

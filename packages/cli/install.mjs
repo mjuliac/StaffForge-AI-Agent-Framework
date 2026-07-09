@@ -322,6 +322,19 @@ async function main() {
 
   if (p !== 'all') savePrev({ platform: p, defaultAgent: a, installDir: d });
 
+  // ── Git init (requirement: all projects MUST have a git repo) ──
+  if (!existsSync(join(CWD, '.git'))) {
+    console.log(`\n${bl('→')} Initializing git repository...`);
+    execSync('git init', { cwd: CWD, stdio: 'pipe' });
+    execSync('git add -A', { cwd: CWD, stdio: 'pipe' });
+    try {
+      execSync('git commit -m "chore: initial commit"', { cwd: CWD, stdio: 'pipe' });
+    } catch {
+      // if nothing to commit, that's fine
+    }
+    console.log(`  ${g('✓')} Git repo initialized at ${CWD}`);
+  }
+
   // Cleanup
   if (downloaded) {
     console.log(`\n${bl('→')} Cleaning up...`);

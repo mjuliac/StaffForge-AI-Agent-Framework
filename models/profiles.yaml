@@ -5,6 +5,8 @@ profiles:
     min_context: 32768
     max_cost: 0.01
     description: "General coding and implementation tasks"
+    requirements:
+      - "MUST init git repo before any code generation if .git does not exist"
 
   architecture:
     prefer: [deepseek, claude, gpt-4]
