@@ -1,0 +1,14 @@
+{
+  "name": "@staffforge/dashboard",
+  "version": "0.1.0",
+  "description": "StaffForge Community Dashboard — Web UI for viewing agents, pipelines, and executions.",
+  "type": "module",
+  "main": "./index.mjs",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "@staffforge/core": "2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

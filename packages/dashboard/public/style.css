@@ -1,0 +1,65 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; }
+a { color: #58a6ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav { display: flex; align-items: center; gap: 2rem; padding: 0.75rem 1.5rem; background: #161b22; border-bottom: 1px solid #30363d; }
+.nav-brand { font-weight: 700; font-size: 1.1rem; color: #f0f6fc; }
+.nav-links { display: flex; gap: 1rem; }
+.nav-links a { color: #8b949e; font-size: 0.9rem; padding: 0.25rem 0.5rem; border-radius: 4px; }
+.nav-links a:hover, .nav-links a.active { color: #f0f6fc; background: #1f2937; text-decoration: none; }
+
+main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+.loading { text-align: center; padding: 4rem; color: #8b949e; }
+.hidden { display: none !important; }
+
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+header h2 { font-size: 1.3rem; font-weight: 600; }
+header span { color: #8b949e; font-size: 0.85rem; }
+
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; text-align: center; }
+.stat-card .num { font-size: 1.8rem; font-weight: 700; color: #f0f6fc; }
+.stat-card .label { font-size: 0.8rem; color: #8b949e; margin-top: 0.25rem; }
+
+.search-bar { margin-bottom: 1rem; }
+.search-bar input { width: 100%; padding: 0.5rem 0.75rem; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; font-size: 0.9rem; }
+.search-bar input:focus { outline: none; border-color: #58a6ff; }
+
+.filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.filters button { padding: 0.3rem 0.75rem; border: 1px solid #30363d; border-radius: 12px; background: transparent; color: #8b949e; cursor: pointer; font-size: 0.8rem; }
+.filters button.active { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+.filters button:hover { background: #21262d; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #21262d; font-size: 0.85rem; }
+th { color: #8b949e; font-weight: 500; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+tr:hover td { background: #161b22; }
+
+.badge { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 8px; font-size: 0.75rem; font-weight: 500; }
+.badge-primary { background: #1f6feb33; color: #58a6ff; }
+.badge-subagent { background: #23863633; color: #3fb950; }
+.badge-core { background: #d2992233; color: #d29922; }
+.badge-domain { background: #8957e533; color: #a371f7; }
+
+.level-list { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.level-tag { background: #1f2937; border-radius: 4px; padding: 0.2rem 0.4rem; font-size: 0.75rem; white-space: nowrap; }
+
+.agent-detail { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1.5rem; }
+.agent-detail h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.agent-detail .meta { display: flex; gap: 1rem; margin-bottom: 1rem; color: #8b949e; font-size: 0.85rem; }
+.agent-detail .body { background: #0d1117; border: 1px solid #30363d; border-radius: 4px; padding: 1rem; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.8rem; white-space: pre-wrap; line-height: 1.5; max-height: 60vh; overflow-y: auto; }
+
+.pipeline-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+.pipeline-card h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+.pipeline-card .desc { color: #8b949e; font-size: 0.85rem; margin-bottom: 0.75rem; }
+
+.pill { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.75rem; background: #1f2937; color: #8b949e; margin: 0.15rem; }
+.pill.parallel { border-left: 3px solid #238636; }
+.pill.sequential { border-left: 3px solid #d29922; }
+
+@media (max-width: 768px) {
+  nav { flex-direction: column; gap: 0.5rem; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
