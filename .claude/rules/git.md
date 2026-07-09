@@ -114,11 +114,12 @@ git branch -d release/<version>
 
 These run automatically at the start of every invocation, before any git operation.
 
-### 1. No git repo → Create it
-If the project directory has no `.git` folder, orchestrate the repo:
+### 1. No git repo → Create it with git flow
+If the project directory has no `.git` folder, bootstrap the repo:
 ```bash
 git init
-git checkout -b main
+git add -A && git commit -m "chore: initial commit"
+git checkout -b develop
 ```
 Log the action and proceed.
 
