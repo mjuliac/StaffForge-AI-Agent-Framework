@@ -133,10 +133,13 @@ These run automatically at the start of every invocation, before any git operati
 If the project directory has no `.git` folder, bootstrap the full git flow structure:
 
 ```bash
-git init                                    # creates main (default branch)
-git add -A && git commit -m "chore: initial commit"   # first commit on main
-git branch develop                          # create develop from main
-git checkout develop                        # switch to develop for work
+git init                                                        # create repo
+if git rev-parse --verify master >/dev/null 2>&1; then
+  git branch -m master main                                     # rename master → main
+fi
+git add -A && git commit -m "chore: initial commit"             # first commit on main
+git branch develop                                              # create develop from main
+git checkout develop                                            # switch to develop
 ```
 
 After bootstrapping, proceed to create the task-specific branch (feature/bugfix/etc.) as instructed by the orchestrator.
