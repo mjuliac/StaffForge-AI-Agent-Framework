@@ -53,7 +53,7 @@ main (production)
 #### Feature Development
 ```bash
 git checkout develop
-git pull origin develop
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin develop
 git checkout -b feature/<name>
 # ... work ...
 git add .
@@ -67,7 +67,7 @@ git branch -d feature/<name>
 #### Bug Fix
 ```bash
 git checkout develop
-git pull origin develop
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin develop
 git checkout -b bugfix/<name>
 # ... work ...
 git add .
@@ -81,7 +81,7 @@ git branch -d bugfix/<name>
 #### Hotfix (Urgent Production Fix)
 ```bash
 git checkout main
-git pull origin main
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin main
 git checkout -b hotfix/<name>
 # ... work ...
 git add .
@@ -99,7 +99,7 @@ git branch -d hotfix/<name>
 #### Release Preparation
 ```bash
 git checkout develop
-git pull origin develop
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin develop
 git checkout -b release/<version>
 # ... final adjustments, version bump ...
 git add .
