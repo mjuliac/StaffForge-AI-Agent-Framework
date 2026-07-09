@@ -215,4 +215,12 @@ v3.0 ─────────────────────────
   - Audit Logs
   - Observability
   - Dashboard Enterprise
+
+v3.1 ────────────────────────────────────────────────────────
+  Enterprise AI Optimization
+  - Token Saving Mode
+  - Prompt Compression Engine
+  - Semantic Context Cache
+  - Context Window Optimizer
+  - Prompt Analytics
 ```
