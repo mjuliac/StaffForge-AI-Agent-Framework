@@ -15,7 +15,17 @@
  */
 
 import { execSync } from 'node:child_process';
-import { existsSync, copyFileSync, readFileSync, writeFileSync, mkdirSync, rmSync, renameSync } from 'node:fs';
+import {
+  existsSync,
+  copyFileSync,
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  rmSync,
+  renameSync,
+  cpSync,
+  readdirSync,
+} from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline';
@@ -160,8 +170,8 @@ function copyResult(platform, src, dest) {
       break;
     case 'claude-code':
       if (existsSync(join(src, 'CLAUDE.md'))) cp(join(src, 'CLAUDE.md'), join(dest, 'CLAUDE.md'));
-      if (existsSync(join(src, '.claude/rules'))) mv(join(src, '.claude/rules'), join(dest, '.claude/rules'));
-      console.log(`  ${g('✓')} CLAUDE.md + .claude/rules/`);
+      if (existsSync(join(src, '.claude/agents'))) mv(join(src, '.claude/agents'), join(dest, '.claude/agents'));
+      console.log(`  ${g('✓')} CLAUDE.md + .claude/agents/`);
       break;
     case 'cursor':
       if (existsSync(join(src, '.cursor/rules'))) mv(join(src, '.cursor/rules'), join(dest, '.cursor/rules'));
@@ -182,6 +192,20 @@ function copyResult(platform, src, dest) {
       console.log(`  ${g('✓')} .gemini/`);
       break;
   }
+}
+
+// Copy the canonical agents/ folder (each agent's full .md rules) to the
+// target project so every install has the rules available as separate files.
+function copyAgentsFolder(fwDir, dest) {
+  const src = join(fwDir, 'agents');
+  if (!existsSync(src)) return;
+  const target = join(dest, 'agents');
+  // Guard: never delete the source when framework dir === destination
+  if (resolve(src) === resolve(target)) return;
+  rmSync(target, { recursive: true, force: true });
+  cpSync(src, target, { recursive: true });
+  const count = readdirSync(target).filter((f) => f.endsWith('.md')).length;
+  console.log(`  ${g('✓')} agents/ → ${target}/ (${count} agent files)`);
 }
 
 function isTracked(f) {
@@ -291,6 +315,10 @@ async function main() {
     console.log(`\n${g('✓')} StaffForge installed for ${p}`);
     copyResult(p, d, CWD);
   }
+
+  // Always copy the canonical agents/ folder so every install has each
+  // agent's full rules available as separate files.
+  copyAgentsFolder(fw, CWD);
 
   if (p !== 'all') savePrev({ platform: p, defaultAgent: a, installDir: d });
 

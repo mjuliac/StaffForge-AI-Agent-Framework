@@ -1,5 +1,9 @@
 /**
- * Claude Code adapter — generates CLAUDE.md + .claude/rules/<agent>.md.
+ * Claude Code adapter — generates CLAUDE.md + .claude/agents/<agent>.md subagents.
+ *
+ * Claude Code loads subagents from `.claude/agents/*.md` (not `.claude/rules/`,
+ * which is for always-on project rules). Each subagent file needs frontmatter
+ * with name, description, and optional tools.
  */
 
 export default function claudeCodeAdapter(agents) {
@@ -13,13 +17,26 @@ export default function claudeCodeAdapter(agents) {
     });
   }
 
-  const rules = agents.filter(a => a.name !== 'orchestrator');
-  for (const agent of rules) {
+  for (const agent of agents.filter(a => a.name !== 'orchestrator')) {
+    const tools = agent.frontmatter.tools || {};
+    const toolList = ['read', 'write', 'bash', 'edit']
+      .filter((t) => tools[t])
+      .map((t) => t.charAt(0).toUpperCase() + t.slice(1))
+      .join(', ');
+    const frontmatter = [
+      '---',
+      `name: ${agent.name}`,
+      `description: ${agent.frontmatter.description}`,
+      toolList ? `tools: ${toolList}` : null,
+      '---',
+    ].filter(Boolean).join('\n');
+
     files.push({
-      path: `.claude/rules/${agent.name}.md`,
-      content: `---\n${Object.entries(agent.frontmatter).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join('\n')}\n---\n\n${agent.body}\n`,
+      path: `.claude/agents/${agent.name}.md`,
+      content: `${frontmatter}\n\n${agent.body}\n`,
     });
   }
 
   return files;
 }
+
