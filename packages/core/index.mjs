@@ -35,4 +35,9 @@ export { DAG } from './lib/dag.mjs';
 export { ModelProfile } from './lib/model-profile.mjs';
 export { ModelDiscovery } from './lib/model-discovery.mjs';
 
+export { PluginManager, getPluginManager } from './lib/plugin-manager.mjs';
+
+export { RegistryServer, createRegistryServer } from './lib/registry-server.mjs';
+export { RegistryClient, createRegistryClient } from './lib/registry-client.mjs';
+
 export { IPlugin } from './lib/interfaces/plugin.mjs';
