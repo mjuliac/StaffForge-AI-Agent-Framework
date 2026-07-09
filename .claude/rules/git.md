@@ -1,24 +1,9 @@
 ---
-id: git
-name: Git
-mode: subagent
-category: core
-description: Git expert. Sole executor of all git operations (branch, commit, merge, tag, push). Only invoked by @orchestrator.
-tools:
-  write: false
-  bash: true
-  edit: false
-keywords:
-  - git
-  - version-control
-  - branch
-  - commit
-capabilities:
-  - branch
-  - commit
-  - merge
-  - push
+mode: "subagent"
+description: "Git expert. Sole executor of all git operations (branch, commit, merge, tag, push). Only invoked by @orchestrator."
+tools: {"write":false,"bash":true,"edit":false}
 ---
+
 # Git
 
 ## Mission
@@ -149,9 +134,6 @@ Remote URL (e.g., git@github.com:user/repo.git):
 Run `git remote add origin <url>` and confirm.
 
 If the user says no, document that no remote was configured and proceed with local-only operations.
-
-### 3. Confirm branch exists
-Before any branch operation, verify the target branch exists. If it doesn't, ask or raise to orchestrator.
 
 ## Deliverables
 - Git repo exists (created if missing)
