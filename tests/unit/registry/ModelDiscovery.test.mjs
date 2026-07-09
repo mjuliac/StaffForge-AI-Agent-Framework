@@ -1,4 +1,4 @@
-import { ModelDiscovery } from '../../../tools/lib/model-discovery.mjs';
+import { ModelDiscovery } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;
@@ -85,7 +85,7 @@ function assert(condition, name) {
 
 // Test 8: singleton getModelDiscovery
 {
-  const { getModelDiscovery } = await import('../../../tools/lib/model-discovery.mjs');
+  const { getModelDiscovery } = await import('@staffforge/core');
   const d1 = getModelDiscovery();
   const d2 = getModelDiscovery();
   assert(d1 === d2, 'singleton same instance');

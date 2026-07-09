@@ -1,6 +1,4 @@
-import { getModelRegistry } from '../../tools/lib/model-registry.mjs';
-import { getModelSelector } from '../../tools/lib/model-selector.mjs';
-import { TelemetryCollector } from '../../tools/lib/telemetry/collector.mjs';
+import { getModelRegistry, getModelSelector, TelemetryCollector } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

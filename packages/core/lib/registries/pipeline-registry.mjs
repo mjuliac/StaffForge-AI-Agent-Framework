@@ -14,7 +14,7 @@ import { join, extname, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PIPELINES_DIR = join(__dirname, '..', '..', 'pipelines');
+const PIPELINES_DIR = join(__dirname, '..', '..', '..', '..', 'pipelines');
 
 class PipelineRegistry {
   constructor() {

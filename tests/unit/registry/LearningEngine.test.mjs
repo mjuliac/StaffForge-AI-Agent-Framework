@@ -1,8 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { LearningEngine, getLearningEngine } from '../../../tools/lib/learning-engine.mjs';
-import { TelemetryStorage } from '../../../tools/lib/telemetry/storage.mjs';
+import { LearningEngine, getLearningEngine, TelemetryStorage } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

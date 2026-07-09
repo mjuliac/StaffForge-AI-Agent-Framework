@@ -1,9 +1,4 @@
-import { ModelRegistry } from '../../tools/lib/model-registry.mjs';
-import { ModelProfile } from '../../tools/lib/model-profile.mjs';
-import { SelectionEngine } from '../../tools/lib/selection-engine.mjs';
-import { FallbackEngine } from '../../tools/lib/fallback-engine.mjs';
-import { LearningEngine } from '../../tools/lib/learning-engine.mjs';
-import { ModelSelector } from '../../tools/lib/model-selector.mjs';
+import { ModelRegistry, ModelProfile, SelectionEngine, FallbackEngine, LearningEngine, ModelSelector } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;
