@@ -9,7 +9,6 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "npm install --workspaces",
     "setup": "node install.mjs",
     "setup:opencode": "node install.mjs --platform opencode --agent orchestrator -y",
     "setup:build": "node install.mjs --platform opencode --agent build -y",
