@@ -114,13 +114,17 @@ git branch -d release/<version>
 
 These run automatically at the start of every invocation, before any git operation.
 
-### 1. No git repo → Create it with git flow
-If the project directory has no `.git` folder, bootstrap the repo:
+### 1. No git repo → Bootstrap full git flow
+If the project directory has no `.git` folder, bootstrap the full git flow structure:
+
 ```bash
-git init
-git add -A && git commit -m "chore: initial commit"
-git checkout -b develop
+git init                                    # creates main (default branch)
+git add -A && git commit -m "chore: initial commit"   # first commit on main
+git branch develop                          # create develop from main
+git checkout develop                        # switch to develop for work
 ```
+
+After bootstrapping, proceed to create the task-specific branch (feature/bugfix/etc.) as instructed by the orchestrator.
 Log the action and proceed.
 
 ### 2. No remote → Ask user
