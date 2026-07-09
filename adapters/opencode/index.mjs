@@ -14,6 +14,7 @@ export default function opencodeAdapter(agents) {
       description: a.frontmatter.description,
       mode: a.frontmatter.mode,
       permission: mapPermission(a.frontmatter.tools),
+      prompt: a.body,
     };
   }
 
@@ -25,7 +26,6 @@ export default function opencodeAdapter(agents) {
   const opencodeJson = {
     $schema: "https://opencode.ai/config.json",
     default_agent: defaultAgent,
-    instructions: ["AGENTS.md"],
     agent: agentEntries,
   };
 
