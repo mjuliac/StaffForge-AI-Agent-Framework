@@ -21,7 +21,7 @@ export class MarketplaceLoader extends RemoteLoader {
       throw new Error(`Pipeline "${pipelineName}" not found in marketplace`);
     }
 
-    const template = await this.load(pipeline.url);
+    const template = await super.load(pipeline.url);
     this._cache.set(cacheKey, template);
     return template;
   }

@@ -8,9 +8,7 @@
   "licenseFile": "LICENSE",
   "files": [
     "index.mjs",
-    "sqlite-storage.mjs",
-    "analytics.mjs",
-    "policy-engine.mjs"
+    "sqlite-storage.mjs"
   ],
   "dependencies": {
     "@staffforge/core": "2.0.0"

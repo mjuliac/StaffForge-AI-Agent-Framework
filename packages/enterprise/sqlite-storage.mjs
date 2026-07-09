@@ -79,9 +79,9 @@ export class SQLiteStorage {
     if (this._usingFallback) return this._fallback.save(runData);
     const id = runData.id || `run-${Date.now()}`;
     const savedAt = new Date().toISOString();
-    this._db.prepare(
-      'INSERT OR REPLACE INTO telemetry (id, task_type, status, saved_at, payload) VALUES (?, ?, ?, ?, ?)'
-    ).run(id, runData.taskType || null, runData.status || null, savedAt, JSON.stringify(runData));
+    this._db
+      .prepare('INSERT OR REPLACE INTO telemetry (id, task_type, status, saved_at, payload) VALUES (?, ?, ?, ?, ?)')
+      .run(id, runData.taskType || null, runData.status || null, savedAt, JSON.stringify(runData));
     return { id, savedAt };
   }
 

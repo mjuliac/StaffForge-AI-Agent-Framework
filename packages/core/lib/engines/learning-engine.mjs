@@ -1,16 +1,14 @@
-// import { MemoryStorage } from './storage/index.mjs';
+import { MemoryStorage } from '../storage/index.mjs';
 
 export class LearningEngine {
   constructor(storage = null) {
-    this._storage = storage;
+    this._storage = storage || new MemoryStorage();
     this._executions = [];
 
     // Load from storage if available
-    if (this._storage) {
-      const loaded = this._storage.list();
-      if (loaded && loaded.length > 0) {
-        this._executions = loaded;
-      }
+    const loaded = this._storage.list();
+    if (loaded && loaded.length > 0) {
+      this._executions = loaded;
     }
   }
 
