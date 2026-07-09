@@ -53,7 +53,7 @@ main (production)
 #### Feature Development
 ```bash
 git checkout develop
-git pull origin develop
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin develop
 git checkout -b feature/<name>
 # ... work ...
 git add .
@@ -67,7 +67,7 @@ git branch -d feature/<name>
 #### Bug Fix
 ```bash
 git checkout develop
-git pull origin develop
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin develop
 git checkout -b bugfix/<name>
 # ... work ...
 git add .
@@ -81,7 +81,7 @@ git branch -d bugfix/<name>
 #### Hotfix (Urgent Production Fix)
 ```bash
 git checkout main
-git pull origin main
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin main
 git checkout -b hotfix/<name>
 # ... work ...
 git add .
@@ -99,7 +99,7 @@ git branch -d hotfix/<name>
 #### Release Preparation
 ```bash
 git checkout develop
-git pull origin develop
+git remote get-url origin >/dev/null 2>&1 && git pull --ff-only origin develop
 git checkout -b release/<version>
 # ... final adjustments, version bump ...
 git add .
@@ -116,7 +116,6 @@ git branch -d release/<version>
 
 ## Mandatory Rules
 - Work only inside your domain.
-- Never talk to the user.
 - Never commit without proper commit message format.
 - Always use `--no-ff` when merging to preserve branch history.
 - Tag releases and hotfixes on main.
@@ -126,7 +125,45 @@ git branch -d release/<version>
 - Think as a Staff Engineer.
 - Consider maintainability, scalability, security and technical debt.
 
+## Pre-Flight Checks
+
+These run automatically at the start of every invocation, before any git operation.
+
+### 1. No git repo → Bootstrap full git flow
+If the project directory has no `.git` folder, bootstrap the full git flow structure:
+
+```bash
+git init                                                        # create repo
+if git rev-parse --verify master >/dev/null 2>&1; then
+  git branch -m master main                                     # rename master → main
+fi
+git add -A && git commit -m "chore: initial commit"             # first commit on main
+git branch develop                                              # create develop from main
+git checkout develop                                            # switch to develop
+```
+
+After bootstrapping, proceed to create the task-specific branch (feature/bugfix/etc.) as instructed by the orchestrator.
+Log the action and proceed.
+
+### 2. No remote → Ask user
+If no remote (`origin`) is configured after init, ask the user:
+```
+This project has no git remote. Add one now? [y/N]:
+```
+If yes, prompt for the URL:
+```
+Remote URL (e.g., git@github.com:user/repo.git):
+```
+Run `git remote add origin <url>` and confirm.
+
+If the user says no, document that no remote was configured and proceed with local-only operations.
+
+### 3. Confirm branch exists
+Before any branch operation, verify the target branch exists. If it doesn't, ask or raise to orchestrator.
+
 ## Deliverables
+- Git repo exists (created if missing)
+- Remote configured (or user declined)
 - Branch created with correct naming
 - Commit with proper message format
 - Merge to target branch

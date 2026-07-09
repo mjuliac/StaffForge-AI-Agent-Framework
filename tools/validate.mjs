@@ -27,9 +27,34 @@ for (const agent of agents) {
       console.error(`  ${err.instancePath} ${err.message}`);
     }
     totalErrors++;
-  } else {
-    console.log(`OK    ${agent.file}`);
+    continue;
   }
+
+  const fm = agent.frontmatter;
+  const tools = fm.tools || {};
+  const isFull = tools.write === true && tools.bash === true && tools.edit === true;
+
+  // Governance rule: only the orchestrator may hold full tool permissions.
+  // The orchestrator is the sole agent allowed to write, run shell, and edit freely.
+  if (isFull && agent.id !== 'orchestrator') {
+    console.error(`FAIL  agent: ${agent.file}:`);
+    console.error(`  only 'orchestrator' may have write+bash+edit all true (got full permissions for '${agent.id}')`);
+    totalErrors++;
+    continue;
+  }
+
+  // Governance rule: every agent must declare its governance constraints in the
+  // body (reference the orchestrator / escalation / no direct user contact).
+  const body = (agent.body || '').toLowerCase();
+  const mentionsGovernance = body.includes('orchestrator') || body.includes('escalate') || body.includes('never talk');
+  if (!mentionsGovernance) {
+    console.error(`FAIL  agent: ${agent.file}:`);
+    console.error(`  agent body must reference the orchestrator / escalation / 'never talk to the user' constraints`);
+    totalErrors++;
+    continue;
+  }
+
+  console.log(`OK    ${agent.file}`);
 }
 
 // Validate models

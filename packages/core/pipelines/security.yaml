@@ -1,0 +1,23 @@
+name: security
+description: Security audit pipeline
+version: "1.0"
+levels:
+  - name: planning
+    agents:
+      - orchestrator
+      - security
+    parallel: true
+  - name: analysis
+    agents:
+      - knowledge
+      - dependency-audit
+    parallel: true
+  - name: assessment
+    agents:
+      - pentest
+  - name: review
+    agents:
+      - code-review
+  - name: finalization
+    agents:
+      - git

@@ -1,12 +1,14 @@
 {
   "name": "staffforge-ai-agent-framework",
-  "version": "1.7.0",
+  "version": "2.5.0",
   "private": true,
   "license": "GPL-3.0-only",
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "postinstall": "cd tools && npm install",
     "setup": "node install.mjs",
     "setup:opencode": "node install.mjs --platform opencode --agent orchestrator -y",
     "setup:build": "node install.mjs --platform opencode --agent build -y",
@@ -20,12 +22,15 @@
     "export:gemini": "node tools/export.mjs --platform gemini-cli",
     "validate": "node tools/validate.mjs",
     "test": "node tests/run-all.mjs",
-    "lint": "eslint 'tools/**/*.mjs'",
-    "format": "prettier --check 'tools/**/*.mjs'",
-    "format:fix": "prettier --write 'tools/**/*.mjs'",
+    "lint": "eslint 'tools/**/*.mjs' 'packages/**/*.mjs'",
+    "format": "prettier --check 'tools/**/*.mjs' 'packages/**/*.mjs'",
+    "format:fix": "prettier --write 'tools/**/*.mjs' 'packages/**/*.mjs'",
     "init-agent": "node tools/init-agent.mjs",
     "docs": "node tools/generate-docs.mjs",
-    "publish:cli": "cd packages/cli && npm publish"
+    "publish:cli": "cd packages/cli && npm publish",
+    "publish:core": "cd packages/core && npm publish",
+    "publish:sdk": "cd packages/sdk && npm publish",
+    "publish:plugin-sdk": "cd packages/plugin-sdk && npm publish"
   },
   "bin": "./install.mjs",
   "files": [
@@ -43,6 +48,11 @@
   "devDependencies": {
     "eslint": "^8.57.0",
     "prettier": "^3.2.0"
+  },
+  "dependencies": {
+    "ajv": "~8.17.1",
+    "glob": "~11.0.0",
+    "js-yaml": "~4.1.0"
   },
   "repository": {
     "type": "git",

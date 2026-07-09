@@ -1,0 +1,19 @@
+{
+  "name": "@staffforge/enterprise",
+  "version": "2.1.0",
+  "description": "StaffForge Enterprise — commercial storage and analytics modules (Licencia Comercial StaffForge).",
+  "type": "module",
+  "main": "./index.mjs",
+  "license": "Commercial",
+  "licenseFile": "LICENSE",
+  "files": [
+    "index.mjs",
+    "sqlite-storage.mjs"
+  ],
+  "dependencies": {
+    "@staffforge/core": "2.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

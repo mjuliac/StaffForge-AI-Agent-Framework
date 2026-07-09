@@ -1,0 +1,32 @@
+name: feature
+description: Full feature development pipeline with architecture review
+version: "1.0"
+levels:
+  - name: planning
+    agents:
+      - orchestrator
+      - planner
+    parallel: true
+  - name: design
+    agents:
+      - requirements
+      - architect
+    parallel: true
+  - name: knowledge
+    agents:
+      - knowledge
+  - name: implementation
+    agents:
+      - impact-analysis
+      - language
+      - security
+      - testing
+    parallel: true
+  - name: review
+    agents:
+      - code-review
+      - documentation
+    parallel: true
+  - name: finalization
+    agents:
+      - git

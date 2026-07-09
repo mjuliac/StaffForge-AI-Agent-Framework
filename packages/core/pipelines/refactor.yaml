@@ -1,0 +1,25 @@
+name: refactor
+description: Code refactoring pipeline with architecture guardrails
+version: "1.0"
+levels:
+  - name: planning
+    agents:
+      - orchestrator
+      - architect
+    parallel: true
+  - name: analysis
+    agents:
+      - knowledge
+      - impact-analysis
+    parallel: true
+  - name: implementation
+    agents:
+      - refactor
+      - performance
+    parallel: true
+  - name: review
+    agents:
+      - code-review
+  - name: finalization
+    agents:
+      - git
