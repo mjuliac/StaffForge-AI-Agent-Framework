@@ -1,4 +1,4 @@
-import { getCapabilityEngine } from '../../../tools/lib/capability-engine.mjs';
+import { getCapabilityEngine } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

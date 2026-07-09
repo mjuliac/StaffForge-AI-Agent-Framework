@@ -1,9 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { ModelRegistry } from '../../../tools/lib/model-registry.mjs';
-import { ModelProfile } from '../../../tools/lib/model-profile.mjs';
-import { SelectionEngine } from '../../../tools/lib/selection-engine.mjs';
+import { ModelRegistry, ModelProfile, SelectionEngine } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

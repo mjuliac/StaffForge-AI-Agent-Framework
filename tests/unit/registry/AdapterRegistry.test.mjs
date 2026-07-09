@@ -1,4 +1,4 @@
-import { AdapterRegistry } from '../../../tools/lib/adapter-registry.mjs';
+import { AdapterRegistry } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

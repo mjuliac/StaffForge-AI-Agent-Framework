@@ -1,7 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { ModelRegistry } from '../../../tools/lib/model-registry.mjs';
+import { ModelRegistry } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;
@@ -229,7 +229,7 @@ weaknesses: [no-tools]
 
 // Test 16: singleton getModelRegistry
 {
-  const { getModelRegistry } = await import('../../../tools/lib/model-registry.mjs');
+  const { getModelRegistry } = await import('@staffforge/core');
   const reg1 = getModelRegistry();
   const reg2 = getModelRegistry();
   assert(reg1 === reg2, 'singleton same instance');

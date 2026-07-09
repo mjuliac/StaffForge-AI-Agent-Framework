@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 import { getLogger } from '../logger.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '..', '..');
+const root = join(__dirname, '..', '..', '..', '..');
 
 function toTitle(id) {
   return id

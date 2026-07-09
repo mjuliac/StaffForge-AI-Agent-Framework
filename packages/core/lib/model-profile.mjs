@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '..', '..');
+const root = join(__dirname, '..', '..', '..');
 
 export class ModelProfile {
   constructor(profilesPath = null) {

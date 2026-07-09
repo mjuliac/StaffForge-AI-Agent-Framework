@@ -1,4 +1,4 @@
-import { DAG } from '../../tools/lib/dag.mjs';
+import { DAG } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

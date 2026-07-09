@@ -1,9 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { TelemetryCollector } from '../../tools/lib/telemetry/collector.mjs';
-import { TelemetryStorage } from '../../tools/lib/telemetry/storage.mjs';
-import { TelemetryReporter } from '../../tools/lib/telemetry/reporter.mjs';
+import { TelemetryCollector, TelemetryStorage, TelemetryReporter } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

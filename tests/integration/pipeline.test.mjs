@@ -1,7 +1,4 @@
-import { getRouter } from '../../tools/lib/router.mjs';
-import { getScheduler } from '../../tools/lib/scheduler.mjs';
-import { DAG } from '../../tools/lib/dag.mjs';
-import { TelemetryCollector } from '../../tools/lib/telemetry/collector.mjs';
+import { getRouter, getScheduler, DAG, TelemetryCollector } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;
