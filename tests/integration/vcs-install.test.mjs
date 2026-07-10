@@ -22,6 +22,11 @@ function assert(condition, name) {
   else { console.error(`FAIL  ${name}`); failed++; }
 }
 
+function runGit(args, opts = {}) {
+  try { return execFileSync('git', args, { ...opts, stdio: 'pipe', encoding: 'utf-8' }); }
+  catch (e) { console.error(`FAIL  git ${args.join(' ')}: ${e.message}`); failed++; return ''; }
+}
+
 let tmpDirs = [];
 
 function makeTmp(label) {
@@ -39,7 +44,7 @@ function cleanup() {
 
 function runSync(label, fn) {
   const dir = makeTmp(label);
-  fn(dir);
+  try { fn(dir); } catch (e) { console.error(`FAIL  ${label}: ${e.message}`); failed++; }
 }
 
 async function run() {
