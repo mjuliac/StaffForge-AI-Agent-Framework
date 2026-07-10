@@ -223,4 +223,4 @@ for (const { name, fn } of asyncTests) {
 }
 
 cleanup();
-console.log(`\nVCS Install Integration: ${passed} passed, ${failed} failed`);
+console.log(`\n${passed} passed, ${failed} failed`);
