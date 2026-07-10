@@ -255,16 +255,16 @@ node install.mjs -y                                 # defaults (opencode, orches
 | **orchestrator** | ✓ default | ✓ | Full tools |
 | **build** | ✓ | ✓ | Full tools |
 | **plan** | ✓ | ✓ | Read-only |
-| 134 subagents | — | ✓ | Varies |
+| 145 subagents | — | ✓ | Varies |
 
 - **Tab** — Cycle: orchestrator → build → plan
-- **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@docker`, `@flask`, `@react`, `@postgres`)
+- **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@ci`, `@docker`, `@flask`, `@react`, `@postgres`)
 - Orchestrator is the default agent. It detects task type AND technologies from your prompt, then routes to the right specialist agents.
 
 ## Architecture
 
 - **Orchestrator** (default agent) — receives all requests, detects task type and technologies, creates git flow branches, routes pipelines, communicates with the user
-- **Subagents** (134) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, etc.)
+- **Subagents** (145) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, CI/CD, etc.)
 - **Only the orchestrator** may talk to the user, write files, or manage git
 - Subagents run in **parallel** when they have no dependency on each other (DAG-based execution)
 
@@ -382,6 +382,8 @@ npm run format           # Prettier check
 ```
 
 The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS, telemetry), integration tests (export, install, pipelines, VCS git+svn), and end-to-end tests (full agent lifecycle). Run `npm test` locally before opening a PR — CI runs the same suite on Node 22/24.
+
+The **`@ci`** subagent enforces zero-tolerance for CI failures: invoked automatically before every merge, it inspects CI logs, fixes all failures (format, lint, test, validate, export, security), and iterates until every check passes. Invoke manually with `@ci` to debug a failing pipeline.
 
 ## Documentation
 
