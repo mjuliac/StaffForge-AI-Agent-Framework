@@ -27,6 +27,17 @@ function runGit(args, opts = {}) {
   catch (e) { console.error(`FAIL  git ${args.join(' ')}: ${e.message}`); failed++; return ''; }
 }
 
+function gitInit(dir) {
+  runGit(['init'], { cwd: dir });
+  runGit(['config', 'user.name', 'Test'], { cwd: dir });
+  runGit(['config', 'user.email', 'test@test.com'], { cwd: dir });
+}
+
+function gitCommit(dir, msg) {
+  runGit(['add', '-A'], { cwd: dir });
+  runGit(['commit', '-m', msg], { cwd: dir });
+}
+
 let tmpDirs = [];
 
 function makeTmp(label) {
@@ -58,47 +69,44 @@ async function run() {
     assert(config.provider === 'git', 'git: config provider');
     assert(config.workflow === 'git-flow', 'git: config workflow');
 
-    execFileSync('git', ['init'], { cwd: dir, stdio: 'pipe' });
+    gitInit(dir);
     assert(existsSync(join(dir, '.git')), 'git: .git created');
 
-    execFileSync('git', ['add', '-A'], { cwd: dir, stdio: 'pipe' });
-    try { execFileSync('git', ['commit', '-m', 'chore: initial commit'], { cwd: dir, stdio: 'pipe' }); } catch {}
+    gitCommit(dir, 'chore: initial commit');
 
-    const branch = execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: dir, encoding: 'utf-8' }).trim();
+    const branch = runGit(['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: dir }).trim();
     assert(branch === 'master' || branch === 'main', `git: on branch (${branch})`);
 
     console.log('  ✓ git: full install from scratch');
   });
 
   runSync('git-noconfig', (dir) => {
-    execFileSync('git', ['init'], { cwd: dir, stdio: 'pipe' });
+    runGit(['init'], { cwd: dir });
     assert(existsSync(join(dir, '.git')), 'git-noconfig: .git created');
     console.log('  ✓ git: direct init works without config');
   });
 
   runSync('git-flow', (dir) => {
-    execFileSync('git', ['init'], { cwd: dir, stdio: 'pipe' });
+    gitInit(dir);
     writeFileSync(join(dir, 'README.md'), '# test\n');
-    execFileSync('git', ['add', '-A'], { cwd: dir, stdio: 'pipe' });
-    execFileSync('git', ['commit', '-m', 'chore: initial'], { cwd: dir, stdio: 'pipe' });
+    gitCommit(dir, 'chore: initial');
 
-    try { execFileSync('git', ['branch', '-m', 'master', 'main'], { cwd: dir, stdio: 'pipe' }); } catch {}
-    execFileSync('git', ['branch', 'develop', 'main'], { cwd: dir, stdio: 'pipe' });
+    try { runGit(['branch', '-m', 'master', 'main'], { cwd: dir }); } catch {}
+    runGit(['branch', 'develop', 'main'], { cwd: dir });
 
-    execFileSync('git', ['checkout', '-b', 'feature/test-auth'], { cwd: dir, stdio: 'pipe' });
+    runGit(['checkout', '-b', 'feature/test-auth'], { cwd: dir });
     writeFileSync(join(dir, 'auth.js'), '// auth\n');
-    execFileSync('git', ['add', '-A'], { cwd: dir, stdio: 'pipe' });
-    execFileSync('git', ['commit', '-m', 'feat: add auth'], { cwd: dir, stdio: 'pipe' });
+    gitCommit(dir, 'feat: add auth');
 
-    execFileSync('git', ['checkout', 'develop'], { cwd: dir, stdio: 'pipe' });
-    execFileSync('git', ['merge', '--no-ff', 'feature/test-auth', '-m', 'merge: feature/test-auth'], { cwd: dir, stdio: 'pipe' });
+    runGit(['checkout', 'develop'], { cwd: dir });
+    runGit(['merge', '--no-ff', 'feature/test-auth', '-m', 'merge: feature/test-auth'], { cwd: dir });
 
-    const log = execFileSync('git', ['log', '--oneline', '-3'], { cwd: dir, encoding: 'utf-8' });
+    const log = runGit(['log', '--oneline', '-3'], { cwd: dir });
     assert(log.includes('merge:') || log.includes('feat:'), 'git-flow: merge commit created');
     assert(log.split('\n').length >= 2, 'git-flow: multiple commits');
 
-    execFileSync('git', ['branch', '-d', 'feature/test-auth'], { cwd: dir, stdio: 'pipe' });
-    const branches = execFileSync('git', ['branch'], { cwd: dir, encoding: 'utf-8' });
+    runGit(['branch', '-d', 'feature/test-auth'], { cwd: dir });
+    const branches = runGit(['branch'], { cwd: dir });
     assert(!branches.includes('feature/test-auth'), 'git-flow: branch deleted');
 
     console.log('  ✓ git: git flow workflow (init → feature → merge --no-ff → cleanup)');
@@ -134,7 +142,7 @@ async function run() {
 
   runSync('full-install', (dir) => {
     writeFileSync(join(dir, '.staffforge-vcs.json'), JSON.stringify({ provider: 'git', workflow: 'git-flow' }) + '\n');
-    execFileSync('git', ['init'], { cwd: dir, stdio: 'pipe' });
+    gitInit(dir);
     const config = JSON.parse(readFileSync(join(dir, '.staffforge-vcs.json'), 'utf-8'));
     assert(config.provider === 'git', 'full: provider');
     assert(config.workflow === 'git-flow', 'full: workflow');
@@ -145,7 +153,7 @@ async function run() {
   // ── Async tests ──
 
   const dir1 = makeTmp('defaults');
-  execFileSync('git', ['init'], { cwd: dir1, stdio: 'pipe' });
+  gitInit(dir1);
   const cfg = new VCSConfig(join(dir1, '.staffforge-vcs.json'));
   const defConfig = cfg.load();
   assert(defConfig.provider === 'git', 'default: provider git');
