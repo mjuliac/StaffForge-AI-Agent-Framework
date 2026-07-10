@@ -1,15 +1,57 @@
 # StaffForge AI Agent Framework
 
 [![CI](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](#requirements)
+[![Agents](https://img.shields.io/badge/agents-147-orange)](agents/)
+[![Platforms](https://img.shields.io/badge/platforms-6-purple)](#installation-per-platform)
 
 Multi-provider agent framework. Write agents once, deploy anywhere.
+
+## Why StaffForge
+
+If your team uses more than one AI coding assistant — OpenCode, Claude Code, Cursor, GitHub Copilot, Aider, Gemini CLI — you've probably rewritten the same agent rules, prompts, and conventions for each one, and kept rewriting them every time a rule changes.
+
+StaffForge solves that by separating **what your agents know** from **where they run**:
+
+- Define an agent once in `agents/*.md` (Markdown + frontmatter).
+- Export it to any supported platform's native format with one command.
+- Update the rule in one place; re-export to every platform instead of hand-editing 6 config formats.
+
+StaffForge is **not** an agent-execution runtime like LangGraph or CrewAI — it doesn't call LLM APIs itself. It's a definition layer and orchestrator/router that sits on top of the AI coding tools you already use, plus a Model Selection Layer for choosing which model a task should use.
+
+## Table of contents
+
+- [Why StaffForge](#why-staffforge)
+- [Quick start](#quick-start)
+- [Installation per platform](#installation-per-platform)
+- [Interactive installer](#interactive-installer)
+- [Agent modes](#agent-modes)
+- [Architecture](#architecture)
+- [Routing](#routing)
+- [Prompt examples](#prompt-examples)
+- [Commands](#commands)
+- [Adapting to a new platform](#adapting-to-a-new-platform)
+- [Model Selection Layer](#model-selection-layer)
+- [Requirements](#requirements)
+- [Testing](#testing)
+- [Project layout](#project-layout)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Support](#support)
+
+## Project layout
 
 ```
 agents/           ← Canonical agent definitions (Markdown + frontmatter)
 adapters/         ← Platform-specific exporters (OpenCode, Claude Code, Cursor, etc.)
+packages/         ← Monorepo packages (core, sdk, plugin-sdk, cli, dashboard, enterprise)
 schemas/          ← JSON Schema for agent validation
 templates/        ← Scaffolding for new agents
+models/           ← Model definitions and task profiles (Model Selection Layer)
 tools/            ← CLI scripts (validate, export, init, install)
+tests/            ← Unit, integration, and e2e test suites
 examples/         ← Usage examples
 ```
 
@@ -323,3 +365,46 @@ The framework includes a Model Selection Layer for optimal model selection:
 > **Note:** This is a pure selection layer — it chooses the optimal model and returns it. It does not invoke LLM APIs directly. The `agentFn` parameter in FallbackEngine and ModelSelector is provided for callers to supply their own execution logic.
 
 See `ARCHITECTURE.md` §2 for full API reference.
+
+## Requirements
+
+- **Node.js ≥ 18** (Linux, macOS, or Windows)
+- No other runtime dependency — the installer (`npx github:mjuliac/StaffForge-AI-Agent-Framework`) works standalone
+- A supported AI coding assistant already installed for whichever platform(s) you target (OpenCode, Claude Code, Cursor, GitHub Copilot, Aider, or Gemini CLI)
+
+## Testing
+
+```bash
+npm test                 # Run all suites (unit, integration, e2e)
+npm run validate         # Validate every agent definition against the JSON Schema
+npm run lint             # ESLint over tools/ and packages/
+npm run format           # Prettier check
+```
+
+The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS, telemetry), integration tests (export, install, pipelines), and end-to-end tests (full agent lifecycle). Run `npm test` locally before opening a PR — CI runs the same suite on Node 18/20/22.
+
+## Documentation
+
+| Document | Contents |
+|---|---|
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Full internal architecture, core libraries, and API reference |
+| [`ORCHESTRATOR_MATRIX.md`](ORCHESTRATOR_MATRIX.md) | Task → pipeline mapping and parallel execution groups |
+| [`AGENTS.md`](AGENTS.md) | Conventions and structure for writing agent definitions |
+| [`V2_ROADMAP.md`](V2_ROADMAP.md) | Monorepo structure, plugin SDK interfaces, and version roadmap |
+| [`CHANGELOG.md`](CHANGELOG.md) | Release history |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add agents, models, and adapters |
+
+## Contributing
+
+Contributions are welcome — especially new agent definitions, platform adapters, and model definitions. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full workflow (adding an agent, adding a model, adding a platform adapter, commit conventions, and PR process). Issues and feature requests use the templates in `.github/ISSUE_TEMPLATE/`.
+
+## License
+
+- `packages/core`, `packages/sdk`, `packages/plugin-sdk`, and everything under `agents/`, `adapters/`, `schemas/`, `templates/`, and `tools/` are licensed under **GPL-3.0-only** — see [`LICENSE`](LICENSE).
+- `packages/enterprise` (SQLite storage, analytics, policy engine, and the Enterprise dashboard) is distributed under a **separate commercial StaffForge license** and is not covered by the GPL-3.0 grant above.
+
+## Support
+
+- **Bugs / feature requests:** open an issue using the templates in `.github/ISSUE_TEMPLATE/`
+- **Questions about usage:** see the [Prompt examples](#prompt-examples) and [`ORCHESTRATOR_MATRIX.md`](ORCHESTRATOR_MATRIX.md) first
+- **Security issues:** please do not open a public issue — contact the maintainer directly
