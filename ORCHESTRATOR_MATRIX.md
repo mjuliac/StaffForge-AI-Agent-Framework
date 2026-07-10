@@ -13,9 +13,10 @@
 > The Router uses `CapabilityEngine` to match technology agents to prompt intent.
 > See `tools/lib/capability-engine.mjs` and `tools/lib/router.mjs`.
 
-## Git Flow Integration
+## VCS Flow Integration
 
-All task types create a branch via the `git` agent before starting work:
+All task types create a branch via the `@vcs` agent before starting work.
+The configured VCS provider (default: git) determines the exact branch commands.
 
 | Task Type | Branch Pattern | Commit Prefix |
 |-----------|---------------|---------------|
@@ -28,43 +29,43 @@ All task types create a branch via the `git` agent before starting work:
 
 ### Feature
 ```
-Git (create feature/*) → Planner
+VCS (create feature/*) → Planner
 → [Requirements + Architect] (parallel)
 → Knowledge → Impact
 → [Language Specialist + Security + Testing] (parallel)
 → [Code Review + Documentation] (parallel)
-→ Git (merge)
+→ VCS (merge)
 ```
 
 ### Bug Fix
 ```
-Git (create bugfix/*) → Planner
+VCS (create bugfix/*) → Planner
 → [Knowledge + Impact] (parallel)
 → Debugging
 → [Language Specialist + Testing] (parallel)
-→ Code Review → Git (merge)
+→ Code Review → VCS (merge)
 ```
 
 ### Refactor
 ```
-Git (create feature/*) → Architect
+VCS (create feature/*) → Architect
 → [Refactor + Performance] (parallel)
-→ Code Review → Git (merge)
+→ Code Review → VCS (merge)
 ```
 
 ### Security
 ```
-Git (create feature/*) → Security → Pentest → Code Review → Git (merge)
+VCS (create feature/*) → Security → Pentest → Code Review → VCS (merge)
 ```
 
 ### Deployment
 ```
-Git (create release/*) → [Docker + Kubernetes] (parallel)
+VCS (create release/*) → [Docker + Kubernetes] (parallel)
 → [Build + Release] (parallel)
-→ Documentation → Git (finalize: merge to main + tag + merge to develop + cleanup)
+→ Documentation → VCS (finalize: merge to main + tag + merge to develop + cleanup)
 ```
 
 ### Hotfix (Urgent)
 ```
-Git (create hotfix/*) → Debugging → Code Review → Git (tag + merge to main + develop)
+VCS (create hotfix/*) → Debugging → Code Review → VCS (tag + merge to main + develop)
 ```

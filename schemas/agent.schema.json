@@ -31,7 +31,7 @@
     },
     "category": {
       "type": "string",
-      "enum": ["core", "technology", "domain", "platform", "utility"],
+      "enum": ["core", "technology", "domain", "platform", "utility", "vcs"],
       "description": "Agent taxonomy category"
     },
     "keywords": {

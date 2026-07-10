@@ -5,3 +5,4 @@ export { IModelProvider } from './interfaces/model-provider.mjs';
 export { IPipelineProvider } from './interfaces/pipeline-provider.mjs';
 export { ITelemetryStorage } from './interfaces/telemetry-storage.mjs';
 export { IPlugin } from './interfaces/plugin.mjs';
+export { IVCSProvider } from './interfaces/vcs-provider.mjs';
