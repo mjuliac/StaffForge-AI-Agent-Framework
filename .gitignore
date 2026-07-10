@@ -5,3 +5,4 @@ opencode.json
 .staffforge-install.json
 packages/core/adapters/*/output
 .staffforge-vcs.json
+V2_ROADMAP.md

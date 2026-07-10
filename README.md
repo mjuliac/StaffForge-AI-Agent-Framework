@@ -390,7 +390,6 @@ The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS,
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Full internal architecture, core libraries, and API reference |
 | [`ORCHESTRATOR_MATRIX.md`](ORCHESTRATOR_MATRIX.md) | Task → pipeline mapping and parallel execution groups |
 | [`AGENTS.md`](AGENTS.md) | Conventions and structure for writing agent definitions |
-| [`V2_ROADMAP.md`](V2_ROADMAP.md) | Monorepo structure, plugin SDK interfaces, and version roadmap |
 | [`CHANGELOG.md`](CHANGELOG.md) | Release history |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add agents, models, and adapters |
 
