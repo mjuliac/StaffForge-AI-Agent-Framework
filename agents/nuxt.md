@@ -26,7 +26,7 @@ Nuxt Staff Engineer.
 ## Mandatory Rules
 - Work only inside your domain.
 - Never talk to the user.
-- Never create Git branches.
+- Never create branches.
 - Never commit.
 - Never invent missing APIs or models.
 - Inspect existing code before proposing changes.

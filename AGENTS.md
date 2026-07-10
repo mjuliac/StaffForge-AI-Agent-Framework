@@ -10,7 +10,7 @@ adapters/          — Platform exporters per platform (opencode, claude-code, c
 schemas/           — JSON Schema for agent validation (agent.schema.json, model.schema.json)
 tools/             — Node.js CLI: validate, export, init-agent, install, test
 models/            — Model definitions (22 files, 7 providers) + task profiles
-ORCHESTRATOR_MATRIX.md — task → pipeline routing with Git Flow integration
+ORCHESTRATOR_MATRIX.md — task → pipeline routing with VCS Flow integration
 ```
 
 ## Routing
@@ -19,19 +19,19 @@ See `ORCHESTRATOR_MATRIX.md`.
 
 | Type       | Pipeline |
 |------------|----------|
-| Feature    | Git → Planner → [Requirements+Architect] → Knowledge → Impact → [Language+Security+Testing] → [Code Review+Documentation] → Git merge |
-| Bug        | Git → Planner → [Knowledge+Impact] → Debugging → [Language+Testing] → Code Review → Git merge |
-| Refactor   | Git → Architect → [Refactor+Performance] → Code Review → Git merge |
-| Security   | Git → Security → Pentest → Code Review → Git merge |
-| Deployment | Git → [Docker+Kubernetes] → [Build+Release] → Documentation → Git (merge to main + tag + merge to develop + cleanup) |
-| Hotfix     | Git (from main) → Debugging → Code Review → Git (merge to main + tag + merge to develop + cleanup) |
+| Feature    | VCS → Planner → [Requirements+Architect] → Knowledge → Impact → [Language+Security+Testing] → [Code Review+Documentation] → VCS merge |
+| Bug        | VCS → Planner → [Knowledge+Impact] → Debugging → [Language+Testing] → Code Review → VCS merge |
+| Refactor   | VCS → Architect → [Refactor+Performance] → Code Review → VCS merge |
+| Security   | VCS → Security → Pentest → Code Review → VCS merge |
+| Deployment | VCS → [Docker+Kubernetes] → [Build+Release] → Documentation → VCS (merge to main + tag + merge to develop + cleanup) |
+| Hotfix     | VCS (from main) → Debugging → Code Review → VCS (merge to main + tag + merge to develop + cleanup) |
 
 ## Conventions
 
 - **Orchestrator is the default agent** (Tab key). It receives all user requests first.
-- **Orchestrator creates the git flow branch** as its very first action for every task.
-- Only the orchestrator communicates with the user or creates Git branches/commits.
-- No subagent may talk to the user or manage git.
+- **Orchestrator creates the VCS branch** as its very first action for every task.
+- Only the orchestrator communicates with the user or creates branches/commits.
+- No subagent may talk to the user or manage VCS.
 - Subagents get findings/risks/recommendations, never final output.
 - Tool permissions are explicit in frontmatter: `tools.write`, `tools.bash`, `tools.edit`.
 - Only orchestrator has full permissions; most agents are read-only or have limited bash.

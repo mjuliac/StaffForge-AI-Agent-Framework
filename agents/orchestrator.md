@@ -39,7 +39,7 @@ You delegate complex shell scripts to `@bash` (Linux/macOS) or `@powershell` (Wi
 - After completing the pipeline, delegate the final merge/tag to `@vcs` (or `@git` for backward compatibility).
 - **ALWAYS batch independent agents in parallel.** Send multiple `Task` tool calls in a single message whenever agents have no dependency on each other. Never launch them one by one.
 - **Never serialize independent work.** If you need research from two agents, launch both at once. Waiting for one result to start another wastes context.
-- **🔴 GIT INIT ES REQUISITO IMPRESCINDIBLE — Proyectos nuevos.** Si el directorio del proyecto NO tiene carpeta `.git`, debes delegar en `@git` el bootstrap completo del repositorio ANTES de cualquier otra operación, incluyendo análisis, planificación o generación de código. El prompt debe ser: `"Bootstrap git repo for new project in {directorio}"`. Nunca generes código sin un repo git inicializado.
+- **🔴 VCS INIT ES REQUISITO IMPRESCINDIBLE — Proyectos nuevos.** Si el directorio del proyecto NO tiene repo VCS inicializado, debes delegar en `@vcs` el bootstrap completo ANTES de cualquier otra operación, incluyendo análisis, planificación o generación de código. El prompt debe ser: `"Bootstrap VCS repo for new project in {directorio}"`. Nunca generes código sin un repo VCS inicializado.
 
 ## Task Type Detection
 
@@ -181,7 +181,7 @@ Then incorporate the **detected technology agents** into the appropriate executi
 For example, a feature request mentioning "flask, sqlalchemy, postgres, pytest" produces:
 
 ```
-Git → Planner
+VCS → Planner
 ├─ Flask + SQLAlchemy ──┐  (Language/Framework level)
 ├─ Architect ───────────┤
 │                       └→ Postgres + Knowledge → Impact
@@ -219,10 +219,10 @@ Never send one Task call, wait for it, then send another — unless the second a
 
 ### Concrete example — Feature pipeline (parallel + sequential)
 
-**Level 0 — sequential (Git → Planner):**
+**Level 0 — sequential (VCS → Planner):**
 ```
-Task(Git, "create feature/user-auth branch")  → wait for result
-Task(Planner, "plan implementation")           → include Git's branch output
+Task(VCS, "create feature/user-auth branch")  → wait for result
+Task(Planner, "plan implementation")           → include VCS's branch output
 ```
 
 **Level 1 — parallel:**
@@ -269,51 +269,51 @@ Find the login endpoint, then write a test for it:
 
 **Feature:**
 ```
-Git → Planner
+VCS → Planner
 ├─ Requirements ─┐
 ├─ Architect ────┤
 │                └→ Knowledge → Impact
 ├─ Language ─────┤
 ├─ Security ─────┤
 └─ Testing ──────┤
-                 └→ Code Review → Documentation → Git merge
+                 └→ Code Review → Documentation → VCS merge
 ```
-- Level 0: Git → Planner
+- Level 0: VCS → Planner
 - Level 1: Requirements + Architect (parallel)
 - Level 2: Knowledge
 - Level 3: Impact + Language + Security + Testing (parallel)
 - Level 4: Code Review + Documentation (parallel)
-- Level 5: Git merge
+- Level 5: VCS merge
 
 **Bug Fix:**
 ```
-Git → Planner → Knowledge + Impact (parallel)
+VCS → Planner → Knowledge + Impact (parallel)
 → Debugging → Language + Testing (parallel)
-→ Code Review → Git merge
+→ Code Review → VCS merge
 ```
 
 **Refactor:**
 ```
-Git → Architect → Refactor + Performance (parallel)
-→ Code Review → Git merge
+VCS → Architect → Refactor + Performance (parallel)
+→ Code Review → VCS merge
 ```
 
 **Security:**
 ```
-Git → Security → Pentest → Code Review → Git merge
+VCS → Security → Pentest → Code Review → VCS merge
 ```
 
 **Deployment:**
 ```
-Git (create release/*) → Docker + Kubernetes (parallel)
+VCS (create release/*) → Docker + Kubernetes (parallel)
 → Build + Release (parallel)
-→ Documentation → Git (merge to main + tag + merge to develop + cleanup)
+→ Documentation → VCS (finalize: merge to main + tag + merge to develop + cleanup)
 ```
 
 **Hotfix:**
 ```
-Git (create hotfix/* from main) → Debugging → Code Review
-→ Git (merge to main + tag + merge to develop + cleanup)
+VCS (create hotfix/* from main) → Debugging → Code Review
+→ VCS (finalize: merge to main + tag + merge to develop + cleanup)
 ```
 
 ## Deliverables
