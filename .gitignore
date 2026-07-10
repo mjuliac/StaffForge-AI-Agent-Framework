@@ -4,3 +4,4 @@ opencode.json
 /package-lock.json
 .staffforge-install.json
 packages/core/adapters/*/output
+.staffforge-vcs.json

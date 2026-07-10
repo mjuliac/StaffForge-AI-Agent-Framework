@@ -19,11 +19,14 @@ capabilities:
   - merge
   - push
 ---
-# Git
+# Git (Deprecated — use @vcs instead)
 
 ## Mission
 Sole executor of all git operations in the framework. Handles branch creation, staging, commits, merges, tags, and pushes using Git Flow.
 Only the orchestrator may invoke you. Other agents never call you directly.
+
+> **⚠️ DEPRECATED**: This agent is kept for backward compatibility. New projects should use `@vcs` instead.
+> When invoked, this agent now routes to `@vcs` which reads `.staffforge-vcs.json` (defaults to git + git-flow).
 
 ## Git Flow Workflow
 

@@ -44,3 +44,23 @@ export { RegistryServer, createRegistryServer } from './lib/registry-server.mjs'
 export { RegistryClient, createRegistryClient } from './lib/registry-client.mjs';
 
 export { IPlugin } from './lib/interfaces/plugin.mjs';
+
+export {
+  IVCSProvider,
+  IVCSWorkflow,
+  VCSConfig,
+  VCSRegistry,
+  getVCSRegistry,
+  VCSManager,
+  GitProvider,
+  SvnProvider,
+  HgProvider,
+  TfvcProvider,
+  PerforceProvider,
+  CustomProvider,
+  GitFlowWorkflow,
+  GitHubFlowWorkflow,
+  GitLabFlowWorkflow,
+  TrunkBasedWorkflow,
+  CustomWorkflow,
+} from './lib/vcs/index.mjs';

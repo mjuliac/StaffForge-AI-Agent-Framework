@@ -47,4 +47,7 @@ export class IPlugin {
 
   /** @type {import('./telemetry-storage.mjs').ITelemetryStorage|null} */
   storage = null;
+
+  /** @type {import('./vcs-provider.mjs').IVCSProvider[]|null} */
+  vcs = null;
 }

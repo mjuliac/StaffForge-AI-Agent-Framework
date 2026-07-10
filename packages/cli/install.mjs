@@ -60,6 +60,8 @@ ${b('Options:')}
   --platform <name>   Platform (opencode, claude-code, cursor, copilot, aider, gemini-cli, all)
   --agent <name>      Default agent (orchestrator, build, plan)
   --out <dir>         Output directory
+  --vcs <name>        VCS provider (git, svn, hg, tfvc, perforce, custom)
+  --workflow <name>   Workflow preset (git-flow, github-flow, gitlab-flow, trunk-based, custom)
   --yes, -y           Skip prompts, use defaults
   --help, -h          Show this help
 `);
@@ -83,6 +85,12 @@ function parseArgs() {
         break;
       case '--out':
         o.out = a[++i];
+        break;
+      case '--vcs':
+        o.vcs = a[++i];
+        break;
+      case '--workflow':
+        o.workflow = a[++i];
         break;
       case '--catalog':
         o.catalog = a[++i];
@@ -264,6 +272,8 @@ async function main() {
     p = p || 'opencode';
     a = a || 'orchestrator';
     d = d || join(CWD, 'staffforge');
+    o.vcs = o.vcs || 'git';
+    o.workflow = o.workflow || 'git-flow';
   }
 
   if (!o.yes && prev && !p && !a && !d) {
@@ -302,6 +312,35 @@ async function main() {
     d = c === '2' ? join(env.HOME || env.USERPROFILE || '~', '.config', 'staffforge') : join(CWD, 'staffforge');
   }
 
+  // ── VCS provider selection ──
+  if (!o.vcs) {
+    console.log('\nVersion Control System:');
+    console.log('  1) Git (default)');
+    console.log('  2) Subversion (SVN)');
+    console.log('  3) Mercurial (Hg)');
+    console.log('  4) Azure DevOps (TFVC)');
+    console.log('  5) Perforce');
+    console.log('  6) Custom');
+    const c = (await ask('\n? [1]: ')).trim();
+    const vcsMap = { 2: 'svn', 3: 'hg', 4: 'tfvc', 5: 'perforce', 6: 'custom' };
+    o.vcs = vcsMap[c] || c || 'git';
+    if (!['git', 'svn', 'hg', 'tfvc', 'perforce', 'custom'].includes(o.vcs)) o.vcs = 'git';
+  }
+
+  // ── Workflow selection ──
+  if (!o.workflow) {
+    console.log('\nWorkflow:');
+    console.log('  1) Git Flow (default)');
+    console.log('  2) GitHub Flow');
+    console.log('  3) GitLab Flow');
+    console.log('  4) Trunk Based');
+    console.log('  5) Custom');
+    const c = (await ask('\n? [1]: ')).trim();
+    const wfMap = { 2: 'github-flow', 3: 'gitlab-flow', 4: 'trunk-based', 5: 'custom' };
+    o.workflow = wfMap[c] || c || 'git-flow';
+    if (!['git-flow', 'github-flow', 'gitlab-flow', 'trunk-based', 'custom'].includes(o.workflow)) o.workflow = 'git-flow';
+  }
+
   d = resolve(d);
   const platforms = p === 'all' ? ['opencode', 'claude-code', 'cursor', 'copilot', 'aider', 'gemini-cli'] : [p];
 
@@ -322,17 +361,26 @@ async function main() {
 
   if (p !== 'all') savePrev({ platform: p, defaultAgent: a, installDir: d });
 
-  // ── Git init (requirement: all projects MUST have a git repo) ──
-  if (!existsSync(join(CWD, '.git'))) {
-    console.log(`\n${bl('→')} Initializing git repository...`);
-    execSync('git init', { cwd: CWD, stdio: 'pipe' });
-    execSync('git add -A', { cwd: CWD, stdio: 'pipe' });
-    try {
-      execSync('git commit -m "chore: initial commit"', { cwd: CWD, stdio: 'pipe' });
-    } catch {
-      // if nothing to commit, that's fine
+  // ── Write .staffforge-vcs.json ──
+  const vcsConfig = { provider: o.vcs, workflow: o.workflow };
+  writeFileSync(join(CWD, '.staffforge-vcs.json'), JSON.stringify(vcsConfig, null, 2) + '\n');
+  console.log(`  ${g('✓')} .staffforge-vcs.json (${o.vcs} + ${o.workflow})`);
+
+  // ── VCS init (requirement: all projects MUST have a VCS repo) ──
+  if (o.vcs === 'git') {
+    if (!existsSync(join(CWD, '.git'))) {
+      console.log(`\n${bl('→')} Initializing git repository...`);
+      execSync('git init', { cwd: CWD, stdio: 'pipe' });
+      execSync('git add -A', { cwd: CWD, stdio: 'pipe' });
+      try { execSync('git commit -m "chore: initial commit"', { cwd: CWD, stdio: 'pipe' }); } catch { }
+      console.log(`  ${g('✓')} Git repo initialized at ${CWD}`);
     }
-    console.log(`  ${g('✓')} Git repo initialized at ${CWD}`);
+  } else if (o.vcs === 'hg' && !existsSync(join(CWD, '.hg'))) {
+    console.log(`\n${bl('→')} Initializing Mercurial repository...`);
+    execSync('hg init', { cwd: CWD, stdio: 'pipe' });
+    console.log(`  ${g('✓')} Hg repo initialized at ${CWD}`);
+  } else if (o.vcs !== 'git') {
+    console.log(`\n${bl('→')} VCS: ${o.vcs}. Initialize your ${o.vcs} repository manually.`);
   }
 
   // Cleanup
