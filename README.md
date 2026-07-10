@@ -324,7 +324,7 @@ npm run export:copilot   # Export to GitHub Copilot
 npm run export:aider     # Export to Aider
 npm run export:gemini    # Export to Gemini CLI
 npm run validate         # Validate all agents
-npm test                 # Run all 526 tests (21 suites)
+npm test                 # Run all 848+ tests (31 suites)
 
 # Low-level (node)
 node install.mjs                          # Interactive installer (any platform)
@@ -381,7 +381,7 @@ npm run lint             # ESLint over tools/ and packages/
 npm run format           # Prettier check
 ```
 
-The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS, telemetry), integration tests (export, install, pipelines), and end-to-end tests (full agent lifecycle). Run `npm test` locally before opening a PR — CI runs the same suite on Node 18/20/22.
+The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS, telemetry), integration tests (export, install, pipelines, VCS git+svn), and end-to-end tests (full agent lifecycle). Run `npm test` locally before opening a PR — CI runs the same suite on Node 22/24.
 
 ## Documentation
 

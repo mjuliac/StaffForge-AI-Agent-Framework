@@ -394,7 +394,7 @@ Orchestrator (agents/orchestrator.md)
 - **No discovery**: Adding an agent doesn't auto-register it anywhere
 - **No dependency engine**: Pipeline order is hardcoded in matrix, not machine-readable
 - **No scheduler**: Parallel execution is a documented strategy, not executable code
-- ~~**No tests**: Zero test infrastructure~~ ✅ 526 tests across 21 suites
+- ~~**No tests**: Zero test infrastructure~~ ✅ 848 tests across 31 suites
 - ~~**No telemetry**: No metrics, no pipeline reports~~ ✅ TelemetryCollector + Storage + Reporter
 - ~~**No auto-documentation**: Catalogs, DAGs, and compatibility matrices are manual~~ ✅ DocumentationGenerator
 - **Single version**: Framework, agents, and adapters share one version
@@ -456,7 +456,7 @@ Orchestrator (agents/orchestrator.md)
 | `tests/unit/registry/ModelSelector.test.mjs` | ✅ 27/27 passed |
 | `tests/integration/mil-pipeline.test.mjs` | ✅ 13/13 passed |
 | `tests/e2e/mil-lifecycle.test.mjs` | ✅ 35/35 passed |
-| `tests/run-all.mjs` | ✅ 526/526 passed (21 suites) |
+| `tests/run-all.mjs` | ✅ 848/848 passed (31 suites) |
 | Agent categories | ✅ core=8, technology=94, domain=23, utility=11 |
 | Models | ✅ 22 YAML files, 7 providers |
 | Git working tree | ✅ On `develop` |
