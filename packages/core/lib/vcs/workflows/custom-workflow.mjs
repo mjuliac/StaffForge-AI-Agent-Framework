@@ -6,15 +6,13 @@ export class CustomWorkflow {
     this._config = config;
     this._branchTypes = config.branchTypes || ['feature', 'bugfix', 'hotfix'];
     this._prefixMap = config.prefixMap || { feature: 'feat', bugfix: 'fix', hotfix: 'hotfix' };
-    this._branchTemplate = config.branchTemplate || (type => type);
+    this._branchTemplate = config.branchTemplate || ((type) => type);
     this._mergeFlags = config.mergeFlags || ['--no-ff'];
-    this._commitPrefix = config.commitPrefix || (type => this._prefixMap[type] || type);
+    this._commitPrefix = config.commitPrefix || ((type) => this._prefixMap[type] || type);
   }
 
   getBranchName(type, name) {
-    const prefix = typeof this._branchTemplate === 'function'
-      ? this._branchTemplate(type, name)
-      : `${type}/${name}`;
+    const prefix = typeof this._branchTemplate === 'function' ? this._branchTemplate(type, name) : `${type}/${name}`;
     return `${prefix}/${name}`;
   }
 

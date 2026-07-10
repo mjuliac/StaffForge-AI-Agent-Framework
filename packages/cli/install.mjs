@@ -338,7 +338,8 @@ async function main() {
     const c = (await ask('\n? [1]: ')).trim();
     const wfMap = { 2: 'github-flow', 3: 'gitlab-flow', 4: 'trunk-based', 5: 'custom' };
     o.workflow = wfMap[c] || c || 'git-flow';
-    if (!['git-flow', 'github-flow', 'gitlab-flow', 'trunk-based', 'custom'].includes(o.workflow)) o.workflow = 'git-flow';
+    if (!['git-flow', 'github-flow', 'gitlab-flow', 'trunk-based', 'custom'].includes(o.workflow))
+      o.workflow = 'git-flow';
   }
 
   d = resolve(d);
@@ -372,7 +373,9 @@ async function main() {
       console.log(`\n${bl('→')} Initializing git repository...`);
       execSync('git init', { cwd: CWD, stdio: 'pipe' });
       execSync('git add -A', { cwd: CWD, stdio: 'pipe' });
-      try { execSync('git commit -m "chore: initial commit"', { cwd: CWD, stdio: 'pipe' }); } catch { }
+      try {
+        execSync('git commit -m "chore: initial commit"', { cwd: CWD, stdio: 'pipe' });
+      } catch {}
       console.log(`  ${g('✓')} Git repo initialized at ${CWD}`);
     }
   } else if (o.vcs === 'hg' && !existsSync(join(CWD, '.hg'))) {

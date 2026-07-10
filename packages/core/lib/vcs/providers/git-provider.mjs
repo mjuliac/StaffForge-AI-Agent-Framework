@@ -117,8 +117,19 @@ export class GitProvider {
 
   getCapabilities() {
     return [
-      'init', 'clone', 'checkout', 'commit', 'push', 'pull',
-      'merge', 'branch', 'tag', 'status', 'log', 'diff', 'addRemote',
+      'init',
+      'clone',
+      'checkout',
+      'commit',
+      'push',
+      'pull',
+      'merge',
+      'branch',
+      'tag',
+      'status',
+      'log',
+      'diff',
+      'addRemote',
     ];
   }
 
