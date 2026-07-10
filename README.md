@@ -3,7 +3,7 @@
 [![CI](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](#requirements)
-[![Agents](https://img.shields.io/badge/agents-147-orange)](agents/)
+[![Agents](https://img.shields.io/badge/agents-148-orange)](agents/)
 [![Platforms](https://img.shields.io/badge/platforms-6-purple)](#installation-per-platform)
 
 Multi-provider agent framework. Write agents once, deploy anywhere.

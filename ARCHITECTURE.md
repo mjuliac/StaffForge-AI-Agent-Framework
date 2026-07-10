@@ -408,7 +408,7 @@ Orchestrator (agents/orchestrator.md)
 
 | Check | Status |
 |---|---|
-| `node tools/validate.mjs` | ✅ 137/137 agents valid |
+| `node tools/validate.mjs` | ✅ 148/148 agents valid |
 | `node tools/export.mjs --all` | ✅ 6 platforms, all pass |
 | `node tools/export.mjs --platform opencode` | ✅ 1 file |
 | `node tools/export.mjs --platform claude-code` | ✅ 137 files |

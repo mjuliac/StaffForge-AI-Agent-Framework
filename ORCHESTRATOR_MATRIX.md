@@ -5,8 +5,9 @@
 > Sequential `→` means the previous step must complete before the next begins.
 >
 > **Agent categories:** See `agents/*.md` frontmatter `category` field.
-> - `core` (8): Pipeline orchestrators and governance
-> - `technology` (94): Languages, frameworks, databases, tools
+> - `core` (10): Pipeline orchestrators, governance, CI/CD watchdog
+> - `vcs` (5): VCS provider agents (git, svn, hg, tfvc, perforce)
+> - `technology` (99): Languages, frameworks, databases, tools
 > - `domain` (23): Discipline specialists (database, ML, networking, etc.)
 > - `utility` (11): Cross-cutting concerns (debugging, refactor, security audit)
 >
@@ -34,7 +35,7 @@ VCS (create feature/*) → Planner
 → Knowledge → Impact
 → [Language Specialist + Security + Testing] (parallel)
 → [Code Review + Documentation] (parallel)
-→ VCS (merge)
+→ CI (verify green) → VCS (merge)
 ```
 
 ### Bug Fix
@@ -43,29 +44,29 @@ VCS (create bugfix/*) → Planner
 → [Knowledge + Impact] (parallel)
 → Debugging
 → [Language Specialist + Testing] (parallel)
-→ Code Review → VCS (merge)
+→ Code Review → CI (verify green) → VCS (merge)
 ```
 
 ### Refactor
 ```
 VCS (create feature/*) → Architect
 → [Refactor + Performance] (parallel)
-→ Code Review → VCS (merge)
+→ Code Review → CI (verify green) → VCS (merge)
 ```
 
 ### Security
 ```
-VCS (create feature/*) → Security → Pentest → Code Review → VCS (merge)
+VCS (create feature/*) → Security → Pentest → Code Review → CI (verify green) → VCS (merge)
 ```
 
 ### Deployment
 ```
 VCS (create release/*) → [Docker + Kubernetes] (parallel)
 → [Build + Release] (parallel)
-→ Documentation → VCS (finalize: merge to main + tag + merge to develop + cleanup)
+→ Documentation → CI (verify green) → VCS (finalize: merge to main + tag + merge to develop + cleanup)
 ```
 
 ### Hotfix (Urgent)
 ```
-VCS (create hotfix/*) → Debugging → Code Review → VCS (tag + merge to main + develop)
+VCS (create hotfix/*) → Debugging → Code Review → CI (verify green) → VCS (tag + merge to main + develop)
 ```
