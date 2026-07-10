@@ -1,12 +1,101 @@
-StaffForge Enterprise — Licencia Comercial
+# StaffForge Enterprise — Commercial License Agreement (EULA)
 
-Copyright (c) StaffForge. Todos los derechos reservados.
+**Version 1.0 — [date]**
 
-Este paquete (@staffforge/enterprise) se distribuye bajo la Licencia Comercial
-StaffForge y NO bajo los términos de la GPL-3.0 que cubre @staffforge/core,
-@staffforge/sdk y @staffforge/plugin-sdk.
+This End User License Agreement ("Agreement") governs the use of the `@staffforge/enterprise` software package and any associated components (including, without limitation, the Enterprise Dashboard, the Policy Engine, and the analytics and storage modules) (collectively, "the Software"), between:
 
-Queda prohibido el uso, copia, modificación o redistribución de este paquete sin
-una licencia comercial vigente otorgada por StaffForge.
+- **The Licensor**: [Marc Julià Canal / legal entity to be defined], hereinafter "StaffForge".
+- **The Licensee**: the organization acquiring a commercial license to StaffForge Enterprise, hereinafter "the Customer".
 
-Para adquirir una licencia: contacto@staffforge.dev
+By installing, accessing, or using the Software, the Customer agrees to be bound by this Agreement. If the Customer does not agree to these terms, it must not install or use the Software.
+
+## 1. Purpose
+
+StaffForge grants the Customer, subject to payment of the applicable fees, a license to use the Software in accordance with the terms of this Agreement. **The Software is NOT distributed under GPL-3.0.** The StaffForge core (`@staffforge/core`, `@staffforge/sdk`, `@staffforge/plugin-sdk`) remains separately available under the GPL-3.0 license; this Agreement covers exclusively the commercial Enterprise components.
+
+## 2. Scope of the License
+
+2.1. **License type**: [to be defined — common options: named-seat/per-user, per-instance/deployment, or per-organization with no user limit].
+
+2.2. **Permitted use**: The Customer may install and use the Software solely for its internal business operations, within the number of seats/instances contracted per the corresponding purchase order.
+
+2.3. **Restrictions**: The Customer may NOT:
+- Redistribute, sublicense, sell, rent, or transfer the Software to third parties.
+- Reverse engineer, decompile, or disassemble the Software, except to the extent expressly permitted by applicable law notwithstanding this limitation.
+- Remove or alter copyright, trademark, or license notices on the Software.
+- Use the Software to develop a competing product.
+- Exceed the number of contracted seats/instances without expanding the license.
+
+## 3. Term and Renewal
+
+3.1. This Agreement takes effect on the date of acceptance and remains in force for the **contracted period** (e.g., 12 months), as specified in the corresponding purchase order.
+
+3.2. Unless either party provides notice of non-renewal at least [30/60] days prior to expiration, the license automatically renews for successive periods of equal length.
+
+## 4. Fees and Payment
+
+4.1. The Customer will pay the fees set out in the corresponding purchase order, according to the contracted plan (Pro / Enterprise) and billing frequency (monthly / annual).
+
+4.2. Non-payment more than [15] days after a payment request entitles StaffForge to suspend access to the Software until the balance is settled.
+
+## 5. Support and SLA
+
+5.1. StaffForge will provide technical support according to the contracted tier: [to be defined — e.g., business hours / 24x7, response times by severity].
+
+5.2. Specific service level terms (SLA), if applicable, are detailed in a separate Support Addendum.
+
+## 6. Intellectual Property
+
+6.1. StaffForge retains ownership of all intellectual property rights in the Software. This Agreement does not transfer any ownership to the Customer; it grants only the right of use described in Section 2.
+
+6.2. Any suggestion, improvement, or feedback the Customer provides regarding the Software may be freely used by StaffForge without any obligation of compensation.
+
+## 7. Data and Privacy
+
+7.1. If use of the Software involves the processing of personal data on the Customer's behalf (for example, usage telemetry, Dashboard analytics), the parties will execute a **Data Processing Agreement (DPA)** in accordance with the General Data Protection Regulation (GDPR), as an addendum to this Agreement.
+
+7.2. StaffForge will implement reasonable technical and organizational measures to protect the Customer's data.
+
+## 8. Warranties and Disclaimer
+
+8.1. StaffForge warrants that it will perform the contracted support services with reasonable professional diligence.
+
+8.2. EXCEPT AS EXPRESSLY STATED IN THIS AGREEMENT, THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING WITHOUT LIMITATION WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+## 9. Limitation of Liability
+
+9.1. In no event will StaffForge's total liability arising out of this Agreement exceed the total amount paid by the Customer in the twelve (12) months preceding the event giving rise to the claim.
+
+9.2. Neither party will be liable for indirect, incidental, special, consequential damages, or loss of profits, even if advised of the possibility of such damages.
+
+9.3. Nothing in this Agreement limits either party's liability for fraud, gross negligence, or death or personal injury caused by negligence, to the extent such limitation is not permitted by applicable law.
+
+## 10. Termination
+
+10.1. Either party may terminate this Agreement if the other party materially breaches its obligations and fails to cure such breach within [30] days of written notice.
+
+10.2. Upon termination of this Agreement for any reason, the Customer must cease all use of the Software and destroy or return all copies in its possession.
+
+10.3. Sections 6, 8, 9, 11, and 12 will survive termination of this Agreement.
+
+## 11. Confidentiality
+
+Each party agrees to maintain the confidentiality of the other party's non-public information disclosed under this Agreement, and not to use it for purposes other than those contemplated herein.
+
+## 12. General Provisions
+
+12.1. **Governing Law and Jurisdiction**: This Agreement is governed by the laws of Spain. For any dispute, the parties submit to the courts and tribunals of [city, Spain], expressly waiving any other venue.
+
+12.2. **Entire Agreement**: This Agreement, together with its addenda (purchase order, SLA, DPA), constitutes the entire agreement between the parties and supersedes any prior agreement on the same subject matter.
+
+12.3. **Amendments**: Any amendment to this Agreement must be made in writing and signed by both parties.
+
+12.4. **Assignment**: The Customer may not assign this Agreement without StaffForge's prior written consent, except in the case of a merger, acquisition, or sale of substantially all of its assets.
+
+---
+
+**Licensing contact**: contacto@staffforge.dev
+
+---
+
+*This document is a generic working draft based on standard clauses from B2B SaaS/software contracts, with [to be defined] placeholders pending completion. It should be reviewed and adapted by a commercial lawyer before use with real customers — particularly Sections 3 (term), 4 (fees), 5 (SLA), 9 (liability limits), and 12.1 (specific jurisdiction), which depend on business decisions and the legal form under which you operate (sole trader, limited company, etc.).*
