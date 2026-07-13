@@ -35,7 +35,7 @@ import { search as marketplaceSearch, install as marketplaceInstall } from './ma
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CWD = cwd();
 
-const REPO = 'https://github.com/mjuliac/StaffForge-AI-Agent-Framework';
+const REPO = 'https://github.com/StaffForge/StaffForge-AI-Agent-Framework';
 const BRANCH = 'develop';
 const TMP = join('/tmp', `staffforge-${process.pid}`);
 const CONFIG = join(CWD, '.staffforge-install.json');
@@ -54,7 +54,7 @@ ${b('Usage:')}
   node install.mjs                          ${bl('# interactive')}
   node install.mjs -y                       ${bl('# non-interactive (defaults)')}
   node install.mjs --platform opencode --agent orchestrator
-  npx github:mjuliac/StaffForge-AI-Agent-Framework              ${bl('# remote install')}
+  npx github:StaffForge/StaffForge-AI-Agent-Framework              ${bl('# remote install')}
 
 ${b('Options:')}
   --platform <name>   Platform (opencode, claude-code, cursor, copilot, aider, gemini-cli, all)

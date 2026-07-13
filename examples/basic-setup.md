@@ -3,7 +3,7 @@
 ## 1. Install
 
 ```bash
-npx github:mjuliac/StaffForge-AI-Agent-Framework
+npx github:StaffForge/StaffForge-AI-Agent-Framework
 ```
 
 Follow the prompts to select:

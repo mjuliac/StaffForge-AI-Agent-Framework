@@ -4,7 +4,7 @@ export class MarketplaceLoader extends RemoteLoader {
   constructor(options = {}) {
     super(options);
     this._registryUrl =
-      options.registryUrl || 'https://raw.githubusercontent.com/mjuliac/staffforge-marketplace/main/registry.json';
+      options.registryUrl || 'https://raw.githubusercontent.com/StaffForge/staffforge-marketplace/main/registry.json';
     this._cache = new Map();
   }
 
