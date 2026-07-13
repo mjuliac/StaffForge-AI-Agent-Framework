@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework
 
-[![CI](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
+[![CI](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](#requirements)
 [![Agents](https://img.shields.io/badge/agents-148-orange)](agents/)
@@ -60,21 +60,21 @@ examples/         ← Usage examples
 ### From any project — **one command, all OS**
 
 ```bash
-npx github:mjuliac/StaffForge-AI-Agent-Framework
+npx github:StaffForge/StaffForge-AI-Agent-Framework
 ```
 
 Interactive prompts ask for platform, default agent, and location. Works on Linux, macOS, and Windows — Node.js is the only requirement.
 
 Or non-interactive with flags:
 ```bash
-npx github:mjuliac/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
+npx github:StaffForge/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
 ```
 
 The installer saves a `.staffforge-install.json` config, so re-running detects previous settings:
 
 ```bash
 # Update to latest agents:
-npx github:mjuliac/StaffForge-AI-Agent-Framework
+npx github:StaffForge/StaffForge-AI-Agent-Framework
 # → Previous: opencode (agent: orchestrator)
 #   Reinstall? [Y/n]:  ← press Enter
 ```
@@ -87,7 +87,7 @@ opencode
 ### Clone the repository (any OS)
 
 ```bash
-git clone --depth 1 https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
+git clone --depth 1 https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
 npm install
 npm run setup          # interactive installer
@@ -349,7 +349,7 @@ STAFFFORGE_LOG_LEVEL=error node tools/validate.mjs                    # Errors o
 
 ## opencode.json
 
-Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:mjuliac/StaffForge-AI-Agent-Framework`.
+Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:StaffForge/StaffForge-AI-Agent-Framework`.
 
 ## Model Selection Layer
 
@@ -369,7 +369,7 @@ See `ARCHITECTURE.md` §2 for full API reference.
 ## Requirements
 
 - **Node.js ≥ 18** (Linux, macOS, or Windows)
-- No other runtime dependency — the installer (`npx github:mjuliac/StaffForge-AI-Agent-Framework`) works standalone
+- No other runtime dependency — the installer (`npx github:StaffForge/StaffForge-AI-Agent-Framework`) works standalone
 - A supported AI coding assistant already installed for whichever platform(s) you target (OpenCode, Claude Code, Cursor, GitHub Copilot, Aider, or Gemini CLI)
 
 ## Testing

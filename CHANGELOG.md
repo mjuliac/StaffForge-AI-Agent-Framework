@@ -203,19 +203,19 @@
 - ORCHESTRATOR_MATRIX.md: task → pipeline routing
 - AGENTS.md: agent catalog and conventions
 
-[v2.6.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v2.6.0
-[v2.5.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v2.5.0
-[v2.3.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v2.3.0
-[v2.2.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v2.2.0
-[v2.1.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v2.1.0
-[v2.0.1]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v2.0.1
-[v2.0.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v2.0.0
-[v1.7.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.7.0
-[v1.6.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.6.0
-[v1.5.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.5.0
-[v1.4.1]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.4.1
-[v1.4.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.4.0
-[v1.3.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.3.0
-[v1.2.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.2.0
-[v1.1.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.1.0
-[v1.0.0]: https://github.com/mjuliac/StaffForge-AI-Agent-Framework/releases/tag/v1.0.0
+[v2.6.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v2.6.0
+[v2.5.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v2.5.0
+[v2.3.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v2.3.0
+[v2.2.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v2.2.0
+[v2.1.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v2.1.0
+[v2.0.1]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v2.0.1
+[v2.0.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v2.0.0
+[v1.7.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.7.0
+[v1.6.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.6.0
+[v1.5.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.5.0
+[v1.4.1]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.4.1
+[v1.4.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.4.0
+[v1.3.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.3.0
+[v1.2.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.2.0
+[v1.1.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.1.0
+[v1.0.0]: https://github.com/StaffForge/StaffForge-AI-Agent-Framework/releases/tag/v1.0.0

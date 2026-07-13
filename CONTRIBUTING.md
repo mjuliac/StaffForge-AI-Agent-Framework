@@ -3,7 +3,7 @@
 ## Getting started
 
 ```bash
-git clone https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
+git clone https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
 npm install
 npm run validate

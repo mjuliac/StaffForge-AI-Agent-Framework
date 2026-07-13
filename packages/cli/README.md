@@ -1,6 +1,6 @@
 # @staffforge/cli
 
-Universal installer for [StaffForge AI Agent Framework](https://github.com/mjuliac/StaffForge-AI-Agent-Framework).
+Universal installer for [StaffForge AI Agent Framework](https://github.com/StaffForge/StaffForge-AI-Agent-Framework).
 
 ```bash
 npx @staffforge/cli

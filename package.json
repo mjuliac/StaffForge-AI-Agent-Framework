@@ -55,7 +55,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git"
+    "url": "git+https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git"
   },
-  "homepage": "https://github.com/mjuliac/StaffForge-AI-Agent-Framework#readme"
+  "homepage": "https://github.com/StaffForge/StaffForge-AI-Agent-Framework#readme"
 }
