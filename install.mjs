@@ -12,17 +12,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const pkgDir = __dirname;
 
 // When installed via `npx github:...`, npm may not set up workspace symlinks
-// (@staffforge/core won't resolve). Run workspace install if missing.
+// (@staffforge/core won't resolve). Run a full npm install.
+// Note: --workspaces alone skips root deps (ajv, js-yaml) needed by tools/*.
 if (!existsSync(join(pkgDir, 'node_modules', '@staffforge', 'core'))) {
   console.log('⚙️  Setting up StaffForge dependencies...');
   try {
-    execSync('npm install --workspaces --loglevel=warn --install-strategy=hoisted', {
+    execSync('npm install --loglevel=warn --install-strategy=hoisted', {
       cwd: pkgDir,
       stdio: 'inherit',
     });
   } catch (err) {
     console.error('\n✖ Failed to install dependencies.');
-    console.error('  Try running manually: cd "' + pkgDir + '" && npm install --workspaces');
+    console.error('  Try running manually: cd "' + pkgDir + '" && npm install');
     process.exit(1);
   }
 }
