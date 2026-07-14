@@ -169,7 +169,17 @@ function copyResult(platform, src, dest) {
   const mv = (f, d) => {
     rmSync(d, { recursive: true, force: true });
     mkdirSync(dirname(d), { recursive: true });
-    renameSync(f, d);
+    try {
+      renameSync(f, d);
+    } catch (err) {
+      if (err.code === 'EXDEV') {
+        // Cross-device: copy + delete instead of rename
+        cpSync(f, d, { recursive: true });
+        rmSync(f, { recursive: true, force: true });
+      } else {
+        throw err;
+      }
+    }
   };
   switch (platform) {
     case 'opencode':
