@@ -9,7 +9,7 @@
 export default function claudeCodeAdapter(agents) {
   const files = [];
 
-  const orchestratorAgent = agents.find(a => a.name === 'orchestrator');
+  const orchestratorAgent = agents.find(a => a.name.toLowerCase() === 'orchestrator');
   if (orchestratorAgent) {
     files.push({
       path: "CLAUDE.md",
