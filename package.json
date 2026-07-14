@@ -32,7 +32,9 @@
     "publish:sdk": "cd packages/sdk && npm publish",
     "publish:plugin-sdk": "cd packages/plugin-sdk && npm publish"
   },
-  "bin": "./install.mjs",
+  "bin": {
+    "staffforge": "./install.mjs"
+  },
   "files": [
     "install.mjs",
     "packages/",
