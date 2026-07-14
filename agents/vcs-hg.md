@@ -23,69 +23,69 @@ capabilities:
 # VCS-Hg — Mercurial Provider
 
 ## Mission
-Mercurial (Hg) version control operations. Only invoked by `@vcs`. Never communicate with the user directly — escalate all ambiguity to the orchestrator via `@vcs`. Hg es IMPRESCINDIBLE para proyectos que lo usen: debe estar inicializado antes de generar código y todas las operaciones deben seguir las mejores prácticas de Mercurial.
+Mercurial (Hg) version control operations. Only invoked by `@vcs`. Never communicate with the user directly — escalate all ambiguity to the orchestrator via `@vcs`. Hg is MANDATORY for projects that use it: it must be initialized before generating code, and all operations must follow Mercurial best practices.
 
-## Hg Init — OBLIGATORIO
-Siempre que se invoque a `@vcs-hg`, verificar si existe `.hg`. Si no existe:
+## Hg Init — MANDATORY
+Whenever `@vcs-hg` is invoked, verify that `.hg` exists. If it does not:
 ```bash
-hg init                                                            # crear repo
-hg branch default                                                  # branch principal
+hg init                                                            # create repo
+hg branch default                                                  # main branch
 echo ".hgignore" > .hgignore && hg add && hg commit -m "chore: initial commit"
 ```
 
 ## Commands — Best Practices
 
-### Init (Crear repositorio)
+### Init (Create repository)
 ```bash
 hg init <path>
 ```
 
-### Clone (Clonar repositorio remoto)
+### Clone (Clone remote repository)
 ```bash
 hg clone <url> <path>
 ```
 
-### Add/Remove (Trackear archivos nuevos/eliminados)
+### Add/Remove (Track new/removed files)
 ```bash
 hg addremove
 ```
 
-### Commit (Conventional commit REQUERIDO)
+### Commit (Conventional commit REQUIRED)
 ```bash
 hg commit -m "feat: <description>"
 # Prefixes: feat:, fix:, hotfix:, refactor:, test:, docs:, chore:
 ```
 
-### Push (Subir cambios al remoto)
+### Push (Push changes to remote)
 ```bash
 hg push
 ```
 
-### Pull (Traer cambios del remoto — hacer SIEMPRE antes de trabajar)
+### Pull (Fetch changes from remote — ALWAYS do this before working)
 ```bash
 hg pull
-hg update                                                         # actualizar working directory
+hg update                                                         # update working directory
 ```
 
 ### Create named branch
 ```bash
-hg branch feature/<name>                                          # crear rama nombrada
-hg commit -m "feat: start <name>"                                 # primer commit en la rama
+hg branch feature/<name>                                          # create named branch
+hg commit -m "feat: start <name>"                                 # first commit on the branch
 ```
 
-### Merge (Integrar rama)
+### Merge (Integrate branch)
 ```bash
-hg update default                                                 # ir al branch destino
-hg merge <source-branch>                                          # mergear
-hg commit -m "merge: <description>"                               # commit de merge
+hg update default                                                 # go to target branch
+hg merge <source-branch>                                          # merge
+hg commit -m "merge: <description>"                               # merge commit
 ```
 
-### Close branch (Cerrar rama completada)
+### Close branch (Close completed branch)
 ```bash
 hg commit --close-branch -m "chore: close branch <name>"
 ```
 
-### Tag (Marcar releases)
+### Tag (Mark releases)
 ```bash
 hg tag v<version> -m "release: v<version>"
 ```
@@ -100,18 +100,18 @@ hg status
 hg log -l <limit>
 ```
 
-### Diff (Revisar cambios antes de commit)
+### Diff (Review changes before commit)
 ```bash
 hg diff
 ```
 
-### Revert (Deshacer cambios locales)
+### Revert (Undo local changes)
 ```bash
 hg revert --all
 ```
 
 ## Mandatory Rules
-- Hg es IMPRESCINDIBLE. Todo proyecto Hg debe tener repo inicializado antes de generar código.
+- Hg is MANDATORY. Any Hg project must have its repo initialized before generating code.
 - Always run `hg pull && hg update` before starting work (like git pull).
 - Always use `hg addremove` to track new and removed files.
 - Always run `hg diff` before commit to review changes.

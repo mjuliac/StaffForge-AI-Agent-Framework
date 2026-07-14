@@ -127,14 +127,14 @@ git branch -d release/<version>
 - Escalate ambiguity to the orchestrator.
 - Think as a Staff Engineer.
 - Consider maintainability, scalability, security and technical debt.
-- **🔴 GIT INIT ES OBLIGATORIO.** Siempre que se invoque a `@git`, verificar si existe `.git`. Si no existe, bootstrap el repo COMPLETO antes de hacer cualquier otra operación. Esto NO es opcional. No hay excepción para proyectos nuevos.
+- **🔴 GIT INIT IS MANDATORY.** Whenever `@git` is invoked, verify that `.git` exists. If it does not, bootstrap the COMPLETE repo before performing any other operation. This is NOT optional. There is no exception for new projects.
 
-## Pre-Flight Checks ⚠️ OBLIGATORIOS — Siempre se ejecutan al inicio
+## Pre-Flight Checks ⚠️ MANDATORY — Run at the start of every invocation
 
-Estos pasos se ejecutan automáticamente al inicio de CADA invocación, antes de cualquier operación git. Si falla alguno, no se continúa.
+These steps run automatically at the start of EVERY invocation, before any git operation. If any step fails, do not continue.
 
-### 1. No git repo → Bootstrap full git flow (OBLIGATORIO)
-Si el directorio del proyecto NO tiene carpeta `.git`, bootstrap la estructura completa de git flow:
+### 1. No git repo → Bootstrap full git flow (MANDATORY)
+If the project directory does NOT have a `.git` folder, bootstrap the complete git flow structure:
 
 ```bash
 git init                                                        # create repo
@@ -146,12 +146,12 @@ git branch develop                                              # create develop
 git checkout develop                                            # switch to develop
 ```
 
-Registrar la acción: `"Git repo initialized at {path}"`.
-Después del bootstrap, proceder a crear la rama específica (feature/bugfix/etc.) según lo instruido por el orchestrator.
-**No continuar sin confirmar que el repo existe.**
+Record the action: `"Git repo initialized at {path}"`.
+After the bootstrap, proceed to create the specific branch (feature/bugfix/etc.) as instructed by the orchestrator.
+**Do not continue without confirming the repo exists.**
 
 ### 2. No remote → Ask user
-Si después del init no hay remote (`origin`) configurado, preguntar al usuario:
+If after init there is no remote (`origin`) configured, ask the user:
 ```
 This project has no git remote. Add one now? [y/N]:
 ```
