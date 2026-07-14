@@ -90,8 +90,8 @@ git push origin develop
 git branch -d release/<version>
 ```
 
-## Git Init — OBLIGATORIO
-Siempre que se invoque a `@vcs-git`, verificar si existe `.git`. Si no existe:
+## Git Init — MANDATORY
+Whenever `@vcs-git` is invoked, verify that `.git` exists. If it does not:
 ```bash
 git init
 if git rev-parse --verify master >/dev/null 2>&1; then
@@ -103,7 +103,7 @@ git checkout develop
 ```
 
 ## Mandatory Rules
-- Git es IMPRESCINDIBLE. Todo proyecto debe tener repo git inicializado antes de generar código.
+- Git is MANDATORY. Every project must have its git repo initialized before generating code.
 - Follow workflow-specific branch naming and merge strategy.
 - Always use `--no-ff` merges unless the workflow specifies otherwise.
 - Use conventional commits: `feat:`, `fix:`, `hotfix:`, `release:`, `docs:`, `refactor:`, `test:`, `chore:`.

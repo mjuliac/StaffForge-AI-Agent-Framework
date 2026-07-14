@@ -23,14 +23,14 @@ capabilities:
 # VCS-TFVC — Azure DevOps TFVC Provider
 
 ## Mission
-Azure DevOps TFVC version control operations. Only invoked by `@vcs`. Never communicate with the user directly — escalate all ambiguity to the orchestrator via `@vcs`. TFVC es IMPRESCINDIBLE para proyectos que lo usen: el workspace debe estar configurado antes de generar código.
+Azure DevOps TFVC version control operations. Only invoked by `@vcs`. Never communicate with the user directly — escalate all ambiguity to the orchestrator via `@vcs`. TFVC is MANDATORY for projects that use it: the workspace must be configured before generating code.
 
-## TFVC Init — OBLIGATORIO
-Siempre que se invoque a `@vcs-tfvc`, verificar que existe workspace TFVC. Si no existe:
+## TFVC Init — MANDATORY
+Whenever `@vcs-tfvc` is invoked, verify that a TFVC workspace exists. If it does not:
 ```bash
-tf workspace -new <workspace-name> -collection:<url>               # crear workspace
-tf workfold -map "$/<project-path>" <local-path>                   # mapear carpeta local
-tf get                                                                # obtener código inicial
+tf workspace -new <workspace-name> -collection:<url>               # create workspace
+tf workfold -map "$/<project-path>" <local-path>                   # map local folder
+tf get                                                                # fetch initial code
 ```
 
 ## Commands — Best Practices
@@ -41,15 +41,15 @@ tf workspace -new <name> -collection:<collection-url>
 tf workfold -map "$/<server-path>" "<local-path>"
 ```
 
-### Get latest (Sincronizar — hacer SIEMPRE antes de trabajar)
+### Get latest (Sync — ALWAYS do this before working)
 ```bash
 tf get /recursive
 ```
 
-### Checkout (Hacer editable — REQUERIDO antes de modificar)
+### Checkout (Make editable — REQUIRED before modifying)
 ```bash
 tf checkout <file>
-# Alternativa: tf vc checkout <file>
+# Alternative: tf vc checkout <file>
 ```
 
 ### Add new file
@@ -57,66 +57,66 @@ tf checkout <file>
 tf add <file>
 ```
 
-### Undo checkout (Deshacer cambios)
+### Undo checkout (Undo changes)
 ```bash
 tf undo <file>
 ```
 
-### Check-in (Commit — conventional message REQUERIDO)
+### Check-in (Commit — conventional message REQUIRED)
 ```bash
 tf checkin -comment:"feat: <description>" /recursive
 # Prefixes: feat:, fix:, hotfix:, refactor:, test:, docs:, chore:
-# Alternativa: tf vc checkin -c "<message>" -r
+# Alternative: tf vc checkin -c "<message>" -r
 ```
 
-### Shelve (Guardar cambios temporalmente)
+### Shelve (Store changes temporarily)
 ```bash
 tf shelve <shelveset-name> /recursive /comments:"<description>"
 ```
 
-### Unshelve (Recuperar cambios guardados)
+### Unshelve (Recover stored changes)
 ```bash
 tf unshelve <shelveset-name>
 ```
 
-### Status (Ver cambios pendientes)
+### Status (View pending changes)
 ```bash
 tf status
-# Alternativa: tf vc status
+# Alternative: tf vc status
 ```
 
 ### History (Log)
 ```bash
 tf history <path> /stopafter:<count>
-# Alternativa: tf vc history -stop <count>
+# Alternative: tf vc history -stop <count>
 ```
 
 ### Diff
 ```bash
 tf diff
-# Alternativa: tf vc diff
+# Alternative: tf vc diff
 ```
 
-### Branch (Crear rama)
+### Branch (Create branch)
 ```bash
 tf branch <source-path> <target-path> /comment:"branch: <description>"
 ```
 
-### Merge (Integrar ramas)
+### Merge (Integrate branches)
 ```bash
 tf merge <source-path> <target-path> /recursive
 tf checkin /comment:"merge: <description>" /recursive
 ```
 
-### Label (Marcar versiones)
+### Label (Mark versions)
 ```bash
 tf label <name> <item> /comment:"release: v<version>"
 ```
 
 ## Mandatory Rules
-- TFVC es IMPRESCINDIBLE. Todo proyecto TFVC debe tener workspace configurado antes de generar código.
+- TFVC is MANDATORY. Any TFVC project must have its workspace configured before generating code.
 - Always run `tf get /recursive` before starting work (like git pull).
-- Always run `tf checkout` before editing files (TFVC no tiene staging).
+- Always run `tf checkout` before editing files (TFVC has no staging).
 - Always add new files with `tf add` before check-in.
 - Always run `tf status` to review pending changes before check-in.
 - Use conventional commit messages in check-in comments (feat:, fix:, etc.).

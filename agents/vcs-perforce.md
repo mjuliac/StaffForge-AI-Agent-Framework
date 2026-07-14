@@ -23,26 +23,26 @@ capabilities:
 # VCS-Perforce — Perforce Provider
 
 ## Mission
-Perforce (p4) version control operations. Only invoked by `@vcs`. Never communicate with the user directly — escalate all ambiguity to the orchestrator via `@vcs`. Perforce es IMPRESCINDIBLE para proyectos que lo usen: el workspace debe estar configurado antes de generar código.
+Perforce (p4) version control operations. Only invoked by `@vcs`. Never communicate with the user directly — escalate all ambiguity to the orchestrator via `@vcs`. Perforce is MANDATORY for projects that use it: the workspace must be configured before generating code.
 
-## Perforce Init — OBLIGATORIO
-Siempre que se invoque a `@vcs-perforce`, verificar que existe conexión al servidor P4. Si no existe:
+## Perforce Init — MANDATORY
+Whenever `@vcs-perforce` is invoked, verify that a connection to the P4 server exists. If it does not:
 ```bash
-export P4PORT=<server:port>                                        # configurar servidor
-export P4USER=<username>                                           # configurar usuario
-export P4CLIENT=<workspace-name>                                   # configurar workspace
-p4 client -S <stream>                                              # crear/actualizar workspace (stream)
-p4 sync                                                               # obtener código inicial
+export P4PORT=<server:port>                                        # configure server
+export P4USER=<username>                                           # configure user
+export P4CLIENT=<workspace-name>                                   # configure workspace
+p4 client -S <stream>                                              # create/update workspace (stream)
+p4 sync                                                               # fetch initial code
 ```
 
 ## Commands — Best Practices
 
-### Sync (Sincronizar con servidor — hacer SIEMPRE antes de trabajar)
+### Sync (Sync with server — ALWAYS do this before working)
 ```bash
 p4 sync
 ```
 
-### Edit (Hacer editable — REQUERIDO antes de modificar)
+### Edit (Make editable — REQUIRED before modifying)
 ```bash
 p4 edit <file>
 ```
@@ -57,18 +57,18 @@ p4 add <file>
 p4 delete <file>
 ```
 
-### Revert (Deshacer cambios)
+### Revert (Undo changes)
 ```bash
 p4 revert <file>
 ```
 
-### Submit (Commit — conventional message REQUERIDO)
+### Submit (Commit — conventional message REQUIRED)
 ```bash
 p4 submit -d "feat: <description>"
 # Prefixes: feat:, fix:, hotfix:, refactor:, test:, docs:, chore:
 ```
 
-### Shelve (Guardar cambios sin commitear)
+### Shelve (Store changes without committing)
 ```bash
 p4 shelve -c <changelist> -d "<description>"
 ```
@@ -78,7 +78,7 @@ p4 shelve -c <changelist> -d "<description>"
 p4 unshelve -s <shelve-changelist>
 ```
 
-### Opened (Ver cambios pendientes)
+### Opened (View pending changes)
 ```bash
 p4 opened
 ```
@@ -98,36 +98,36 @@ p4 diff <file>
 p4 diff -du <file>
 ```
 
-### Branch spec (Crear definición de rama)
+### Branch spec (Create branch definition)
 ```bash
-p4 branch -o <name>                                                # ver especificación
-p4 branch -i < <name>.txt                                          # crear/actualizar desde archivo
+p4 branch -o <name>                                                # view spec
+p4 branch -i < <name>.txt                                          # create/update from file
 ```
 
 ### Integrate (Merge)
 ```bash
-p4 integrate <source> <target>                                     # integrar cambios
-p4 resolve                                                            # resolver conflictos
-p4 submit -d "merge: <description>"                                # completar merge
+p4 integrate <source> <target>                                     # integrate changes
+p4 resolve                                                            # resolve conflicts
+p4 submit -d "merge: <description>"                                # complete merge
 ```
 
-### Label (Marcar snapshot de archivos)
+### Label (Mark file snapshot)
 ```bash
-p4 label -o <label-name>                                           # crear especificación de label
-p4 labelsync -l <label-name>                                       # sincronizar label con versión actual
+p4 label -o <label-name>                                           # create label spec
+p4 labelsync -l <label-name>                                       # sync label to current version
 ```
 
-### Stream (Flujo de trabajo con streams)
+### Stream (Workflow with streams)
 ```bash
-p4 stream -t <type> -P <parent> <stream-path>                     # crear stream (main, development, release)
-p4 client -S <stream-path>                                         # workspace asociado a stream
-p4 switch -r <stream-path>                                         # cambiar a otro stream
+p4 stream -t <type> -P <parent> <stream-path>                     # create stream (main, development, release)
+p4 client -S <stream-path>                                         # workspace associated with stream
+p4 switch -r <stream-path>                                         # switch to another stream
 ```
 
 ## Mandatory Rules
-- Perforce es IMPRESCINDIBLE. Todo proyecto Perforce debe tener workspace configurado antes de generar código.
+- Perforce is MANDATORY. Any Perforce project must have its workspace configured before generating code.
 - Always run `p4 sync` before starting work (like git pull).
-- Always run `p4 edit` before modifying files (Perforce no tiene staging).
+- Always run `p4 edit` before modifying files (Perforce has no staging).
 - Always add new files with `p4 add` before submit.
 - Always run `p4 opened` to review pending changes before submit.
 - Use conventional commit messages in submit descriptions (feat:, fix:, etc.).
