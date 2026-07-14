@@ -102,7 +102,7 @@ function runInstall(repoDir, projectDir, args = []) {
 
   // Run npm install --workspaces to satisfy @staffforge/core dependency
   console.log(`  installing workspace deps in repo...`);
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
+  execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
 
   const result = runInstall(repoDir, projectDir, [
     '--yes',
@@ -163,7 +163,7 @@ function runInstall(repoDir, projectDir, args = []) {
   const repoDir = makeTempDir('all-platforms-repo');
   const projectDir = makeTempDir('all-platforms-project');
   cloneRepo(repoDir);
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
+  execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
 
   const result = runInstall(repoDir, projectDir, [
     '--yes',
@@ -197,7 +197,7 @@ function runInstall(repoDir, projectDir, args = []) {
   assert(!existsSync(join(corePath, 'index.mjs')), 'fresh clone has NO @staffforge/core yet');
 
   // Run the same npm install command root install.mjs uses
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
+  execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
   assert(existsSync(join(corePath, 'index.mjs')), 'after npm install --workspaces, @staffforge/core exists');
 
   // Verify the import works
@@ -214,7 +214,7 @@ function runInstall(repoDir, projectDir, args = []) {
 {
   const repoDir = makeTempDir('adapters-test-repo');
   cloneRepo(repoDir);
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
+  execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
 
   const platforms = ['opencode', 'claude-code', 'cursor', 'copilot', 'aider', 'gemini-cli'];
   for (const platform of platforms) {
@@ -259,9 +259,9 @@ function runInstall(repoDir, projectDir, args = []) {
 {
   const repoDir = makeTempDir('idempotent-repo');
   cloneRepo(repoDir);
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
+  execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
   // Run again - should not fail
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
+  execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
   assert(existsSync(join(repoDir, 'node_modules', '@staffforge', 'core', 'index.mjs')), 'idempotent npm install keeps @staffforge/core');
 }
 
@@ -289,17 +289,18 @@ function runInstall(repoDir, projectDir, args = []) {
 {
   const repoDir = makeTempDir('validation-repo');
   cloneRepo(repoDir);
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
+  execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
 
   const result = spawnSync('node', [join(repoDir, 'tools', 'validate.mjs')], {
     cwd: repoDir,
     encoding: 'utf-8',
     timeout: 30000,
   });
-  assert(result.status === 0, `validate.mjs exits 0 (got ${result.status})`);
+  const stderrInfo = result.stderr ? ` stderr: ${result.stderr.slice(0, 200)}` : '';
+  assert(result.status === 0, `validate.mjs exits 0 (got ${result.status})${stderrInfo}`);
   const outputLines = result.stdout.split('\n').filter(l => l.trim());
   const okCount = outputLines.filter(l => l.startsWith('OK')).length;
-  assert(okCount > 150, `validate.mjs reports ~150 valid items (got ${okCount})`);
+  assert(okCount > 150, `validate.mjs reports ~150 valid items (got ${okCount} of ${outputLines.length} lines)${stderrInfo}`);
 }
 
 // ── Cleanup ──
