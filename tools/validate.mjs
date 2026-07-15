@@ -142,4 +142,3 @@ if (totalErrors) {
 } else {
   console.log(`\n${agents.length} agent(s), ${skillFiles.length} skill(s), ${modelFiles.length} model(s) valid`);
 }
-
