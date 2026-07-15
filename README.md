@@ -131,9 +131,12 @@ npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework -y
 ```bash
 git clone --depth 1 https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
-npm install
+npm install            # install dependencies — NOTE: no "run"
 npm run setup          # interactive installer
 ```
+
+> **⚠️ `npm install` vs `npm run install`**
+> Use `npm install` (without `run`) to install dependencies. `npm run install` is **not** a valid command in this project — it fails with `Missing script: "install"`. To run the framework's installer, use `npm run setup` (or `node install.mjs`).
 
 ### Export to other platforms (after cloning)
 
