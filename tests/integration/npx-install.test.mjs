@@ -281,8 +281,10 @@ function runInstall(repoDir, projectDir, args = []) {
 // ── Test 9: The bin entry in package.json points to correct file ──
 {
   const pkg = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf-8'));
-  assert(pkg.bin && pkg.bin.staffforge === './install.mjs', 'package.json bin points to ./install.mjs');
-  assert(existsSync(join(REPO_ROOT, 'install.mjs')), 'install.mjs exists at root');
+  const binPath = pkg.bin?.staffforge || '';
+  const isValid = binPath === './install.mjs' || binPath === './packages/cli/install.mjs';
+  assert(isValid, `package.json bin points to valid path: ${binPath}`);
+  assert(existsSync(join(REPO_ROOT, binPath.replace(/^\.\//, ''))), `bin target exists: ${binPath}`);
 }
 
 // ── Test 10: Validation passes on cloned repo ──

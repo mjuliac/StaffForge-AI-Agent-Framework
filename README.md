@@ -3,7 +3,7 @@
 [![CI](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](#requirements)
-[![Agents](https://img.shields.io/badge/agents-148-orange)](agents/)
+[![Agents](https://img.shields.io/badge/agents-149-orange)](agents/)
 [![Platforms](https://img.shields.io/badge/platforms-6-purple)](#installation-per-platform)
 
 Multi-provider agent framework. Write agents once, deploy anywhere.
@@ -63,26 +63,63 @@ examples/         ← Usage examples
 npx github:StaffForge/StaffForge-AI-Agent-Framework
 ```
 
-Interactive prompts ask for platform, default agent, and location. Works on Linux, macOS, and Windows — Node.js is the only requirement.
+Works on Linux, macOS, and Windows — Node.js ≥ 18 is the only requirement.
 
-Or non-interactive with flags:
+Interactive prompts ask for:
+- **Platform** — opencode, claude-code, cursor, copilot, aider, gemini-cli, or all
+- **Default agent** — orchestrator, build, or plan
+- **Location** — project directory or global (~/.config/staffforge/)
+- **VCS provider** — git, svn, hg, tfvc, perforce, or custom
+- **Workflow** — git-flow, github-flow, gitlab-flow, trunk-based, or custom
+
+After install, config files are placed in your project and a `.staffforge-install.json`
+is saved so re-running detects previous settings:
+
 ```bash
-npx github:StaffForge/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
-```
-
-The installer saves a `.staffforge-install.json` config, so re-running detects previous settings:
-
-```bash
-# Update to latest agents:
+# Update to latest agents (detects previous config):
 npx github:StaffForge/StaffForge-AI-Agent-Framework
 # → Previous: opencode (agent: orchestrator)
 #   Reinstall? [Y/n]:  ← press Enter
 ```
 
-After install:
+### Non-interactive with CLI flags
+
+All options can be passed as flags for automation:
+
 ```bash
-opencode
+# Minimal: OpenCode + orchestrator (defaults for the rest)
+npx github:StaffForge/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
+
+# Full config
+npx github:StaffForge/StaffForge-AI-Agent-Framework \
+  --platform opencode \
+  --agent orchestrator \
+  --out ./myproject \
+  --vcs git \
+  --workflow git-flow \
+  --yes
+
+# Specific platform + agent
+npx github:StaffForge/StaffForge-AI-Agent-Framework --platform claude-code --agent build
+
+# All platforms at once
+npx github:StaffForge/StaffForge-AI-Agent-Framework --platform all
+
+# All defaults (equivalent to interactive with all defaults)
+npx github:StaffForge/StaffForge-AI-Agent-Framework -y
 ```
+
+#### CLI reference
+
+| Flag | Description | Values |
+|------|-------------|--------|
+| `--platform` | Target platform | `opencode`, `claude-code`, `cursor`, `copilot`, `aider`, `gemini-cli`, `all` |
+| `--agent` | Default agent mode | `orchestrator`, `build`, `plan` |
+| `--out` | Output directory | Any path (default: current directory) |
+| `--vcs` | Version control system | `git`, `svn`, `hg`, `tfvc`, `perforce`, `custom` |
+| `--workflow` | Workflow preset | `git-flow`, `github-flow`, `gitlab-flow`, `trunk-based`, `custom` |
+| `--yes`, `-y` | Skip prompts, use defaults | (flag) |
+| `--help`, `-h` | Show help | (flag) |
 
 ### Clone the repository (any OS)
 
@@ -104,8 +141,6 @@ npm run export:gemini      # Gemini CLI
 ```
 
 ---
-
-
 
 ## Installation per platform
 
@@ -246,7 +281,22 @@ node install.mjs --platform opencode --agent orchestrator
 node install.mjs --platform claude-code --agent build
 node install.mjs --platform all
 node install.mjs -y                                 # defaults (opencode, orchestrator, project-local)
+node install.mjs --vcs svn --workflow trunk-based   # SVN with trunk-based workflow
 ```
+
+The installer asks five questions when run interactively:
+
+1. **Platform** — which AI coding assistant(s) to target
+2. **Default agent** — orchestrator (full control), build (fast edits), or plan (read-only)
+3. **Location** — project-local (`./staffforge/`) or global (`~/.config/staffforge/`)
+4. **VCS provider** — Git, SVN, Mercurial, TFVC, Perforce, or custom
+5. **Workflow** — Git Flow, GitHub Flow, GitLab Flow, Trunk Based, or custom
+
+After selection, the installer:
+- Generates platform config files (`opencode.json`, `CLAUDE.md`, `.cursor/rules/`, etc.)
+- Copies all 149+ agent definitions to `agents/`
+- Creates `.staffforge-vcs.json` with VCS configuration
+- Initializes a Git/Mercurial repository if needed
 
 ## Agent modes
 
@@ -255,7 +305,7 @@ node install.mjs -y                                 # defaults (opencode, orches
 | **orchestrator** | ✓ default | ✓ | Full tools |
 | **build** | ✓ | ✓ | Full tools |
 | **plan** | ✓ | ✓ | Read-only |
-| 145 subagents | — | ✓ | Varies |
+| 146 subagents | — | ✓ | Varies |
 
 - **Tab** — Cycle: orchestrator → build → plan
 - **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@ci`, `@docker`, `@flask`, `@react`, `@postgres`)
@@ -264,7 +314,7 @@ node install.mjs -y                                 # defaults (opencode, orches
 ## Architecture
 
 - **Orchestrator** (default agent) — receives all requests, detects task type and technologies, creates git flow branches, routes pipelines, communicates with the user
-- **Subagents** (145) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, CI/CD, etc.)
+- **Subagents** (146) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, CI/CD, etc.)
 - **Only the orchestrator** may talk to the user, write files, or manage git
 - Subagents run in **parallel** when they have no dependency on each other (DAG-based execution)
 
@@ -309,6 +359,14 @@ The orchestrator:
 4. Executes in DAG-based parallel levels
 
 ## Commands
+
+### One-line install (any project, no clone needed)
+
+```bash
+npx github:StaffForge/StaffForge-AI-Agent-Framework [options]
+```
+
+### After cloning the repo
 
 ```bash
 # Root-level (npm)
