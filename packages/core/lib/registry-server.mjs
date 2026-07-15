@@ -184,7 +184,7 @@ export class RegistryServer {
     this._json(res, { ...tpl, raw });
   }
 
-  _listPlugins(res, query) {
+  _listPlugins(res, _query) {
     // List plugins from the staffforge plugins directory
     let plugins = [];
     try {

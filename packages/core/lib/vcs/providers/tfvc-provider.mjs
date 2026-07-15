@@ -1,13 +1,11 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 
 export class TfvcProvider {
   name = 'tfvc';
   version = '1.0.0';
   description = 'Azure DevOps TFVC version control provider';
 
-  async detect(path) {
+  async detect(_path) {
     try {
       execFileSync('tf', ['version'], { stdio: 'pipe' });
       return { available: true };
@@ -16,7 +14,7 @@ export class TfvcProvider {
     }
   }
 
-  async checkout(path, opts = {}) {
+  async checkout(path, _opts = {}) {
     const args = ['vc', 'checkout', path];
     execFileSync('tf', args, { stdio: 'pipe' });
     return { success: true };

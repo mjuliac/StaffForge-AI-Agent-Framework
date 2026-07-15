@@ -9,7 +9,7 @@ export class IEventBus {
    * @param {function} handler - Event handler function
    * @returns {{ dispose: () => void }} Disposable to unsubscribe
    */
-  on(event, handler) {
+  on(_event, _handler) {
     throw new Error('IEventBus.on() must be implemented');
   }
 
@@ -18,7 +18,7 @@ export class IEventBus {
    * @param {string} event - Event name
    * @param {function} handler - The handler to remove
    */
-  off(event, handler) {
+  off(_event, _handler) {
     throw new Error('IEventBus.off() must be implemented');
   }
 
@@ -27,7 +27,7 @@ export class IEventBus {
    * @param {string} event - Event name
    * @param {any} payload - Event data
    */
-  emit(event, payload) {
+  emit(_event, _payload) {
     throw new Error('IEventBus.emit() must be implemented');
   }
 
@@ -37,7 +37,7 @@ export class IEventBus {
    * @param {function} handler - Event handler function
    * @returns {{ dispose: () => void }} Disposable to cancel before trigger
    */
-  once(event, handler) {
+  once(_event, _handler) {
     throw new Error('IEventBus.once() must be implemented');
   }
 
@@ -45,7 +45,7 @@ export class IEventBus {
    * Remove all listeners, optionally filtered by event name.
    * @param {string} [event] - If provided, only remove listeners for this event
    */
-  removeAllListeners(event) {
+  removeAllListeners(_event) {
     throw new Error('IEventBus.removeAllListeners() must be implemented');
   }
 }

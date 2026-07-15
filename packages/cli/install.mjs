@@ -19,8 +19,15 @@
 
 import { execSync } from 'node:child_process';
 import {
-  existsSync, readFileSync, writeFileSync, mkdirSync, rmSync,
-  readdirSync, cpSync, statSync, copyFileSync,
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  rmSync,
+  readdirSync,
+  cpSync,
+  statSync,
+  copyFileSync,
 } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -66,16 +73,38 @@ function parseArgs() {
   const o = {};
   for (let i = 0; i < a.length; i++) {
     switch (a[i]) {
-      case '--help': case '-h': help(); exit(0);
-      case '--platform': o.platform = a[++i]; break;
-      case '--agent':    o.agent = a[++i]; break;
-      case '--out':      o.out = a[++i]; break;
-      case '--vcs':      o.vcs = a[++i]; break;
-      case '--workflow': o.workflow = a[++i]; break;
-      case '--yes': case '-y': o.yes = true; break;
+      case '--help':
+      case '-h':
+        help();
+        exit(0);
+      case '--platform':
+        o.platform = a[++i];
+        break;
+      case '--agent':
+        o.agent = a[++i];
+        break;
+      case '--out':
+        o.out = a[++i];
+        break;
+      case '--vcs':
+        o.vcs = a[++i];
+        break;
+      case '--workflow':
+        o.workflow = a[++i];
+        break;
+      case '--yes':
+      case '-y':
+        o.yes = true;
+        break;
       default:
-        if (!a[i].startsWith('--')) { o.command = a[i]; o.args = a.slice(i + 1); i = a.length; break; }
-        console.error(`Unknown option: ${a[i]}`); exit(1);
+        if (!a[i].startsWith('--')) {
+          o.command = a[i];
+          o.args = a.slice(i + 1);
+          i = a.length;
+          break;
+        }
+        console.error(`Unknown option: ${a[i]}`);
+        exit(1);
     }
   }
   return o;
@@ -88,12 +117,7 @@ const ask = (q) => new Promise((r) => rl.question(q, r));
 // ── Find framework directory (where agents/ lives) ──
 function findFwDir() {
   // Try: same dir as CLI script, parent, grandparent, CWD
-  const candidates = [
-    CLI_DIR,
-    resolve(CLI_DIR, '..'),
-    resolve(CLI_DIR, '..', '..'),
-    CWD,
-  ];
+  const candidates = [CLI_DIR, resolve(CLI_DIR, '..'), resolve(CLI_DIR, '..', '..'), CWD];
   for (const d of candidates) {
     if (existsSync(join(d, 'agents')) && existsSync(join(d, 'agents', 'orchestrator.md'))) return d;
   }
@@ -106,12 +130,18 @@ function parseFrontmatter(text) {
   if (!lines[0] || lines[0].trim() !== '---') return null;
   let endIdx = -1;
   for (let i = 1; i < lines.length; i++) {
-    if (lines[i].trim() === '---') { endIdx = i; break; }
+    if (lines[i].trim() === '---') {
+      endIdx = i;
+      break;
+    }
   }
   if (endIdx === -1) return null;
 
   const yamlLines = lines.slice(1, endIdx);
-  const body = lines.slice(endIdx + 1).join('\n').trim();
+  const body = lines
+    .slice(endIdx + 1)
+    .join('\n')
+    .trim();
   const fm = {};
   let currentKey = null;
 
@@ -217,27 +247,34 @@ function generateOpencode(agents, defaultAgent) {
       prompt: a.body,
     };
   }
-  return [{
-    path: 'opencode.json',
-    content: JSON.stringify({
-      $schema: 'https://opencode.ai/config.json',
-      default_agent: defaultAgent,
-      agent: agentEntries,
-    }, null, 2) + '\n',
-  }];
+  return [
+    {
+      path: 'opencode.json',
+      content:
+        JSON.stringify(
+          {
+            $schema: 'https://opencode.ai/config.json',
+            default_agent: defaultAgent,
+            agent: agentEntries,
+          },
+          null,
+          2,
+        ) + '\n',
+    },
+  ];
 }
 
 function generateClaude(agents) {
   const files = [];
-  const orch = agents.find(a => a.name.toLowerCase() === 'orchestrator');
+  const orch = agents.find((a) => a.name.toLowerCase() === 'orchestrator');
   if (orch) files.push({ path: 'CLAUDE.md', content: orch.body + '\n' });
 
   for (const a of agents) {
     if (a.name.toLowerCase() === 'orchestrator') continue;
     const tools = a.frontmatter.tools || {};
     const toolList = ['read', 'write', 'bash', 'edit']
-      .filter(t => tools[t])
-      .map(t => t.charAt(0).toUpperCase() + t.slice(1))
+      .filter((t) => tools[t])
+      .map((t) => t.charAt(0).toUpperCase() + t.slice(1))
       .join(', ');
     const lines = [
       '---',
@@ -255,7 +292,7 @@ function generateClaude(agents) {
 }
 
 function generateCursor(agents) {
-  return agents.map(a => ({
+  return agents.map((a) => ({
     path: `.cursor/rules/${a.name}.mdc`,
     content: `---
 description: ${a.frontmatter.description || ''}
@@ -270,33 +307,37 @@ function generateCopilot(agents) {
   for (const a of agents) {
     parts.push(a.body, '', '---', '');
   }
-  return [{
-    path: '.github/copilot-instructions.md',
-    content: parts.join('\n'),
-  }];
+  return [
+    {
+      path: '.github/copilot-instructions.md',
+      content: parts.join('\n'),
+    },
+  ];
 }
 
 function generateAider(agents) {
-  const rules = agents.map(a => a.body);
-  return [{
-    path: '.aider.rules.md',
-    content: rules.join('\n\n---\n\n'),
-  }];
+  const rules = agents.map((a) => a.body);
+  return [
+    {
+      path: '.aider.rules.md',
+      content: rules.join('\n\n---\n\n'),
+    },
+  ];
 }
 
 function generateGemini(agents) {
-  return agents.map(a => ({
+  return agents.map((a) => ({
     path: `.gemini/${a.name}.md`,
     content: a.body + '\n',
   }));
 }
 
 const GENERATORS = {
-  'opencode': generateOpencode,
+  opencode: generateOpencode,
   'claude-code': generateClaude,
-  'cursor': generateCursor,
-  'copilot': generateCopilot,
-  'aider': generateAider,
+  cursor: generateCursor,
+  copilot: generateCopilot,
+  aider: generateAider,
   'gemini-cli': generateGemini,
 };
 
@@ -318,17 +359,20 @@ function copyAgents(src, dest) {
   const tgt = join(dest, 'agents');
   if (resolve(src) === resolve(tgt)) {
     // Same dir, count files
-    return readdirSync(src).filter(f => f.endsWith('.md')).length;
+    return readdirSync(src).filter((f) => f.endsWith('.md')).length;
   }
   rmSync(tgt, { recursive: true, force: true });
   cpSync(src, tgt, { recursive: true });
-  return readdirSync(tgt).filter(f => f.endsWith('.md')).length;
+  return readdirSync(tgt).filter((f) => f.endsWith('.md')).length;
 }
 
 // ── Prev config ──
 function loadPrev() {
-  try { return existsSync(CONFIG_FILE) ? JSON.parse(readFileSync(CONFIG_FILE, 'utf-8')) : null; }
-  catch { return null; }
+  try {
+    return existsSync(CONFIG_FILE) ? JSON.parse(readFileSync(CONFIG_FILE, 'utf-8')) : null;
+  } catch {
+    return null;
+  }
 }
 function savePrev(cfg) {
   writeFileSync(CONFIG_FILE, JSON.stringify(cfg, null, 2) + '\n');
@@ -340,7 +384,9 @@ function initVcs(vcs, dir) {
     console.log(`\n→ Initializing git repository...`);
     execSync('git init', { cwd: dir, stdio: 'pipe' });
     execSync('git add -A', { cwd: dir, stdio: 'pipe' });
-    try { execSync('git commit -m "chore: initial commit"', { cwd: dir, stdio: 'pipe' }); } catch {}
+    try {
+      execSync('git commit -m "chore: initial commit"', { cwd: dir, stdio: 'pipe' });
+    } catch {}
     console.log(`  ✓ Git repo initialized at ${dir}`);
   } else if (vcs === 'hg' && !existsSync(join(dir, '.hg'))) {
     console.log(`\n→ Initializing Mercurial repository...`);
@@ -387,9 +433,7 @@ async function askLocation() {
   console.log('  1) Project  (./staffforge/)');
   console.log('  2) Global   (~/.config/staffforge/)');
   const c = (await ask('\n? [1]: ')).trim();
-  return c === '2'
-    ? join(env.HOME || env.USERPROFILE || '~', '.config', 'staffforge')
-    : join(CWD, 'staffforge');
+  return c === '2' ? join(env.HOME || env.USERPROFILE || '~', '.config', 'staffforge') : join(CWD, 'staffforge');
 }
 
 async function askVcs() {
@@ -450,7 +494,10 @@ async function main() {
     // Try to find agents/ relative to the CLI script
     const tryDirs = [CLI_DIR, resolve(CLI_DIR, '..'), resolve(CLI_DIR, '..', '..')];
     for (const d of tryDirs) {
-      if (existsSync(join(d, 'agents', 'orchestrator.md'))) { fw = d; break; }
+      if (existsSync(join(d, 'agents', 'orchestrator.md'))) {
+        fw = d;
+        break;
+      }
     }
   }
   if (!fw) {
@@ -460,7 +507,7 @@ async function main() {
   }
 
   const agentsDir = join(fw, 'agents');
-  const agentCount = readdirSync(agentsDir).filter(f => f.endsWith('.md')).length;
+  const agentCount = readdirSync(agentsDir).filter((f) => f.endsWith('.md')).length;
   console.log(`  Using local StaffForge`);
   console.log(`  Framework: ${fw}`);
   console.log(`  Agents:    ${agentCount} files in ${agentsDir}`);
@@ -530,7 +577,7 @@ async function main() {
   if (outDir !== CWD && outDir !== fw) {
     copyAgents(agentsDir, outDir);
   }
-  const agentFiles = readdirSync(join(CWD, 'agents')).filter(f => f.endsWith('.md')).length;
+  const agentFiles = readdirSync(join(CWD, 'agents')).filter((f) => f.endsWith('.md')).length;
   console.log(`  ✓ agents/ → ${join(CWD, 'agents')} (${agentFiles} files)`);
 
   // ── For single platform: copy platform files to CWD ──

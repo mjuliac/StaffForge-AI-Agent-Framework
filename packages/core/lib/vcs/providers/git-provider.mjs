@@ -1,13 +1,11 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 
 export class GitProvider {
   name = 'git';
   version = '1.0.0';
   description = 'Git version control provider';
 
-  async detect(path) {
+  async detect(_path) {
     try {
       execFileSync('git', ['--version'], { stdio: 'pipe' });
       return { available: true };

@@ -18,7 +18,7 @@ export class IModelProvider {
    * @param {string} id - Model identifier
    * @returns {object|null} Model definition or null
    */
-  getById(id) {
+  getById(_id) {
     throw new Error('IModelProvider.getById() must be implemented');
   }
 

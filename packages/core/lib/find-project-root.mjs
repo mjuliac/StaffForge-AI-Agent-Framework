@@ -1,6 +1,6 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 
 /**
  * Pre-computed project root.
