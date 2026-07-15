@@ -1,10 +1,10 @@
 import { readFileSync, readdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
+import { resolveRoot } from '../find-project-root.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '..', '..', '..', '..');
+const root = resolveRoot(import.meta.url);
 
 function parseModel(file, content) {
   const data = yaml.load(content);

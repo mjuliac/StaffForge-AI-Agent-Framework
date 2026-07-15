@@ -1,14 +1,11 @@
 {
   "name": "staffforge-ai-agent-framework",
   "version": "2.5.0",
-  "private": true,
   "license": "GPL-3.0-only",
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
+    "postinstall": "node scripts/dev-link.mjs",
     "setup": "node install.mjs",
     "setup:opencode": "node install.mjs --platform opencode --agent orchestrator -y",
     "setup:build": "node install.mjs --platform opencode --agent build -y",
@@ -43,6 +40,7 @@
     "templates/",
     "adapters/",
     "tools/",
+    "scripts/",
     "README.md",
     "AGENTS.md",
     "ORCHESTRATOR_MATRIX.md"
