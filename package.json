@@ -10,7 +10,7 @@
     "setup:opencode": "node install.mjs --platform opencode --agent orchestrator -y",
     "setup:build": "node install.mjs --platform opencode --agent build -y",
     "setup:plan": "node install.mjs --platform opencode --agent plan -y",
-    "export": "node tools/export.mjs",
+    "export": "node tools/export.mjs --all",
     "export:opencode": "node tools/export.mjs --platform opencode",
     "export:claude": "node tools/export.mjs --platform claude-code",
     "export:cursor": "node tools/export.mjs --platform cursor",
@@ -23,6 +23,7 @@
     "format": "prettier --check 'tools/**/*.mjs' 'packages/**/*.mjs'",
     "format:fix": "prettier --write 'tools/**/*.mjs' 'packages/**/*.mjs'",
     "init-agent": "node tools/init-agent.mjs",
+    "init-skill": "node tools/init-skill.mjs",
     "docs": "node tools/generate-docs.mjs",
     "publish:cli": "cd packages/cli && npm publish",
     "publish:core": "cd packages/core && npm publish",
@@ -36,6 +37,7 @@
     "install.mjs",
     "packages/",
     "agents/",
+    "skills/",
     "schemas/",
     "templates/",
     "adapters/",
@@ -45,6 +47,9 @@
     "AGENTS.md",
     "ORCHESTRATOR_MATRIX.md"
   ],
+  "exports": {
+    "./skill-loader": "./tools/skill-loader.mjs"
+  },
   "devDependencies": {
     "eslint": "^8.57.0",
     "prettier": "^3.2.0"

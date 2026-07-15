@@ -103,7 +103,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`\nExporting agents for platform: ${platform}...`);
+  console.log(`\nExporting agents and skills for platform: ${platform}...`);
 
   try {
     execFileSync('node', ['tools/export.mjs', '--platform', platform], {

@@ -1,12 +1,11 @@
 /**
- * Claude Code adapter — generates CLAUDE.md + .claude/agents/<agent>.md subagents.
+ * Claude Code adapter — generates CLAUDE.md + .claude/agents/<agent>.md subagents
+ * + .claude/skills/<skill>.md for skills.
  *
- * Claude Code loads subagents from `.claude/agents/*.md` (not `.claude/rules/`,
- * which is for always-on project rules). Each subagent file needs frontmatter
- * with name, description, and optional tools.
+ * Accepts skills as second parameter.
  */
 
-export default function claudeCodeAdapter(agents) {
+export default function claudeCodeAdapter(agents, skills = []) {
   const files = [];
 
   const orchestratorAgent = agents.find(a => a.name.toLowerCase() === 'orchestrator');
@@ -37,6 +36,17 @@ export default function claudeCodeAdapter(agents) {
     });
   }
 
+  // Write skills as .claude/skills/<name>.md
+  for (const skill of skills) {
+    files.push({
+      path: `.claude/skills/${skill.name}.md`,
+      content: `---
+name: ${skill.name}
+description: ${skill.frontmatter.description}
+---
+${skill.body}\n`,
+    });
+  }
+
   return files;
 }
-
