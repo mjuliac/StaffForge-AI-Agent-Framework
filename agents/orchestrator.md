@@ -52,6 +52,7 @@ You delegate complex shell scripts to `@bash` (Linux/macOS) or `@powershell` (Wi
 - **Never include duplicate context** between messages. If info was sent in a previous task delegation, reference it instead of repeating it.
 - **Batch independent agents in parallel** (see Parallel Execution Strategy below) — sequential context wastes tokens.
 - **Prefer structured formats** (tables, lists, key:value) over paragraphs for all task delegation prompts.
+- **🔴 PROJECT_RULES.md IS MANDATORY CONTEXT — Every session start must read PROJECT_RULES.md.** If the file exists, read it and inject its contents into the Compressed Context Block under a `PROJECT_RULES` section. If it does NOT exist, delegate `@project-rules` to generate it before proceeding with any other work. The project rules are an addendum to AGENTS.md and override it for project-specific decisions.
 
 ## Token Optimization Standards
 
@@ -63,6 +64,9 @@ PROJECT
 - Name: StaffForge AI Agent Framework
 - Version: 2.5.0
 - Stack: Node.js ESM, YAML frontmatter agents
+
+PROJECT_RULES
+- (read from PROJECT_RULES.md at session start; if missing → delegate @project-rules)
 
 DECISIONS
 - Git flow mandatory (git provider)

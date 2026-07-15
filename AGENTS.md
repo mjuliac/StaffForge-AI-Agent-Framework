@@ -5,14 +5,15 @@ OpenCode multi-provider agent framework. Canonical agents in `agents/*.md`, skil
 ## Structure
 
 ```
-agents/           — 149 agent definitions with YAML frontmatter (mode, description, tools)
-skills/           — 3 skill definitions with YAML frontmatter (name, description, keywords, globs)
-adapters/          — Platform exporters per platform (opencode, claude-code, cursor, copilot, aider, gemini-cli)
-schemas/           — JSON Schema for validation (agent.schema.json, model.schema.json, skill.schema.json)
-templates/         — Scaffolding templates for new agents and skills (agent.md, skill.md)
-tools/             — Node.js CLI: validate, export, init-agent, init-skill, install, test, skill-loader
-models/            — Model definitions (22 files, 7 providers) + task profiles (profiles.yaml)
+agents/             — 150 agent definitions with YAML frontmatter (mode, description, tools)
+skills/             — 3 skill definitions with YAML frontmatter (name, description, keywords, globs)
+adapters/            — Platform exporters per platform (opencode, claude-code, cursor, copilot, aider, gemini-cli)
+schemas/             — JSON Schema for validation (agent.schema.json, model.schema.json, skill.schema.json)
+templates/           — Scaffolding templates for new agents and skills (agent.md, skill.md)
+tools/               — Node.js CLI: validate, export, init-agent, init-skill, install, test, skill-loader
+models/              — Model definitions (22 files, 7 providers) + task profiles (profiles.yaml)
 ORCHESTRATOR_MATRIX.md — task → pipeline routing with VCS Flow integration
+PROJECT_RULES.md     — Dynamically generated project rules (addendum to AGENTS.md, created by @project-rules)
 ```
 
 ## Routing
@@ -50,6 +51,22 @@ tools:
   edit: false     # may modify files
 ---
 ```
+
+## Project Rules
+
+`PROJECT_RULES.md` is a dynamically generated addendum to `AGENTS.md` that defines project-specific
+settings: tech stack, conventions, constraints, workflow, and documentation standards.
+
+- Created by the `@project-rules` agent via an interactive wizard at setup time.
+- Automatically checked by `npm run setup` (if missing, prompts to create it).
+- Read by the orchestrator at the start of every session and injected into the Compressed Context Block.
+- All subagents receive project rules as context in every delegation.
+- If a rule in `PROJECT_RULES.md` conflicts with `AGENTS.md`, the project rule takes precedence.
+
+### When PROJECT_RULES.md is missing
+
+The orchestrator delegates to `@project-rules` before any other work. The agent runs a 5-question
+wizard covering: tech stack → conventions → rules → workflow → documentation.
 
 ## Skills
 

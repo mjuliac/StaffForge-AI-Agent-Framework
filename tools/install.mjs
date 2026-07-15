@@ -156,6 +156,26 @@ async function main() {
     console.log('\nUse Tab to switch between orchestrator, build, and plan modes.\n');
   }
 
+  // ── Project Rules setup ────────────────────────────────────────────────
+  const projectRulesPath = join(root, 'PROJECT_RULES.md');
+  if (!existsSync(projectRulesPath)) {
+    console.log('\n── Project Rules ──');
+    console.log('PROJECT_RULES.md not found. This file defines tech stack, conventions,');
+    console.log('constraints and workflow for your project.');
+    console.log('It is used by the orchestrator and all agents as an addendum to AGENTS.md.\n');
+
+    const answer = await question('? Create PROJECT_RULES.md now via @project-rules wizard? (Y/n): ');
+    if (answer.toLowerCase() !== 'n') {
+      console.log('\n  Run the following command in your AI assistant:\n');
+      console.log('    @project-rules setup\n');
+      console.log('  The wizard will guide you through: tech stack, conventions, rules, workflow, documentation.\n');
+    } else {
+      console.log('  You can create it later by invoking @project-rules in your AI assistant.\n');
+    }
+  } else {
+    console.log('✓ PROJECT_RULES.md found — project rules are configured.\n');
+  }
+
   rl.close();
 }
 
