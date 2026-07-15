@@ -140,7 +140,7 @@ export class DashboardServer {
     this._json(res, agent);
   }
 
-  async _listPipelines(res, url) {
+  async _listPipelines(res, _url) {
     const types = _pipelineRegistry.listTaskTypes();
     const result = types.map((name) => {
       const tpl = _pipelineRegistry.resolve(name);
@@ -178,7 +178,7 @@ export class DashboardServer {
     });
   }
 
-  async _listModels(res, url) {
+  async _listModels(res, _url) {
     if (!_modelRegistry) return this._json(res, { count: 0, models: [] });
     const all = _modelRegistry.all ? _modelRegistry.all() : [];
     const result = all.map((m) => ({

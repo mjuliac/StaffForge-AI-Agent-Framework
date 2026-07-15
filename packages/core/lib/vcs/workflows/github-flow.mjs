@@ -6,11 +6,11 @@ export class GitHubFlowWorkflow {
     return `feature/${name}`;
   }
 
-  getCommitPrefix(type) {
+  getCommitPrefix(_type) {
     return 'feat';
   }
 
-  getMergeFlags(target) {
+  getMergeFlags(_target) {
     return ['--squash'];
   }
 

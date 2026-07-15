@@ -2,15 +2,15 @@ export class IVCSWorkflow {
   name = '';
   description = '';
 
-  getBranchName(type, name) {
+  getBranchName(_type, _name) {
     throw new Error('IVCSWorkflow.getBranchName() must be implemented');
   }
 
-  getCommitPrefix(type) {
+  getCommitPrefix(_type) {
     throw new Error('IVCSWorkflow.getCommitPrefix() must be implemented');
   }
 
-  getMergeFlags(target) {
+  getMergeFlags(_target) {
     throw new Error('IVCSWorkflow.getMergeFlags() must be implemented');
   }
 

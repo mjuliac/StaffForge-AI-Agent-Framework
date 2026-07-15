@@ -6,11 +6,11 @@ export class TrunkBasedWorkflow {
     return `${type}-${name}`;
   }
 
-  getCommitPrefix(type) {
+  getCommitPrefix(_type) {
     return 'feat';
   }
 
-  getMergeFlags(target) {
+  getMergeFlags(_target) {
     return ['--ff-only'];
   }
 

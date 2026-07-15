@@ -1,13 +1,11 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 
 export class PerforceProvider {
   name = 'perforce';
   version = '1.0.0';
   description = 'Perforce (p4) version control provider';
 
-  async detect(path) {
+  async detect(_path) {
     try {
       execFileSync('p4', ['info'], { stdio: 'pipe' });
       return { available: true };
@@ -16,7 +14,7 @@ export class PerforceProvider {
     }
   }
 
-  async checkout(path, opts = {}) {
+  async checkout(path, _opts = {}) {
     execFileSync('p4', ['edit', path], { stdio: 'pipe' });
     return { success: true };
   }

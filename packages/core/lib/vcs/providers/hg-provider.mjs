@@ -1,13 +1,11 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 
 export class HgProvider {
   name = 'hg';
   version = '1.0.0';
   description = 'Mercurial (Hg) version control provider';
 
-  async detect(path) {
+  async detect(_path) {
     try {
       execFileSync('hg', ['--version'], { stdio: 'pipe' });
       return { available: true };
@@ -21,7 +19,7 @@ export class HgProvider {
     return { success: true };
   }
 
-  async clone(url, path, opts = {}) {
+  async clone(url, path, _opts = {}) {
     execFileSync('hg', ['clone', url, path], { stdio: 'pipe' });
     return { success: true };
   }

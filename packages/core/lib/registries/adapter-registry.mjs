@@ -1,6 +1,5 @@
 import { readdirSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { resolveRoot } from '../find-project-root.mjs';
 
 const root = resolveRoot(import.meta.url);

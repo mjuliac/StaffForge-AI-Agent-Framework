@@ -1,5 +1,4 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
 
 export class CustomProvider {
   name = 'custom';
@@ -10,7 +9,7 @@ export class CustomProvider {
     this._commands = commands;
   }
 
-  async detect(path) {
+  async detect(_path) {
     return { available: true };
   }
 
@@ -18,29 +17,29 @@ export class CustomProvider {
     return this._run('init', path);
   }
 
-  async clone(url, path, opts = {}) {
+  async clone(url, path, _opts = {}) {
     return this._run('clone', url, path);
   }
 
-  async commit(message, opts = {}) {
+  async commit(message, _opts = {}) {
     return this._run('commit', message);
   }
 
-  async status(opts = {}) {
+  async status(_opts = {}) {
     const out = this._run('status');
     return { success: true, data: String(out) };
   }
 
-  async log(opts = {}) {
+  async log(_opts = {}) {
     const out = this._run('log');
     return { success: true, data: String(out) };
   }
 
-  async push(opts = {}) {
+  async push(_opts = {}) {
     return this._run('push');
   }
 
-  async pull(opts = {}) {
+  async pull(_opts = {}) {
     return this._run('pull');
   }
 

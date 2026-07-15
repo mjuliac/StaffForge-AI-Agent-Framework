@@ -18,7 +18,7 @@ export class IPlugin {
    * @param {string} context.dataDir - Plugin data directory
    * @returns {Promise<void>}
    */
-  async init(context) {
+  async init(_context) {
     throw new Error('IPlugin.init() must be implemented');
   }
 

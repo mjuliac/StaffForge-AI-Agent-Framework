@@ -20,7 +20,7 @@ export class CustomWorkflow {
     return this._commitPrefix(type);
   }
 
-  getMergeFlags(target) {
+  getMergeFlags(_target) {
     return this._mergeFlags;
   }
 

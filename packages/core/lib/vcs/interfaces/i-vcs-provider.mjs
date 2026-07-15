@@ -7,55 +7,55 @@ export class IVCSProvider {
     throw new Error('IVCSProvider.detect() must be implemented');
   }
 
-  async init(path, opts) {
+  async init(_path, _opts) {
     throw new Error('IVCSProvider.init() must be implemented');
   }
 
-  async clone(url, path, opts) {
+  async clone(_url, _path, _opts) {
     throw new Error('IVCSProvider.clone() must be implemented');
   }
 
-  async checkout(ref, opts) {
+  async checkout(_ref, _opts) {
     throw new Error('IVCSProvider.checkout() must be implemented');
   }
 
-  async commit(message, opts) {
+  async commit(_message, _opts) {
     throw new Error('IVCSProvider.commit() must be implemented');
   }
 
-  async push(remote, opts) {
+  async push(_remote, _opts) {
     throw new Error('IVCSProvider.push() must be implemented');
   }
 
-  async pull(remote, opts) {
+  async pull(_remote, _opts) {
     throw new Error('IVCSProvider.pull() must be implemented');
   }
 
-  async merge(source, target, opts) {
+  async merge(_source, _target, _opts) {
     throw new Error('IVCSProvider.merge() must be implemented');
   }
 
-  async branch(name, opts) {
+  async branch(_name, _opts) {
     throw new Error('IVCSProvider.branch() must be implemented');
   }
 
-  async tag(name, message, opts) {
+  async tag(_name, _message, _opts) {
     throw new Error('IVCSProvider.tag() must be implemented');
   }
 
-  async status(opts) {
+  async status(_opts) {
     throw new Error('IVCSProvider.status() must be implemented');
   }
 
-  async log(opts) {
+  async log(_opts) {
     throw new Error('IVCSProvider.log() must be implemented');
   }
 
-  async diff(from, to, opts) {
+  async diff(_from, _to, _opts) {
     throw new Error('IVCSProvider.diff() must be implemented');
   }
 
-  async addRemote(name, url, opts) {
+  async addRemote(_name, _url, _opts) {
     throw new Error('IVCSProvider.addRemote() must be implemented');
   }
 

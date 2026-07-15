@@ -1,13 +1,11 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 
 export class SvnProvider {
   name = 'svn';
   version = '1.0.0';
   description = 'Subversion (SVN) version control provider';
 
-  async detect(path) {
+  async detect(_path) {
     try {
       execFileSync('svn', ['--version'], { stdio: 'pipe' });
       return { available: true };
@@ -21,7 +19,7 @@ export class SvnProvider {
     return { success: true };
   }
 
-  async checkout(url, path, opts = {}) {
+  async checkout(url, path, _opts = {}) {
     const args = ['checkout', url, path];
     execFileSync('svn', args, { stdio: 'pipe' });
     return { success: true };
