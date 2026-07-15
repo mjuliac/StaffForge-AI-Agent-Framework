@@ -60,10 +60,11 @@ examples/         ← Usage examples
 ### From any project — **one command, all OS**
 
 ```bash
-npx github:StaffForge/StaffForge-AI-Agent-Framework
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework
 ```
 
 Works on Linux, macOS, and Windows — Node.js ≥ 18 is the only requirement.
+(If your npm version supports it, you may also use `npx github:StaffForge/...`.)
 
 Interactive prompts ask for:
 - **Platform** — opencode, claude-code, cursor, copilot, aider, gemini-cli, or all
@@ -77,10 +78,14 @@ is saved so re-running detects previous settings:
 
 ```bash
 # Update to latest agents (detects previous config):
-npx github:StaffForge/StaffForge-AI-Agent-Framework
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework
 # → Previous: opencode (agent: orchestrator)
 #   Reinstall? [Y/n]:  ← press Enter
 ```
+
+> **⚠️ npm 9.x note:** If `npx github:user/repo` fails with `could not determine executable to run`,
+> use `npm exec --yes -- github:user/repo` instead. Both invoke the same underlying
+> engine; the `npm exec` form avoids a parsing issue in npm 9.2.0's npx.
 
 ### Non-interactive with CLI flags
 
@@ -88,25 +93,25 @@ All options can be passed as flags for automation:
 
 ```bash
 # Minimal: OpenCode + orchestrator (defaults for the rest)
-npx github:StaffForge/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
 
 # Full config
-npx github:StaffForge/StaffForge-AI-Agent-Framework \
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework \
   --platform opencode \
   --agent orchestrator \
   --out ./myproject \
   --vcs git \
   --workflow git-flow \
-  --yes
+  -y
 
 # Specific platform + agent
-npx github:StaffForge/StaffForge-AI-Agent-Framework --platform claude-code --agent build
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework --platform claude-code --agent build
 
 # All platforms at once
-npx github:StaffForge/StaffForge-AI-Agent-Framework --platform all
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework --platform all
 
 # All defaults (equivalent to interactive with all defaults)
-npx github:StaffForge/StaffForge-AI-Agent-Framework -y
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework -y
 ```
 
 #### CLI reference
@@ -407,7 +412,7 @@ STAFFFORGE_LOG_LEVEL=error node tools/validate.mjs                    # Errors o
 
 ## opencode.json
 
-Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:StaffForge/StaffForge-AI-Agent-Framework`.
+Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework`.
 
 ## Model Selection Layer
 
@@ -427,7 +432,7 @@ See `ARCHITECTURE.md` §2 for full API reference.
 ## Requirements
 
 - **Node.js ≥ 18** (Linux, macOS, or Windows)
-- No other runtime dependency — the installer (`npx github:StaffForge/StaffForge-AI-Agent-Framework`) works standalone
+- No other runtime dependency — the installer (`npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework`) works standalone
 - A supported AI coding assistant already installed for whichever platform(s) you target (OpenCode, Claude Code, Cursor, GitHub Copilot, Aider, or Gemini CLI)
 
 ## Testing

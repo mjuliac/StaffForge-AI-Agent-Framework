@@ -44,6 +44,7 @@ function help() {
   console.log(`StaffForge AI Agent Framework — Installer
 
 USAGE
+  npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework -- [options]
   npx github:StaffForge/StaffForge-AI-Agent-Framework [options]
   node packages/cli/install.mjs [options]
 
