@@ -5,7 +5,7 @@
 ```bash
 git clone https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
-npm install
+npm install              # install dependencies — NOTE: no "run" (npm run install is invalid)
 npm run validate
 npm test
 ```
