@@ -56,7 +56,10 @@ async function main() {
   const description = await ask('Description', `${name} specialist skill.`);
   const keywordsRaw = await ask('Keywords (comma-separated, optional)', '');
   const keywords = keywordsRaw
-    ? keywordsRaw.split(',').map((k) => k.trim()).filter(Boolean)
+    ? keywordsRaw
+        .split(',')
+        .map((k) => k.trim())
+        .filter(Boolean)
     : [];
 
   const template = readFileSync(join(root, 'templates', 'skill.md'), 'utf-8');
