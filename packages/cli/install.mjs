@@ -596,8 +596,9 @@ async function main() {
     }
   }
 
-  // ── Clean up temp output dir (staffforge/) for interactive project-local install ──
-  if (!o.out && outDir !== CWD && !isAll) {
+  // ── Clean up temp output dir (staffforge/) after copying files to CWD ──
+  // Always clean up unless output IS the project root (avoid deleting user's project).
+  if (outDir !== CWD && !isAll) {
     rmSync(outDir, { recursive: true, force: true });
   }
 
