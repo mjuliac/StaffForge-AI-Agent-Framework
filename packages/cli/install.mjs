@@ -596,9 +596,11 @@ async function main() {
     }
   }
 
-  // ── Clean up temp output dir (staffforge/) after copying files to CWD ──
-  // Always clean up unless output IS the project root (avoid deleting user's project).
-  if (outDir !== CWD && !isAll) {
+  // ── Clean up temp output dir when it's the default staffforge/ path ──
+  // Clean up if --out was omitted OR if it explicitly points to CWD/staffforge.
+  // Skip cleanup if --out points to a custom path (user-chosen location).
+  const defaultOut = join(CWD, 'staffforge');
+  if (outDir !== CWD && !isAll && (!o.out || outDir === defaultOut)) {
     rmSync(outDir, { recursive: true, force: true });
   }
 
