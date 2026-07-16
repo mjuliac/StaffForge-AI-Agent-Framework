@@ -72,18 +72,41 @@ function parseArgs() {
   return o;
 }
 
-// ── Readline ──
-const rl = createInterface({ input: process.stdin, output: process.stdout });
-const ask = (q, def = '') =>
-  new Promise((r) => {
-    const p = def ? `${q} [${def}]: ` : `${q}: `;
-    rl.question(p, (a) => r(a.trim() || def));
-  });
-const askLines = async (intro, def = '') => {
-  console.log(intro);
-  const ans = await ask('  > (free text, one line; leave empty for default)', def);
-  return ans;
-};
+// ── Readline (injectable) ──
+// IMPORTANT: do NOT create a second readline over process.stdin when called from
+// another CLI that already opened one (e.g. install.mjs). Passing `rl`/`ask` from
+// the caller prevents duplicate-echo of typed characters (two readers on same TTY).
+// When run standalone, we create our own (and close it on exit).
+let _rl = null;
+let _ownRl = false;
+let ask = null;
+let askLines = null;
+
+function bindReadline(injected) {
+  if (injected && injected.rl && injected.ask) {
+    _rl = injected.rl;
+    ask = injected.ask;
+  } else {
+    _rl = createInterface({ input: process.stdin, output: process.stdout });
+    _ownRl = true;
+    ask = (q, def = '') =>
+      new Promise((r) => {
+        const p = def ? `${q} [${def}]: ` : `${q}: `;
+        _rl.question(p, (a) => r(a.trim() || def));
+      });
+  }
+  askLines = async (intro, def = '') => {
+    console.log(intro);
+    const ans = await ask('  > (free text, one line; leave empty for default)', def);
+    return ans;
+  };
+}
+function closeReadlineIfOwn() {
+  if (_ownRl && _rl) {
+    _rl.close();
+    _ownRl = false;
+  }
+}
 
 // ── Timestamp ──
 function nowStamp() {
@@ -411,7 +434,8 @@ function validateConfig(content, which) {
 }
 
 // ── Main generator (importable) ──
-export async function generateAgentsConfig({ outDir = cwd(), yes = false } = {}) {
+export async function generateAgentsConfig({ outDir = cwd(), yes = false, rl = null, ask: askFn = null } = {}) {
+  bindReadline(rl && askFn ? { rl, ask: askFn } : null);
   const target = resolve(outDir);
   mkdirSync(target, { recursive: true });
 
@@ -489,11 +513,12 @@ export async function generateAgentsConfig({ outDir = cwd(), yes = false } = {})
 // ── CLI entry ──
 async function main() {
   const o = parseArgs();
+  bindReadline(null); // standalone → create own readline
   try {
     await generateAgentsConfig({ outDir: o.out, yes: o.yes });
-    rl.close();
+    closeReadlineIfOwn();
   } catch (e) {
-    rl.close();
+    closeReadlineIfOwn();
     console.error('\n✖ Generation failed:', e.message);
     exit(1);
   }

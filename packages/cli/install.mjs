@@ -619,11 +619,13 @@ async function main() {
   // Runs the interactive 5-module wizard and writes AGENTS.md (or AGENTS_ANEX.md
   // if one already exists) into the project root before VCS init so it is
   // included in the initial commit. --yes uses framework defaults.
+  // We pass THIS installer's readline (`rl`/`ask`) to avoid opening a second
+  // reader on process.stdin (which caused duplicate character echo on input).
   try {
     const { generateAgentsConfig } = await import(
       join(resolve(CLI_DIR, '..', '..'), 'tools', 'init-agents-config.mjs')
     );
-    await generateAgentsConfig({ outDir: CWD, yes: o.yes });
+    await generateAgentsConfig({ outDir: CWD, yes: o.yes, rl, ask });
   } catch (err) {
     console.warn(`\n  ⚠ AGENTS config generation skipped: ${err.message}`);
   }
