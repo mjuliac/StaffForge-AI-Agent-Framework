@@ -383,17 +383,187 @@ async function moduleDocs(yes) {
 - **Approval Required**: Yes (maintainer)`;
 }
 
+// ── Sanitization & Coherence Layer (spec §2, §3) ──
+// Gatekeeper that runs AFTER the 5-module questionnaire and BEFORE rendering.
+// Three stages (spec §3 pipeline):
+//   1. Structural  — dedupe markdown headers, drop empty list items
+//   2. Technical   — Python standards, framework mutex resolution
+//   3. Syntax Guard— empty/placeholder cleanup, typo correction
+// Returns { data, changes } where changes is a human-readable changelog.
+
+// Keyword sets (spec §2.2)
+const PY_FRAMEWORKS = ['fastapi', 'flask', 'django'];
+const NODE_FRAMEWORKS = ['express', 'nestjs', 'fastify'];
+
+function lowerList(s) {
+  return String(s || '')
+    .split(/[,\n|]/)
+    .map((x) => x.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+// Stage 1: structural — remove duplicate "## " headers within a single section block
+// and strip isolated "- " / ":" bullet lines that would render as empty.
+function structuralPass(section) {
+  let out = section;
+  // Collapse repeated duplicate headers (case-insensitive) keeping the first.
+  const seen = new Set();
+  out = out
+    .split('\n')
+    .filter((line) => {
+      const m = line.match(/^(#{2,6})\s+(.*\S)\s*$/);
+      if (m) {
+        const key = m[2].toLowerCase();
+        if (seen.has(key)) return false; // drop duplicate header
+        seen.add(key);
+      }
+      return true;
+    })
+    .join('\n');
+  // Remove empty bullet lines ("- " or "-") and trailing isolated colons.
+  out = out
+    .split('\n')
+    .filter((l) => {
+      const t = l.trim();
+      if (t === '-' || t === '- ' || t === '*' || t === '* ') return false;
+      return true;
+    })
+    .join('\n')
+    .replace(/:\s*$/gm, (m) => (m.trim() === ':' ? '' : m)); // drop trailing lone colon
+  return out;
+}
+
+// Stage 2: technical — Python + framework mutex
+function technicalPass(data, changes) {
+  const langs = lowerList(data.stack);
+  const isPython = langs.some((l) => l.includes('python'));
+  const isNode = langs.some((l) => l.includes('node') || l.includes('javascript') || l.includes('typescript'));
+
+  // §2.1 Python indentation override
+  if (isPython) {
+    const indentMatch = data.conventions.match(/\*\*Indentation\*\*:([^\n]*)/);
+    if (indentMatch) {
+      const cur = indentMatch[1].trim();
+      if (!/4\s*spaces/.test(cur)) {
+        data.conventions = data.conventions.replace(
+          /\*\*Indentation\*\*:[^\n]*/,
+          '**Indentation**: 4 spaces - PEP 8 (overridden from "' + cur + '")',
+        );
+        changes.push(`Indentation set to "4 spaces" (PEP 8) — Python detected, was "${cur}"`);
+      }
+    }
+    // §2.1 Formatter coherence
+    const fmtMatch = data.conventions.match(/\*\*Code Formatter\*\*:([^\n]*)/);
+    if (fmtMatch) {
+      const fmt = fmtMatch[1].toLowerCase();
+      if (fmt.includes('prettier') && !fmt.includes('ruff') && !fmt.includes('black')) {
+        data.conventions = data.conventions.replace(
+          /\*\*Code Formatter\*\*:[^\n]*/,
+          '**Code Formatter**: Ruff (with Black-compatible formatting) - Prettier lacks native Python support',
+        );
+        changes.push('Formatter changed to "Ruff/Black" — Prettier selected without Python plugin (Python detected)');
+      }
+    }
+  }
+
+  // §2.2 Framework mutex — detect competing frameworks in same runtime
+  const fwText = (data.stack + ' ' + data.conventions).toLowerCase();
+  const pyHits = PY_FRAMEWORKS.filter((f) => fwText.includes(f));
+  const nodeHits = NODE_FRAMEWORKS.filter((f) => fwText.includes(f));
+
+  if (pyHits.length > 1) {
+    const promoted = 'FastAPI'; // modern async standard (spec §3.1)
+    data.stack = data.stack.replace(
+      /(Web Framework[^*]*:\s*)([^\n]*)/,
+      `$1${promoted} (microservices) - mutex resolved: detected ${pyHits.join(' + ')}`,
+    );
+    changes.push(
+      `Framework mutex resolved: ${pyHits.join(' + ')} → promoted "${promoted}" (spec §2.2). Clarify if they are separate microservices.`,
+    );
+  }
+  if (nodeHits.length > 1) {
+    const promoted = 'Express';
+    data.stack = data.stack.replace(
+      /(Web Framework[^*]*:\s*)([^\n]*)/,
+      `$1${promoted} - mutex resolved: detected ${nodeHits.join(' + ')}`,
+    );
+    changes.push(
+      `Framework mutex resolved: ${nodeHits.join(' + ')} → promoted "${promoted}" (spec §2.2). Clarify if they are separate services.`,
+    );
+  }
+  return isPython;
+}
+
+// Stage 3: syntax guard — empty/placeholder → N/A, typo correction
+function syntaxPass(data, changes) {
+  const EMPTY = ['', '-', ':', 'n/a', 'na', '.'];
+  // Typo map (spec §4)
+  const TYPOS = [
+    [/Convetional\s+commits/gi, 'Conventional Commits'],
+    [/Conventional\s+commit\b/gi, 'Conventional Commits'],
+    [/git\s*flow\b/gi, 'Git Flow'],
+  ];
+
+  for (const key of ['stack', 'conventions', 'rules', 'workflow', 'docs']) {
+    let txt = data[key];
+    // typo correction
+    for (const [re, rep] of TYPOS) {
+      if (re.test(txt)) {
+        txt = txt.replace(re, rep);
+        changes.push(`Typo corrected in ${key} → "${rep}"`);
+      }
+    }
+    // Empty sub-bullets / placeholder values
+    const lines = txt.split('\n').map((l) => {
+      const t = l.trim();
+      // bullet with empty/placeholder content
+      const bm = l.match(/^(\s*[-*]\s+)(.*)$/);
+      if (bm && EMPTY.includes(bm[2].trim().toLowerCase())) {
+        return l.replace(/[-*]\s+.*$/, `- N/A (Not Applicable yet)`);
+      }
+      // "**Key**:" with empty value
+      const km = l.match(/^(\*\*[^*]+\*\*:\s*)(.*)$/);
+      if (km && EMPTY.includes(km[2].trim().toLowerCase())) {
+        return l.replace(/:\s*.*$/, ': N/A (Not Applicable yet)');
+      }
+      return l;
+    });
+    data[key] = lines.join('\n');
+  }
+}
+
+// Orchestrator entry
+export function sanitize(data) {
+  const changes = [];
+  // Stage 1 — structural dedupe on every section
+  for (const key of ['stack', 'conventions', 'rules', 'workflow', 'docs']) {
+    data[key] = structuralPass(data[key]);
+  }
+  // Stage 2 — technical
+  const isPython = technicalPass(data, changes);
+  // Stage 3 — syntax guard
+  syntaxPass(data, changes);
+  return { data, changes, isPython };
+}
+
 // ── Render ──
+// Each data section carries its own "## Header" (from the questionnaire modules).
+// The template ALSO declares that header, so we strip the leading "## X" from each
+// section block to avoid duplicate headers in the final document (spec §3 stage 1).
+export function stripLeadingHeader(section) {
+  return section.replace(/^\s*##\s+.*\n/, '');
+}
+
 function renderConfig(tpl, data) {
   return tpl
     .replace(/\{project_name\}/g, data.projectName)
     .replace(/\{version\}/g, data.version)
     .replace(/\{created\}/g, data.created)
-    .replace(/\{stack\}/g, data.stack)
-    .replace(/\{conventions\}/g, data.conventions)
-    .replace(/\{rules\}/g, data.rules)
-    .replace(/\{workflow\}/g, data.workflow)
-    .replace(/\{docs\}/g, data.docs);
+    .replace(/\{stack\}/g, stripLeadingHeader(data.stack))
+    .replace(/\{conventions\}/g, stripLeadingHeader(data.conventions))
+    .replace(/\{rules\}/g, stripLeadingHeader(data.rules))
+    .replace(/\{workflow\}/g, stripLeadingHeader(data.workflow))
+    .replace(/\{docs\}/g, stripLeadingHeader(data.docs));
 }
 
 function renderAnex(tpl, data) {
@@ -403,15 +573,15 @@ function renderAnex(tpl, data) {
     .replace(/\{created\}/g, data.created)
     .replace(/\{base_version\}/g, data.baseVersion)
     .replace(/\{ext_scope\}/g, data.extScope)
-    .replace(/\{stack\}/g, data.stack)
-    .replace(/\{conventions\}/g, data.conventions)
-    .replace(/\{rules\}/g, data.rules)
-    .replace(/\{workflow\}/g, data.workflow)
-    .replace(/\{docs\}/g, data.docs);
+    .replace(/\{stack\}/g, stripLeadingHeader(data.stack))
+    .replace(/\{conventions\}/g, stripLeadingHeader(data.conventions))
+    .replace(/\{rules\}/g, stripLeadingHeader(data.rules))
+    .replace(/\{workflow\}/g, stripLeadingHeader(data.workflow))
+    .replace(/\{docs\}/g, stripLeadingHeader(data.docs));
 }
 
-// ── Validation (spec §6.2) ─
-function validateConfig(content, which) {
+// ── Validation (spec §6.2 + §5 checklist) ─
+function validateConfig(content, which, data = {}) {
   const errors = [];
   if (which === 'config') {
     const required = [
@@ -425,6 +595,32 @@ function validateConfig(content, which) {
     for (const r of required) if (!content.includes(r)) errors.push(`Missing section: ${r}`);
     if (!/Version\*\*:\s*v?\d+\.\d+/.test(content)) errors.push('Missing version information');
     if (!/Created\*\*:\s*\S+/.test(content)) errors.push('Missing creation timestamp');
+
+    // §5 Structural — no duplicate "## " headers (each must appear once)
+    const headers = (content.match(/^##\s+(.+)$/gm) || []).map((h) => h.toLowerCase().trim());
+    const uniqueHeaders = new Set(headers);
+    if (headers.length !== uniqueHeaders.size) {
+      errors.push(`Duplicate "## " headers detected (found ${headers.length}, unique ${uniqueHeaders.size})`);
+    }
+
+    // §5 Indent alignment — if Python, indentation must be 4 spaces
+    const langs = lowerList(data.stack || '');
+    const isPython = langs.some((l) => l.includes('python'));
+    if (isPython && !/Indentation\*\*:\s*4 spaces/.test(data.conventions || '')) {
+      errors.push('Python detected but indentation is not "4 spaces" (spec §2.1)');
+    }
+
+    // §5 Conflict resolution — no competing frameworks in same runtime
+    const fwText = ((data.stack || '') + ' ' + (data.conventions || '')).toLowerCase();
+    const pyHits = PY_FRAMEWORKS.filter((f) => fwText.includes(f));
+    const nodeHits = NODE_FRAMEWORKS.filter((f) => fwText.includes(f));
+    if (pyHits.length > 1) errors.push(`Competing Python frameworks unresolved: ${pyHits.join(', ')}`);
+    if (nodeHits.length > 1) errors.push(`Competing Node frameworks unresolved: ${nodeHits.join(', ')}`);
+
+    // §5 No placeholders — zero empty "- " or ":" lines
+    if (/^\s*[-*]\s*$/m.test(content) || /^\s*:\s*$/m.test(content)) {
+      errors.push('Empty bullet/colon placeholder found (spec §2.3)');
+    }
   } else {
     if (!/\*\*Extends\*\*:\s*AGENTS\.md \(v/.test(content)) errors.push('Missing reference to base AGENTS.md version');
     if (!/Load Order for Agents/.test(content)) errors.push('Missing load order instructions');
@@ -477,6 +673,13 @@ export async function generateAgentsConfig({ outDir = cwd(), yes = false, rl = n
   data.workflow = await moduleWorkflow(yes);
   data.docs = await moduleDocs(yes);
 
+  // ── Sanitization & Coherence Layer (spec §2, §3) ──
+  const { changes } = sanitize(data);
+  if (changes.length) {
+    console.log('\n→ Sanitization applied (coherence layer):');
+    for (const c of changes) console.log('  • ' + c);
+  }
+
   let content;
   let outFile;
   let which;
@@ -497,8 +700,8 @@ export async function generateAgentsConfig({ outDir = cwd(), yes = false, rl = n
     which = 'anex';
   }
 
-  // §6.2 validation
-  const errors = validateConfig(content, which);
+  // §6.2 validation + §5 checklist
+  const errors = validateConfig(content, which, data);
   if (errors.length) {
     console.error('\n✖ Validation failed:');
     for (const e of errors) console.error('  - ' + e);
