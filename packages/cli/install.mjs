@@ -615,6 +615,19 @@ async function main() {
   writeFileSync(VCS_CONFIG_FILE, JSON.stringify(vcsCfg, null, 2) + '\n');
   console.log(`  ✓ ${VCS_CONFIG_FILE} (${vcs} + ${workflow})`);
 
+  // ── AGENTS configuration generation (spec §2.1 / §6.1) ──
+  // Runs the interactive 5-module wizard and writes AGENTS.md (or AGENTS_ANEX.md
+  // if one already exists) into the project root before VCS init so it is
+  // included in the initial commit. --yes uses framework defaults.
+  try {
+    const { generateAgentsConfig } = await import(
+      join(resolve(CLI_DIR, '..', '..'), 'tools', 'init-agents-config.mjs')
+    );
+    await generateAgentsConfig({ outDir: CWD, yes: o.yes });
+  } catch (err) {
+    console.warn(`\n  ⚠ AGENTS config generation skipped: ${err.message}`);
+  }
+
   // ── VCS init ──
   initVcs(vcs, CWD);
 
@@ -622,6 +635,10 @@ async function main() {
   if (isAll) {
     console.log(`\nAll platforms at: ${outDir}`);
   }
+
+  // ── Notify agents of available configuration (spec §6.1 step 8) ──
+  console.log(`\n→ All agents are notified of available AGENTS configuration.`);
+  console.log(`  Agents must load AGENTS.md (+ AGENTS_ANEX.md if present) at startup.`);
 
   rl.close();
   console.log(`\n✓ Installation complete.\n`);

@@ -27,6 +27,8 @@ capabilities:
 ## Mission
 Define and maintain the project's rules, conventions, tech stack, workflow, and constraints. You generate a `PROJECT_RULES.md` file that serves as an addendum to `AGENTS.md` — always consulted by the orchestrator and all main agents.
 
+The canonical **AGENTS.md / AGENTS_ANEX.md** generation system lives in `tools/init-agents-config.mjs` (spec §2.1, §3, §4.1, §5.1). It runs automatically during `npm run setup` / `npx` install. Use it (or delegate to the orchestrator to run it) rather than hand-writing AGENTS.md.
+
 ## When to use
 - **Setup / first run**: When `PROJECT_RULES.md` does not exist in the project root.
 - **Reconfiguration**: When the user explicitly asks to redefine project rules (`@project-rules reconfigure`).
