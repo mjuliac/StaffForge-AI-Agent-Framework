@@ -29,7 +29,7 @@ import {
   statSync,
   copyFileSync,
 } from 'node:fs';
-import { join, dirname, resolve } from 'node:path';
+import { join, dirname, resolve, relative, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline';
 import { env, argv, exit, cwd, stdout } from 'node:process';
@@ -387,12 +387,12 @@ function initVcs(vcs, dir) {
     try {
       execSync('git commit -m "chore: initial commit"', { cwd: dir, stdio: 'pipe' });
     } catch {}
-    console.log(`  ✓ Git repo initialized at ${dir}`);
+    console.log(`  ✓ Git repo initialized at ${dir === CWD ? '.' : relative(CWD, dir) || dir}`);
   } else if (vcs === 'hg' && !existsSync(join(dir, '.hg'))) {
     console.log(`\n→ Initializing Mercurial repository...`);
     try {
       execSync('hg init', { cwd: dir, stdio: 'pipe' });
-      console.log(`  ✓ Hg repo initialized at ${dir}`);
+      console.log(`  ✓ Hg repo initialized at ${dir === CWD ? '.' : relative(CWD, dir) || dir}`);
     } catch {
       console.log(`  ⚠ hg not found. Initialize manually or install Mercurial.`);
     }
@@ -509,8 +509,11 @@ async function main() {
   const agentsDir = join(fw, 'agents');
   const agentCount = readdirSync(agentsDir).filter((f) => f.endsWith('.md')).length;
   console.log(`  Using local StaffForge`);
-  console.log(`  Framework: ${fw}`);
-  console.log(`  Agents:    ${agentCount} files in ${agentsDir}`);
+  // Print portable paths (relative to CWD) — never leak absolute host paths.
+  const fwRel = fw === CWD ? '.' : relative(CWD, fw) || basename(fw);
+  const agentsRel = relative(CWD, agentsDir) || agentsDir;
+  console.log(`  Framework: ${fwRel}`);
+  console.log(`  Agents:    ${agentCount} files in ${agentsRel}`);
 
   // Load agents
   const agents = loadAgents(agentsDir);
@@ -566,7 +569,8 @@ async function main() {
     console.log(`\n→ Exporting for ${pl}...`);
     const files = pl === 'opencode' ? gen(agents, agent) : gen(agents);
     const count = writeFiles(files, outDir);
-    console.log(`  ✓ ${count} file(s) → ${outDir}`);
+    const outRel = outDir === CWD ? '.' : relative(CWD, outDir) || outDir;
+    console.log(`  ✓ ${count} file(s) → ${outRel}`);
   }
 
   // ── Copy agents to CWD (always) ──
@@ -578,7 +582,7 @@ async function main() {
     copyAgents(agentsDir, outDir);
   }
   const agentFiles = readdirSync(join(CWD, 'agents')).filter((f) => f.endsWith('.md')).length;
-  console.log(`  ✓ agents/ → ${join(CWD, 'agents')} (${agentFiles} files)`);
+  console.log(`  ✓ agents/ → ./agents (${agentFiles} files)`);
 
   // ── For single platform: copy platform files to CWD ──
   // (so opencode.json, CLAUDE.md etc appear in the project root)
@@ -591,7 +595,7 @@ async function main() {
       if (existsSync(src)) {
         mkdirSync(dirname(dst), { recursive: true });
         copyFileSync(src, dst);
-        console.log(`  ✓ ${f.path} → ${CWD}`);
+        console.log(`  ✓ ${f.path} → .`);
       }
     }
   }
@@ -635,7 +639,8 @@ async function main() {
 
   // ── Summary ──
   if (isAll) {
-    console.log(`\nAll platforms at: ${outDir}`);
+    const outRel = outDir === CWD ? '.' : relative(CWD, outDir) || outDir;
+    console.log(`\nAll platforms at: ${outRel}`);
   }
 
   // ── Notify agents of available configuration (spec §6.1 step 8) ──

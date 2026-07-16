@@ -27,12 +27,13 @@ import {
   writeFileSync,
   mkdirSync,
 } from 'node:fs';
-import { join, dirname, resolve } from 'node:path';
+import { join, dirname, resolve, relative, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline';
 import { env, argv, exit, cwd } from 'node:process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const CWD = cwd();
 const ROOT = resolve(__dirname, '..');
 const TEMPLATE_CONFIG = join(ROOT, 'templates', 'agents-config.md');
 const TEMPLATE_ANEX = join(ROOT, 'templates', 'agents-anex.md');
@@ -709,7 +710,11 @@ export async function generateAgentsConfig({ outDir = cwd(), yes = false, rl = n
   }
 
   writeFileSync(outFile, content, 'utf-8');
-  console.log(`\n✓ ${which === 'config' ? 'AGENTS.md' : 'AGENTS_ANEX.md'} generated at ${outFile}`);
+  // Print a portable path — never leak absolute host paths.
+  // Prefer relative-to-CWD; if outside CWD, fall back to the file basename.
+  const rel = outFile === CWD ? '.' : relative(CWD, outFile);
+  const portable = rel && !rel.startsWith('..') ? rel.replace(/^\//, '') : basename(outFile);
+  console.log(`\n✓ ${which === 'config' ? 'AGENTS.md' : 'AGENTS_ANEX.md'} generated at ${portable}`);
   return outFile;
 }
 
