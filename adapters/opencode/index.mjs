@@ -5,8 +5,8 @@
 
 export default function opencodeAdapter(agents, skills = []) {
   const mapPermission = (tools) => ({
-    edit: tools.edit ? "allow" : "deny",
-    bash: tools.bash ? "allow" : "deny",
+    edit: tools.edit ? 'allow' : 'deny',
+    bash: tools.bash ? 'allow' : 'deny',
   });
 
   const agentEntries = {};
@@ -22,11 +22,15 @@ export default function opencodeAdapter(agents, skills = []) {
     };
   }
 
-  const orchestrator = agents.find(a => a.id === "orchestrator");
-  const defaultAgent = (orchestrator?.name || agents.find(a => a.frontmatter.mode === "primary")?.name || "build").toLowerCase();
+  const orchestrator = agents.find((a) => a.id === 'orchestrator');
+  const defaultAgent = (
+    orchestrator?.name ||
+    agents.find((a) => a.frontmatter.mode === 'primary')?.name ||
+    'build'
+  ).toLowerCase();
 
   const opencodeJson = {
-    $schema: "https://opencode.ai/config.json",
+    $schema: 'https://opencode.ai/config.json',
     default_agent: defaultAgent,
     agent: agentEntries,
   };
@@ -34,22 +38,20 @@ export default function opencodeAdapter(agents, skills = []) {
   // Add skills config if skills exist
   if (skills.length > 0) {
     opencodeJson.skills = {
-      paths: [".opencode/skills"],
+      paths: ['.opencode/skills'],
     };
   }
 
   const files = [
     {
-      path: "opencode.json",
-      content: JSON.stringify(opencodeJson, null, 2) + "\n",
+      path: 'opencode.json',
+      content: JSON.stringify(opencodeJson, null, 2) + '\n',
     },
   ];
 
   // Write individual skill files
   for (const skill of skills) {
-    const globsYaml = skill.frontmatter.globs?.length
-      ? `globs: ${JSON.stringify(skill.frontmatter.globs)}\n`
-      : "";
+    const globsYaml = skill.frontmatter.globs?.length ? `globs: ${JSON.stringify(skill.frontmatter.globs)}\n` : '';
     files.push({
       path: `.opencode/skills/${skill.name}.md`,
       content: `---

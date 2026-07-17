@@ -21,7 +21,11 @@ export default function opencodeAdapter(agents) {
   }
 
   const orchestrator = agents.find((a) => a.name === 'orchestrator');
-  const defaultAgent = (orchestrator?.name || agents.find((a) => a.frontmatter.mode === 'primary')?.name || 'build').toLowerCase();
+  const defaultAgent = (
+    orchestrator?.name ||
+    agents.find((a) => a.frontmatter.mode === 'primary')?.name ||
+    'build'
+  ).toLowerCase();
 
   const opencodeJson = {
     $schema: 'https://opencode.ai/config.json',
