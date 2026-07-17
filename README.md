@@ -1,15 +1,57 @@
 # StaffForge AI Agent Framework
 
-[![CI](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/mjuliac/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
+[![CI](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](#requirements)
+[![Agents](https://img.shields.io/badge/agents-149-orange)](agents/)
+[![Platforms](https://img.shields.io/badge/platforms-6-purple)](#installation-per-platform)
 
 Multi-provider agent framework. Write agents once, deploy anywhere.
+
+## Why StaffForge
+
+If your team uses more than one AI coding assistant — OpenCode, Claude Code, Cursor, GitHub Copilot, Aider, Gemini CLI — you've probably rewritten the same agent rules, prompts, and conventions for each one, and kept rewriting them every time a rule changes.
+
+StaffForge solves that by separating **what your agents know** from **where they run**:
+
+- Define an agent once in `agents/*.md` (Markdown + frontmatter).
+- Export it to any supported platform's native format with one command.
+- Update the rule in one place; re-export to every platform instead of hand-editing 6 config formats.
+
+StaffForge is **not** an agent-execution runtime like LangGraph or CrewAI — it doesn't call LLM APIs itself. It's a definition layer and orchestrator/router that sits on top of the AI coding tools you already use, plus a Model Selection Layer for choosing which model a task should use.
+
+## Table of contents
+
+- [Why StaffForge](#why-staffforge)
+- [Quick start](#quick-start)
+- [Installation per platform](#installation-per-platform)
+- [Interactive installer](#interactive-installer)
+- [Agent modes](#agent-modes)
+- [Architecture](#architecture)
+- [Routing](#routing)
+- [Prompt examples](#prompt-examples)
+- [Commands](#commands)
+- [Adapting to a new platform](#adapting-to-a-new-platform)
+- [Model Selection Layer](#model-selection-layer)
+- [Requirements](#requirements)
+- [Testing](#testing)
+- [Project layout](#project-layout)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Support](#support)
+
+## Project layout
 
 ```
 agents/           ← Canonical agent definitions (Markdown + frontmatter)
 adapters/         ← Platform-specific exporters (OpenCode, Claude Code, Cursor, etc.)
+packages/         ← Monorepo packages (core, sdk, plugin-sdk, cli, dashboard, enterprise)
 schemas/          ← JSON Schema for agent validation
 templates/        ← Scaffolding for new agents
+models/           ← Model definitions and task profiles (Model Selection Layer)
 tools/            ← CLI scripts (validate, export, init, install)
+tests/            ← Unit, integration, and e2e test suites
 examples/         ← Usage examples
 ```
 
@@ -18,38 +60,83 @@ examples/         ← Usage examples
 ### From any project — **one command, all OS**
 
 ```bash
-npx github:mjuliac/StaffForge-AI-Agent-Framework
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework
 ```
 
-Interactive prompts ask for platform, default agent, and location. Works on Linux, macOS, and Windows — Node.js is the only requirement.
+Works on Linux, macOS, and Windows — Node.js ≥ 18 is the only requirement.
+(If your npm version supports it, you may also use `npx github:StaffForge/...`.)
 
-Or non-interactive with flags:
+Interactive prompts ask for:
+- **Platform** — opencode, claude-code, cursor, copilot, aider, gemini-cli, or all
+- **Default agent** — orchestrator, build, or plan
+- **Location** — project directory or global (~/.config/staffforge/)
+- **VCS provider** — git, svn, hg, tfvc, perforce, or custom
+- **Workflow** — git-flow, github-flow, gitlab-flow, trunk-based, or custom
+
+After install, config files are placed in your project and a `.staffforge-install.json`
+is saved so re-running detects previous settings:
+
 ```bash
-npx github:mjuliac/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
-```
-
-The installer saves a `.staffforge-install.json` config, so re-running detects previous settings:
-
-```bash
-# Update to latest agents:
-npx github:mjuliac/StaffForge-AI-Agent-Framework
+# Update to latest agents (detects previous config):
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework
 # → Previous: opencode (agent: orchestrator)
 #   Reinstall? [Y/n]:  ← press Enter
 ```
 
-After install:
+> **⚠️ npm 9.x note:** If `npx github:user/repo` fails with `could not determine executable to run`,
+> use `npm exec --yes -- github:user/repo` instead. Both invoke the same underlying
+> engine; the `npm exec` form avoids a parsing issue in npm 9.2.0's npx.
+
+### Non-interactive with CLI flags
+
+All options can be passed as flags for automation:
+
 ```bash
-opencode
+# Minimal: OpenCode + orchestrator (defaults for the rest)
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework --platform opencode --agent orchestrator
+
+# Full config
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework \
+  --platform opencode \
+  --agent orchestrator \
+  --out ./myproject \
+  --vcs git \
+  --workflow git-flow \
+  -y
+
+# Specific platform + agent
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework --platform claude-code --agent build
+
+# All platforms at once
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework --platform all
+
+# All defaults (equivalent to interactive with all defaults)
+npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework -y
 ```
+
+#### CLI reference
+
+| Flag | Description | Values |
+|------|-------------|--------|
+| `--platform` | Target platform | `opencode`, `claude-code`, `cursor`, `copilot`, `aider`, `gemini-cli`, `all` |
+| `--agent` | Default agent mode | `orchestrator`, `build`, `plan` |
+| `--out` | Output directory | Any path (default: current directory) |
+| `--vcs` | Version control system | `git`, `svn`, `hg`, `tfvc`, `perforce`, `custom` |
+| `--workflow` | Workflow preset | `git-flow`, `github-flow`, `gitlab-flow`, `trunk-based`, `custom` |
+| `--yes`, `-y` | Skip prompts, use defaults | (flag) |
+| `--help`, `-h` | Show help | (flag) |
 
 ### Clone the repository (any OS)
 
 ```bash
-git clone --depth 1 https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
+git clone --depth 1 https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
-npm install
+npm install            # install dependencies — NOTE: no "run"
 npm run setup          # interactive installer
 ```
+
+> **⚠️ `npm install` vs `npm run install`**
+> Use `npm install` (without `run`) to install dependencies. `npm run install` is **not** a valid command in this project — it fails with `Missing script: "install"`. To run the framework's installer, use `npm run setup` (or `node install.mjs`).
 
 ### Export to other platforms (after cloning)
 
@@ -62,8 +149,6 @@ npm run export:gemini      # Gemini CLI
 ```
 
 ---
-
-
 
 ## Installation per platform
 
@@ -204,7 +289,22 @@ node install.mjs --platform opencode --agent orchestrator
 node install.mjs --platform claude-code --agent build
 node install.mjs --platform all
 node install.mjs -y                                 # defaults (opencode, orchestrator, project-local)
+node install.mjs --vcs svn --workflow trunk-based   # SVN with trunk-based workflow
 ```
+
+The installer asks five questions when run interactively:
+
+1. **Platform** — which AI coding assistant(s) to target
+2. **Default agent** — orchestrator (full control), build (fast edits), or plan (read-only)
+3. **Location** — project-local (`./staffforge/`) or global (`~/.config/staffforge/`)
+4. **VCS provider** — Git, SVN, Mercurial, TFVC, Perforce, or custom
+5. **Workflow** — Git Flow, GitHub Flow, GitLab Flow, Trunk Based, or custom
+
+After selection, the installer:
+- Generates platform config files (`opencode.json`, `CLAUDE.md`, `.cursor/rules/`, etc.)
+- Copies all 149+ agent definitions to `agents/`
+- Creates `.staffforge-vcs.json` with VCS configuration
+- Initializes a Git/Mercurial repository if needed
 
 ## Agent modes
 
@@ -213,16 +313,16 @@ node install.mjs -y                                 # defaults (opencode, orches
 | **orchestrator** | ✓ default | ✓ | Full tools |
 | **build** | ✓ | ✓ | Full tools |
 | **plan** | ✓ | ✓ | Read-only |
-| 134 subagents | — | ✓ | Varies |
+| 146 subagents | — | ✓ | Varies |
 
 - **Tab** — Cycle: orchestrator → build → plan
-- **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@docker`, `@flask`, `@react`, `@postgres`)
+- **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@ci`, `@docker`, `@flask`, `@react`, `@postgres`)
 - Orchestrator is the default agent. It detects task type AND technologies from your prompt, then routes to the right specialist agents.
 
 ## Architecture
 
 - **Orchestrator** (default agent) — receives all requests, detects task type and technologies, creates git flow branches, routes pipelines, communicates with the user
-- **Subagents** (134) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, etc.)
+- **Subagents** (146) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, CI/CD, etc.)
 - **Only the orchestrator** may talk to the user, write files, or manage git
 - Subagents run in **parallel** when they have no dependency on each other (DAG-based execution)
 
@@ -268,6 +368,14 @@ The orchestrator:
 
 ## Commands
 
+### One-line install (any project, no clone needed)
+
+```bash
+npx github:StaffForge/StaffForge-AI-Agent-Framework [options]
+```
+
+### After cloning the repo
+
 ```bash
 # Root-level (npm)
 npm install              # Install all dependencies (tools/ included)
@@ -282,7 +390,7 @@ npm run export:copilot   # Export to GitHub Copilot
 npm run export:aider     # Export to Aider
 npm run export:gemini    # Export to Gemini CLI
 npm run validate         # Validate all agents
-npm test                 # Run all 526 tests (21 suites)
+npm test                 # Run all 848+ tests (31 suites)
 
 # Low-level (node)
 node install.mjs                          # Interactive installer (any platform)
@@ -307,7 +415,7 @@ STAFFFORGE_LOG_LEVEL=error node tools/validate.mjs                    # Errors o
 
 ## opencode.json
 
-Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npx github:mjuliac/StaffForge-AI-Agent-Framework`.
+Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs --platform opencode`, or `npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework`.
 
 ## Model Selection Layer
 
@@ -323,3 +431,47 @@ The framework includes a Model Selection Layer for optimal model selection:
 > **Note:** This is a pure selection layer — it chooses the optimal model and returns it. It does not invoke LLM APIs directly. The `agentFn` parameter in FallbackEngine and ModelSelector is provided for callers to supply their own execution logic.
 
 See `ARCHITECTURE.md` §2 for full API reference.
+
+## Requirements
+
+- **Node.js ≥ 18** (Linux, macOS, or Windows)
+- No other runtime dependency — the installer (`npm exec --yes -- github:StaffForge/StaffForge-AI-Agent-Framework`) works standalone
+- A supported AI coding assistant already installed for whichever platform(s) you target (OpenCode, Claude Code, Cursor, GitHub Copilot, Aider, or Gemini CLI)
+
+## Testing
+
+```bash
+npm test                 # Run all suites (unit, integration, e2e)
+npm run validate         # Validate every agent definition against the JSON Schema
+npm run lint             # ESLint over tools/ and packages/
+npm run format           # Prettier check
+```
+
+The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS, telemetry), integration tests (export, install, pipelines, VCS git+svn), and end-to-end tests (full agent lifecycle). Run `npm test` locally before opening a PR — CI runs the same suite on Node 22/24.
+
+The **`@ci`** subagent enforces zero-tolerance for CI failures: invoked automatically before every merge, it inspects CI logs, fixes all failures (format, lint, test, validate, export, security), and iterates until every check passes. Invoke manually with `@ci` to debug a failing pipeline.
+
+## Documentation
+
+| Document | Contents |
+|---|---|
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Full internal architecture, core libraries, and API reference |
+| [`ORCHESTRATOR_MATRIX.md`](ORCHESTRATOR_MATRIX.md) | Task → pipeline mapping and parallel execution groups |
+| [`AGENTS.md`](AGENTS.md) | Conventions and structure for writing agent definitions |
+| [`CHANGELOG.md`](CHANGELOG.md) | Release history |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add agents, models, and adapters |
+
+## Contributing
+
+Contributions are welcome — especially new agent definitions, platform adapters, and model definitions. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full workflow (adding an agent, adding a model, adding a platform adapter, commit conventions, and PR process). Issues and feature requests use the templates in `.github/ISSUE_TEMPLATE/`.
+
+## License
+
+- `packages/core`, `packages/sdk`, `packages/plugin-sdk`, and everything under `agents/`, `adapters/`, `schemas/`, `templates/`, and `tools/` are licensed under **GPL-3.0-only** — see [`LICENSE`](LICENSE).
+- `packages/enterprise` (SQLite storage, analytics, policy engine, and the Enterprise dashboard) is distributed under a **separate commercial StaffForge license** and is not covered by the GPL-3.0 grant above.
+
+## Support
+
+- **Bugs / feature requests:** open an issue using the templates in `.github/ISSUE_TEMPLATE/`
+- **Questions about usage:** see the [Prompt examples](#prompt-examples) and [`ORCHESTRATOR_MATRIX.md`](ORCHESTRATOR_MATRIX.md) first
+- **Security issues:** please do not open a public issue — contact the maintainer directly

@@ -3,12 +3,20 @@
 ## Getting started
 
 ```bash
-git clone https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git
+git clone https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git
 cd StaffForge-AI-Agent-Framework
-npm install
+npm install              # install dependencies — NOTE: no "run" (npm run install is invalid)
 npm run validate
 npm test
 ```
+
+## Contributor License Agreement (CLA)
+
+Before your first pull request is merged, you must accept the [Contributor License Agreement](./CLA.md).
+
+This does **not** take away your rights over your own code — you keep authorship and copyright. It simply grants StaffForge the permissions needed to distribute the project under GPL-3.0 for the community **and**, separately, offer commercial products (like StaffForge Enterprise) without licensing conflicts between contributions.
+
+You'll be prompted to accept it automatically the first time you open a PR (via CLA Assistant). No action is needed until then.
 
 ## Adding an agent
 
@@ -50,6 +58,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ## PR process
 
+0. Accept the CLA if this is your first contribution (see above) — CLA Assistant will prompt you automatically
 1. Branch from `develop`: `feature/my-change`
 2. One commit per logical change
 3. All tests must pass

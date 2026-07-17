@@ -1,7 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { AgentRegistry } from '../../../tools/lib/agent-registry.mjs';
+import { AgentRegistry } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;
@@ -217,7 +217,7 @@ depends_on: [architect]
 
 // Test 15: singleton getAgentRegistry
 {
-  const { getAgentRegistry } = await import('../../../tools/lib/agent-registry.mjs');
+  const { getAgentRegistry } = await import('@staffforge/core');
   const reg1 = getAgentRegistry();
   const reg2 = getAgentRegistry();
   assert(reg1 === reg2, 'singleton same instance');

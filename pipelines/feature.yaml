@@ -29,4 +29,4 @@ levels:
     parallel: true
   - name: finalization
     agents:
-      - git
+      - vcs

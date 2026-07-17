@@ -55,8 +55,12 @@ for (const file of files) {
   } else {
     const short = path.relative(root, file);
     console.log(`  ❓ ${short} — no test summary`);
-    console.log(result.stdout);
+    console.log(result.stdout || result.stderr || '(no output)');
     if (result.status !== 0) exitCode = 1;
+  }
+
+  if (result.stderr) {
+    process.stderr.write(result.stderr);
   }
 }
 

@@ -1,9 +1,8 @@
 import { readdirSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolveRoot } from '../find-project-root.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '..', '..');
+const root = resolveRoot(import.meta.url);
 
 export class AdapterRegistry {
   constructor(adaptersDir = null) {

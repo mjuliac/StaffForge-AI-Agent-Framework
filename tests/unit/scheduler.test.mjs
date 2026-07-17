@@ -1,5 +1,4 @@
-import { getScheduler } from '../../tools/lib/scheduler.mjs';
-import { getRouter } from '../../tools/lib/router.mjs';
+import { getScheduler, getRouter } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

@@ -22,4 +22,4 @@ levels:
       - documentation
   - name: finalization
     agents:
-      - git
+      - vcs

@@ -59,12 +59,13 @@ function cleanup() {
   const { stdout, status } = run(['--yes', '--platform', 'claude-code', '--agent', 'build', '--out', out]);
   assert(status === 0, 'claude-code install exits 0');
   assert(stdout.includes('Exporting'), 'claude-code shows exporting');
-  // .claude/rules should exist in CWD (moved by copyResult)
-  const claudeRulesCWD = existsSync(join(root, '.claude', 'rules'));
-  if (claudeRulesCWD) artifacts.push(join(root, '.claude'));
+  // .claude/agents should exist in CWD (moved by copyResult) — Claude Code
+  // loads subagents from .claude/agents/, not .claude/rules/
+  const claudeAgentsCWD = existsSync(join(root, '.claude', 'agents'));
+  if (claudeAgentsCWD) artifacts.push(join(root, '.claude'));
   // Some files may remain in --out dir after move
-  const claudeRulesOut = existsSync(join(out, '.claude', 'rules'));
-  assert(claudeRulesCWD || claudeRulesOut, 'claude-code install produces .claude/rules');
+  const claudeAgentsOut = existsSync(join(out, '.claude', 'agents'));
+  assert(claudeAgentsCWD || claudeAgentsOut, 'claude-code install produces .claude/agents');
   rmSync(out, { recursive: true, force: true });
 }
 

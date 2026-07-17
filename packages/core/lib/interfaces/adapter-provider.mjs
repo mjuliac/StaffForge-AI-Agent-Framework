@@ -16,7 +16,7 @@ export class IAdapterProvider {
    * @param {object[]} agents - Array of agent objects
    * @returns {{ path: string, content: string }[]} Array of {path, content} pairs
    */
-  export(agents) {
+  export(_agents) {
     throw new Error('IAdapterProvider.export() must be implemented');
   }
 
@@ -25,7 +25,7 @@ export class IAdapterProvider {
    * @param {object[]} agents - Array of agent objects
    * @returns {{ valid: boolean, errors: string[] }} Validation result
    */
-  validate(agents) {
+  validate(_agents) {
     return { valid: true, errors: [] };
   }
 }

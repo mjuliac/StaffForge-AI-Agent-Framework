@@ -25,4 +25,4 @@ levels:
       - code-review
   - name: finalization
     agents:
-      - git
+      - vcs

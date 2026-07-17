@@ -12,11 +12,14 @@ export { IPipelineProvider } from './lib/interfaces/pipeline-provider.mjs';
 
 export { SelectionEngine, getSelectionEngine } from './lib/engines/selection-engine.mjs';
 export { CapabilityEngine, getCapabilityEngine } from './lib/engines/capability-engine.mjs';
-export { FallbackEngine, getFallbackEngine } from './lib/engines/fallback-engine.mjs';
+export { FallbackEngine, FallbackExhaustedError, getFallbackEngine } from './lib/engines/fallback-engine.mjs';
 export { LearningEngine, getLearningEngine } from './lib/engines/learning-engine.mjs';
 
 export { MemoryStorage } from './lib/storage/memory-storage.mjs';
 export { JsonStorage } from './lib/storage/json-storage.mjs';
+export { TelemetryCollector } from './lib/telemetry/collector.mjs';
+export { TelemetryStorage } from './lib/telemetry/storage.mjs';
+export { TelemetryReporter } from './lib/telemetry/reporter.mjs';
 export { ITelemetryStorage } from './lib/interfaces/telemetry-storage.mjs';
 
 export { YamlLoader } from './lib/loaders/yaml-loader.mjs';
@@ -28,12 +31,12 @@ export { Router, getRouter } from './lib/router.mjs';
 export { PipelineExecutor, getPipelineExecutor } from './lib/pipeline-executor.mjs';
 export { Scheduler, getScheduler } from './lib/scheduler.mjs';
 export { getLogger } from './lib/logger.mjs';
-export { getModelSelector } from './lib/model-selector.mjs';
+export { ModelSelector, getModelSelector } from './lib/model-selector.mjs';
 export { getTaskMapper } from './lib/task-mapper.mjs';
 
 export { DAG } from './lib/dag.mjs';
-export { ModelProfile } from './lib/model-profile.mjs';
-export { ModelDiscovery } from './lib/model-discovery.mjs';
+export { ModelProfile, getModelProfile } from './lib/model-profile.mjs';
+export { ModelDiscovery, getModelDiscovery } from './lib/model-discovery.mjs';
 
 export { PluginManager, getPluginManager } from './lib/plugin-manager.mjs';
 
@@ -41,3 +44,23 @@ export { RegistryServer, createRegistryServer } from './lib/registry-server.mjs'
 export { RegistryClient, createRegistryClient } from './lib/registry-client.mjs';
 
 export { IPlugin } from './lib/interfaces/plugin.mjs';
+
+export {
+  IVCSProvider,
+  IVCSWorkflow,
+  VCSConfig,
+  VCSRegistry,
+  getVCSRegistry,
+  VCSManager,
+  GitProvider,
+  SvnProvider,
+  HgProvider,
+  TfvcProvider,
+  PerforceProvider,
+  CustomProvider,
+  GitFlowWorkflow,
+  GitHubFlowWorkflow,
+  GitLabFlowWorkflow,
+  TrunkBasedWorkflow,
+  CustomWorkflow,
+} from './lib/vcs/index.mjs';

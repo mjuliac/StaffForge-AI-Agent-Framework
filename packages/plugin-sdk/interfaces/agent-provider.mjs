@@ -18,7 +18,7 @@ export class IAgentProvider {
    * @param {string} id - Agent identifier
    * @returns {object|null} Agent definition or null
    */
-  findById(id) {
+  findById(_id) {
     throw new Error('IAgentProvider.findById() must be implemented');
   }
 
@@ -27,7 +27,7 @@ export class IAgentProvider {
    * @param {string} query - Search query
    * @returns {object[]} Matching agents
    */
-  search(query) {
+  search(_query) {
     throw new Error('IAgentProvider.search() must be implemented');
   }
 }

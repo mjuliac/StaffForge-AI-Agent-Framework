@@ -1,5 +1,5 @@
-import { writeFileSync, mkdirSync, existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { getLogger } from './logger.mjs';
 
 export class RegistryClient {

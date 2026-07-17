@@ -1,4 +1,4 @@
-import { getPipelineExecutor } from './lib/pipeline-executor.mjs';
+import { getPipelineExecutor } from '@staffforge/core';
 
 const USAGE = `
 Usage: node tools/run-pipeline.mjs --task <type> --prompt <text> [options]

@@ -1,4 +1,4 @@
-import { FallbackEngine, FallbackExhaustedError, getFallbackEngine } from '../../../tools/lib/fallback-engine.mjs';
+import { FallbackEngine, FallbackExhaustedError, getFallbackEngine } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

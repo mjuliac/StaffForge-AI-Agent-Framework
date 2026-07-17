@@ -1,4 +1,4 @@
-import { writeFileSync, readFileSync, copyFileSync, mkdirSync, rmSync, existsSync, renameSync } from 'node:fs';
+import { writeFileSync, readFileSync, copyFileSync, cpSync, mkdirSync, rmSync, existsSync, renameSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdtempSync } from 'node:fs';
@@ -88,7 +88,16 @@ function copyResult(platform, src, dest) {
   const mv = (f, d) => {
     rmSync(d, { recursive: true, force: true });
     mkdirSync(dirname(d), { recursive: true });
-    renameSync(f, d);
+    try {
+      renameSync(f, d);
+    } catch (err) {
+      if (err.code === 'EXDEV') {
+        cpSync(f, d, { recursive: true });
+        rmSync(f, { recursive: true, force: true });
+      } else {
+        throw err;
+      }
+    }
   };
   switch (platform) {
     case 'opencode':
@@ -96,7 +105,7 @@ function copyResult(platform, src, dest) {
       break;
     case 'claude-code':
       if (existsSync(join(src, 'CLAUDE.md'))) cp(join(src, 'CLAUDE.md'), join(dest, 'CLAUDE.md'));
-      if (existsSync(join(src, '.claude/rules'))) mv(join(src, '.claude/rules'), join(dest, '.claude/rules'));
+      if (existsSync(join(src, '.claude/agents'))) mv(join(src, '.claude/agents'), join(dest, '.claude/agents'));
       break;
     case 'cursor':
       if (existsSync(join(src, '.cursor/rules'))) mv(join(src, '.cursor/rules'), join(dest, '.cursor/rules'));
@@ -125,8 +134,8 @@ function setupPlatformSrc(platform) {
       break;
     case 'claude-code':
       writeFileSync(join(src, 'CLAUDE.md'), '# Claude');
-      mkdirSync(join(src, '.claude', 'rules'), { recursive: true });
-      writeFileSync(join(src, '.claude', 'rules', 'core.md'), '# core');
+      mkdirSync(join(src, '.claude', 'agents'), { recursive: true });
+      writeFileSync(join(src, '.claude', 'agents', 'core.md'), '# core');
       break;
     case 'cursor':
       mkdirSync(join(src, '.cursor', 'rules'), { recursive: true });
@@ -162,13 +171,13 @@ function cleanupPlatform({ src, dest }) {
   cleanupPlatform({ src, dest });
 }
 
-// Test 7: copyResult claude-code copies CLAUDE.md and moves .claude/rules
+// Test 7: copyResult claude-code copies CLAUDE.md and moves .claude/agents
 {
   const { src, dest } = setupPlatformSrc('claude-code');
   copyResult('claude-code', src, dest);
   assert(existsSync(join(dest, 'CLAUDE.md')), 'claude-code: CLAUDE.md exists');
-  assert(existsSync(join(dest, '.claude', 'rules', 'core.md')), 'claude-code: rules exist');
-  assert(!existsSync(join(src, '.claude', 'rules')), 'claude-code: rules moved from src');
+  assert(existsSync(join(dest, '.claude', 'agents', 'core.md')), 'claude-code: agents exist');
+  assert(!existsSync(join(src, '.claude', 'agents')), 'claude-code: agents moved from src');
   cleanupPlatform({ src, dest });
 }
 

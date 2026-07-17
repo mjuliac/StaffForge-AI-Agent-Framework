@@ -1,20 +1,32 @@
 #!/usr/bin/env node
 
-// StaffForge universal installer — delegates to packages/cli/install.mjs
-// Dependencies (ajv, glob, js-yaml) are declared at root package.json so
-// `npm install` (run by npx) installs everything needed without workspace setup.
-import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+/**
+ * StaffForge AI Agent Framework — entry point
+ *
+ * Delegates to the self-contained CLI installer at packages/cli/install.mjs.
+ * No workspace resolution needed — works directly via npx github:...
+ *
+ * Usage:
+ *   node install.mjs [options]
+ *   npm run setup [options]
+ *   npx github:StaffForge/StaffForge-AI-Agent-Framework [options]
+ */
+
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const pkgDir = __dirname;
 
-// When installed via `npx github:...`, npm may not set up workspace symlinks
-// (@staffforge/core won't resolve). Run workspace install if missing.
-if (!existsSync(join(pkgDir, 'node_modules', '@staffforge', 'core'))) {
-  execSync('npm install --workspaces --silent --install-strategy=hoisted', { cwd: pkgDir, stdio: 'inherit' });
+const cliInstaller = join(__dirname, 'packages', 'cli', 'install.mjs');
+if (!existsSync(cliInstaller)) {
+  console.error('✖ CLI installer not found at', cliInstaller);
+  process.exit(1);
 }
 
-await import('./packages/cli/install.mjs');
+try {
+  await import(cliInstaller);
+} catch (err) {
+  console.error('\n✖ Installation failed:', err.message);
+  process.exit(1);
+}

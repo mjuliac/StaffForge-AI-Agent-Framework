@@ -9,7 +9,7 @@ export class ITelemetryStorage {
    * @param {object} runData - Execution data to persist
    * @returns {{ id: string, savedAt: string }} Saved entry metadata
    */
-  save(runData) {
+  save(_runData) {
     throw new Error('ITelemetryStorage.save() must be implemented');
   }
 
@@ -18,7 +18,7 @@ export class ITelemetryStorage {
    * @param {string} runId - Run identifier
    * @returns {object|null} Run data or null
    */
-  load(runId) {
+  load(_runId) {
     throw new Error('ITelemetryStorage.load() must be implemented');
   }
 
@@ -27,7 +27,7 @@ export class ITelemetryStorage {
    * @param {number} [limit] - Maximum number of entries
    * @returns {object[]} Array of run data
    */
-  list(limit) {
+  list(_limit) {
     throw new Error('ITelemetryStorage.list() must be implemented');
   }
 
@@ -52,7 +52,7 @@ export class ITelemetryStorage {
    * @param {object} filter - Filter criteria
    * @returns {object[]} Matching executions
    */
-  query(filter) {
+  query(_filter) {
     throw new Error('ITelemetryStorage.query() must be implemented');
   }
 }

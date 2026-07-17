@@ -1,10 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { ModelRegistry } from '../../../tools/lib/model-registry.mjs';
-import { ModelProfile } from '../../../tools/lib/model-profile.mjs';
-import { SelectionEngine } from '../../../tools/lib/selection-engine.mjs';
-import { ModelSelector } from '../../../tools/lib/model-selector.mjs';
+import { ModelRegistry, ModelProfile, SelectionEngine, ModelSelector } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;
@@ -218,7 +215,7 @@ weaknesses: [no-tools]
 
 // Test 14: singleton getModelSelector
 {
-  const { getModelSelector } = await import('../../../tools/lib/model-selector.mjs');
+  const { getModelSelector } = await import('@staffforge/core');
   const s1 = getModelSelector();
   const s2 = getModelSelector();
   assert(s1 === s2, 'singleton same instance');

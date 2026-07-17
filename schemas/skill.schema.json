@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://staffforge.dev/schemas/skill.schema.json",
+  "title": "StaffForge Skill",
+  "description": "Canonical skill definition for the StaffForge multi-provider AI agent framework",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique skill identifier (kebab-case, must match filename without extension)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-line summary of what this skill does and when to use it"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the skill definition"
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Keywords for task-matching — when a user prompt matches these, the skill is loaded"
+    },
+    "globs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "File glob patterns that trigger this skill (platform-specific)"
+    },
+    "compatible_platforms": {
+      "type": "array",
+      "items": {
+        "enum": ["opencode", "claude-code", "cursor", "copilot", "aider", "gemini-cli"]
+      },
+      "description": "Platforms this skill is compatible with (empty = all platforms)"
+    },
+    "author": {
+      "type": "string",
+      "description": "Creator or maintainer of this skill"
+    }
+  },
+  "required": ["name", "description"],
+  "additionalProperties": false
+}

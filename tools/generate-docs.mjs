@@ -1,6 +1,5 @@
 import fs from 'node:fs';
-import { getAgentRegistry } from './lib/agent-registry.mjs';
-import { getAdapterRegistry } from './lib/adapter-registry.mjs';
+import { getAgentRegistry, getAdapterRegistry } from '@staffforge/core';
 
 export class DocumentationGenerator {
   constructor(agentRegistry = null, adapterRegistry = null) {

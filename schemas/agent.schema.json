@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://staffforge.dev/schemas/agent.schema.json",
   "title": "StaffForge Agent",
-  "description": "Canonical agent definition for the StaffForge multi-provider AI agent framework",
+  "description": "Canonical agent definition for the StaffForge multi-provider AI agent framework — C.R.E.A.D.O. compliant",
   "type": "object",
   "properties": {
     "id": {
@@ -17,7 +17,7 @@
     "description": {
       "type": "string",
       "minLength": 1,
-      "description": "One-line summary of the agent's role"
+      "description": "One-line summary of the agent's role (C.R.E.A.D.O. Contexto)"
     },
     "version": {
       "type": "string",
@@ -31,7 +31,7 @@
     },
     "category": {
       "type": "string",
-      "enum": ["core", "technology", "domain", "platform", "utility"],
+      "enum": ["core", "technology", "domain", "platform", "utility", "vcs"],
       "description": "Agent taxonomy category"
     },
     "keywords": {
@@ -102,11 +102,58 @@
     },
     "input_schema": {
       "type": "object",
-      "description": "JSON Schema defining expected input structure"
+      "description": "JSON Schema defining expected input structure (C.R.E.A.D.O. Datos de entrada — validates incoming data from other agents or user)",
+      "properties": {
+        "type": { "type": "string", "enum": ["object"] },
+        "properties": { "type": "object" },
+        "required": { "type": "array", "items": { "type": "string" } }
+      }
     },
     "output_schema": {
       "type": "object",
-      "description": "JSON Schema defining expected output structure"
+      "description": "JSON Schema defining expected output structure (C.R.E.A.D.O. Output — validates agent response before passing downstream)",
+      "properties": {
+        "type": { "type": "string", "enum": ["object"] },
+        "properties": { "type": "object" },
+        "required": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "guardrails": {
+      "type": "object",
+      "description": "Guardrails configuration (Input/Runtime/Output protection layers)",
+      "properties": {
+        "max_iterations": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum consecutive interactions before abort (Runtime Guardrail)"
+        },
+        "token_budget": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum tokens per call (Runtime Guardrail)"
+        },
+        "session_token_budget": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum tokens per session (Runtime Guardrail)"
+        },
+        "input_sanitize": {
+          "type": "boolean",
+          "description": "Enable prompt injection sanitization on inputs (Input Guardrail)"
+        },
+        "output_validate": {
+          "type": "boolean",
+          "description": "Enable output schema validation (Output Guardrail)"
+        },
+        "output_dlp": {
+          "type": "boolean",
+          "description": "Enable secret/PII leak scanning on output (Output Guardrail)"
+        },
+        "hallucination_check": {
+          "type": "boolean",
+          "description": "Enable cross-reference fact-checking against source context (Output Guardrail)"
+        }
+      }
     },
     "examples": {
       "type": "array",

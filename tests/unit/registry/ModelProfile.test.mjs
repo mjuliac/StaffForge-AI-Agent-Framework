@@ -1,7 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
-import { ModelProfile } from '../../../tools/lib/model-profile.mjs';
+import { ModelProfile } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;
@@ -159,7 +159,7 @@ function tmpProfile(content) {
 
 // Test 13: singleton getModelProfile
 {
-  const { getModelProfile } = await import('../../../tools/lib/model-profile.mjs');
+  const { getModelProfile } = await import('@staffforge/core');
   const p1 = getModelProfile();
   const p2 = getModelProfile();
   assert(p1 === p2, 'singleton same instance');

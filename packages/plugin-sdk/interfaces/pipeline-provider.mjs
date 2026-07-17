@@ -11,7 +11,7 @@ export class IPipelineProvider {
    * @param {string} [prompt] - User prompt for additional context
    * @returns {object|null} Pipeline template or null if not resolvable
    */
-  resolveTask(taskType, prompt) {
+  resolveTask(_taskType, _prompt) {
     throw new Error('IPipelineProvider.resolveTask() must be implemented');
   }
 
@@ -28,7 +28,7 @@ export class IPipelineProvider {
    * @param {string} taskType - Task type name
    * @param {object} template - Pipeline template
    */
-  registerTaskType(taskType, template) {
+  registerTaskType(_taskType, _template) {
     throw new Error('IPipelineProvider.registerTaskType() must be implemented');
   }
 }

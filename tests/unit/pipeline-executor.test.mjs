@@ -1,7 +1,4 @@
-import { getPipelineExecutor } from '../../tools/lib/pipeline-executor.mjs';
-import { getRouter } from '../../tools/lib/router.mjs';
-import { getScheduler } from '../../tools/lib/scheduler.mjs';
-import { getTaskMapper } from '../../tools/lib/task-mapper.mjs';
+import { getPipelineExecutor, getRouter, getScheduler, getTaskMapper } from '@staffforge/core';
 
 let passed = 0;
 let failed = 0;

@@ -1,10 +1,9 @@
 import { readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import yaml from 'js-yaml';
+import { resolveRoot } from './find-project-root.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '..', '..');
+const root = resolveRoot(import.meta.url);
 
 export class ModelProfile {
   constructor(profilesPath = null) {

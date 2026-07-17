@@ -1,19 +1,16 @@
 {
   "name": "staffforge-ai-agent-framework",
-  "version": "2.5.0",
-  "private": true,
+  "version": "2.6.0",
   "license": "GPL-3.0-only",
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
+    "postinstall": "node scripts/dev-link.mjs",
     "setup": "node install.mjs",
     "setup:opencode": "node install.mjs --platform opencode --agent orchestrator -y",
     "setup:build": "node install.mjs --platform opencode --agent build -y",
     "setup:plan": "node install.mjs --platform opencode --agent plan -y",
-    "export": "node tools/export.mjs",
+    "export": "node tools/export.mjs --all",
     "export:opencode": "node tools/export.mjs --platform opencode",
     "export:claude": "node tools/export.mjs --platform claude-code",
     "export:cursor": "node tools/export.mjs --platform cursor",
@@ -26,37 +23,44 @@
     "format": "prettier --check 'tools/**/*.mjs' 'packages/**/*.mjs'",
     "format:fix": "prettier --write 'tools/**/*.mjs' 'packages/**/*.mjs'",
     "init-agent": "node tools/init-agent.mjs",
+    "init-skill": "node tools/init-skill.mjs",
     "docs": "node tools/generate-docs.mjs",
     "publish:cli": "cd packages/cli && npm publish",
     "publish:core": "cd packages/core && npm publish",
     "publish:sdk": "cd packages/sdk && npm publish",
     "publish:plugin-sdk": "cd packages/plugin-sdk && npm publish"
   },
-  "bin": "./install.mjs",
+  "bin": {
+    "staffforge": "./packages/cli/install.mjs"
+  },
   "files": [
     "install.mjs",
     "packages/",
     "agents/",
+    "skills/",
     "schemas/",
     "templates/",
     "adapters/",
     "tools/",
+    "scripts/",
     "README.md",
     "AGENTS.md",
     "ORCHESTRATOR_MATRIX.md"
   ],
+  "exports": {
+    "./skill-loader": "./tools/skill-loader.mjs"
+  },
   "devDependencies": {
     "eslint": "^8.57.0",
     "prettier": "^3.2.0"
   },
   "dependencies": {
-    "ajv": "~8.17.1",
-    "glob": "~11.0.0",
-    "js-yaml": "~4.1.0"
+    "ajv": "^8.20.0",
+    "js-yaml": "^4.3.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mjuliac/StaffForge-AI-Agent-Framework.git"
+    "url": "git+https://github.com/StaffForge/StaffForge-AI-Agent-Framework.git"
   },
-  "homepage": "https://github.com/mjuliac/StaffForge-AI-Agent-Framework#readme"
+  "homepage": "https://github.com/StaffForge/StaffForge-AI-Agent-Framework#readme"
 }
