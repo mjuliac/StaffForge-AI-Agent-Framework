@@ -485,7 +485,7 @@ async function main() {
     return;
   }
 
-  console.log(`\nStaffForge AI Agent Framework — Installer v2.5.0\n`);
+  console.log(`\nStaffForge AI Agent Framework — Installer v2.6.0\n`);
 
   // Find framework directory
   let fw = findFwDir();

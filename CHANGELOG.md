@@ -1,34 +1,28 @@
 # Changelog
 
-## [v2.6.0] — 2026-07-10
+## [v2.6.0] — 2026-07-17
 
 ### Added
-- Governance and legal documents: CLA.md, PRIVACY.md, SECURITY.md
-- Contributor License Agreement (English)
-- CI watchdog agent (`@ci`) with zero-tolerance protocol
-- Networking agent
-- Multi VCS Support: VCAL, providers (git/svn), workflows, installer
-- 95 install system tests (args, fs operations, CLI integration)
+- C.R.E.A.D.O. methodology compliance: all 6 components (Contexto, Restricciones, Especificación, Audiencia, Datos de entrada, Output) in agent definitions
+- Three-layer Guardrails system: Input (sanitization, schema validation), Runtime (recursion limits, token budgets), Output (format validation, DLP, hallucination filter)
+- `input_schema` and `output_schema` fields in agent frontmatter (JSON Schema validation)
+- Guardrails enforcement in orchestrator: max_iterations, token budgets, pre-flight input validation, post-flight output scanning
+- Compressed Context Block with GUARDRAILS section for audit trail
 
 ### Changed
-- Updated CONTRIBUTING.md with governance references
-- Updated LICENSE with commercial exception for enterprise
-- Updated packages/enterprise/LICENSE
-- Agent count: 134→145 subagents, 147→148 total
-- Test count: 526→848 across 31 suites
+- Agent template (`templates/agent.md`) redesigned with full C.R.E.A.D.O. structure
+- `technology-agent.md` base template updated with C.R.E.A.D.O. + Guardrails defaults
+- All 4 domain base templates (backend, frontend, database, devops) updated for C.R.E.A.D.O.
+- 10 critical pipeline agents rewritten (orchestrator, prompt-base, requirements, architect, knowledge, impact-analysis, code-review, documentation, debugging, testing)
+- Agent schema (`schemas/agent.schema.json`) updated with reinforced `input_schema` and `output_schema`
+- Version bumped from 2.5.0 → 2.6.0 across all files
 
 ### Fixed
-- Install: ensure every agent's rules are installed per platform
-- Deps: remove dead glob dep, unify ajv/js-yaml versions
-- CI: update checkout@v6, setup-node@v6, drop Node 18/20 from matrix
-- Security: bump ajv 8.20.0, glob 11.1.0, js-yaml 4.3.0 to patch advisories
-
-### Refactored
-- Eliminate tools/lib/ duplication, use @staffforge/core
-
-### Removed
-- Spanish CLA duplicate (CLA_ES.md)
-- V2_ROADMAP.md
+- Missing Audiencia (audience) specification in all agents
+- Missing Datos de entrada (input data format) in all agents
+- Missing Output format structure in ~140 agents
+- Missing Guardrails at all 3 layers (input, runtime, output)
+- Missing anti-hallucination cross-validation between pipeline agents
 
 ## [v2.5.0] — 2026-07-09
 
