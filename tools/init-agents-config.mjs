@@ -21,12 +21,7 @@
  *   --help, -h    Show help
  */
 
-import {
-  existsSync,
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-} from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname, resolve, relative, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline';
@@ -225,10 +220,7 @@ const DEFAULTS = {
 async function moduleStack(yes) {
   if (yes) return DEFAULTS.stack;
   console.log('\n=== Module 1: Technology Stack ===');
-  const languages = await askLines(
-    'Primary language(s)? e.g. Python, TypeScript, Go',
-    'JavaScript (Node.js)',
-  );
+  const languages = await askLines('Primary language(s)? e.g. Python, TypeScript, Go', 'JavaScript (Node.js)');
   const framework = await askLines('Web/app framework? e.g. FastAPI, React, None', 'None (CLI/tooling)');
   const db = await askLines('Database(s)/data stores? e.g. PostgreSQL, Redis, None', 'None (file-based)');
   const arch = await askLines('Architecture pattern? e.g. Microservices, Monolith', 'Modular monorepo');
@@ -270,10 +262,7 @@ async function moduleRules(yes) {
     'Forbidden operations (NEVER do X)? Separate with " | ". Give 1-3.',
     'Never run VCS outside orchestrator | Never commit secrets',
   );
-  const approvals = await askLines(
-    'Required approvals? e.g. PR review, security review',
-    'PR review by maintainer',
-  );
+  const approvals = await askLines('Required approvals? e.g. PR review, security review', 'PR review by maintainer');
   const perf = await askLines('Performance requirements? e.g. response SLA', 'None specified');
   const sec = await askLines('Security constraints? e.g. never log secrets', 'Never log secrets/tokens');
   const data = await askLines('Data handling rules? e.g. retention, privacy', 'No PII in repo');
