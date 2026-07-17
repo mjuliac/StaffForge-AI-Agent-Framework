@@ -8,6 +8,9 @@
 - `input_schema` and `output_schema` fields in agent frontmatter (JSON Schema validation)
 - Guardrails enforcement in orchestrator: max_iterations, token budgets, pre-flight input validation, post-flight output scanning
 - Compressed Context Block with GUARDRAILS section for audit trail
+- `OPENCODE_BUILTINS` filter in 3 adapter generators (adapters/opencode, packages/core/adapters/opencode, packages/cli/install.mjs) to prevent OpenCode built-in agent overrides (fixes /build, /plan, /compact commands)
+- `@ci` CI/CD watchdog agent with zero-tolerance protocol for pipeline failures
+- AGENTS_ANEX.md v2.0: full professionalization with StaffForge-specific technology stack, Guardrails integration, package architecture, real tooling configs, extended forbidden operations, performance thresholds, documentation matrix
 
 ### Changed
 - Agent template (`templates/agent.md`) redesigned with full C.R.E.A.D.O. structure
@@ -16,6 +19,8 @@
 - 10 critical pipeline agents rewritten (orchestrator, prompt-base, requirements, architect, knowledge, impact-analysis, code-review, documentation, debugging, testing)
 - Agent schema (`schemas/agent.schema.json`) updated with reinforced `input_schema` and `output_schema`
 - Version bumped from 2.5.0 → 2.6.0 across all files
+- ARCHITECTURE.md: agent counts 137→150, models 22→23, agent categories updated, Guardrails documentation added, Limitations section modernized, frontmatter schema updated with input_schema/output_schema/guardrails
+- Agent definitions: 137→150 agents (150 standard)
 
 ### Fixed
 - Missing Audiencia (audience) specification in all agents
@@ -23,6 +28,12 @@
 - Missing Output format structure in ~140 agents
 - Missing Guardrails at all 3 layers (input, runtime, output)
 - Missing anti-hallucination cross-validation between pipeline agents
+- `/compact`, `/build`, `/plan` commands broken in OpenCode due to agent name collisions (TitleCase vs lowercase)
+- CI pipeline: `npm run format` (Prettier) failures on 7 files fixed; test assertions updated in `npx-install.test.mjs`
+- Prettier config `printWidth: 120` applied to `packages/cli/install.mjs` and `packages/core/adapters/opencode/index.mjs`
+
+### Removed
+- Stale branch `feature/agents-config-generator` (superseded — all functionality exists in develop)
 
 ## [v2.5.0] — 2026-07-09
 

@@ -1,5 +1,12 @@
 # StaffForge-AI: Detailed Implementation Guide
 
+> **⚠️ PLANNED IMPROVEMENTS — NOT YET IMPLEMENTED**
+>
+> This guide describes 6 planned enhancements for future releases. The files,
+> line numbers, and code snippets are draft proposals — none have been implemented.
+> Current Guardrails (Input/Runtime/Output) are in `packages/core/lib/guardrails/`.
+> See `CHANGELOG.md` and `ARCHITECTURE.md` §2 for currently shipped features.
+
 ## 📋 Overview
 Esta es una guía paso a paso para implementar las 6 mejoras críticas en el proyecto StaffForge-AI.
 

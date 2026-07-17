@@ -1,5 +1,13 @@
 # StaffForge-AI Improvements: Visual Roadmap
 
+> **⚠️ PLANNED IMPROVEMENTS — NOT YET IMPLEMENTED**
+>
+> This roadmap describes 6 planned enhancements for future releases.
+> None of the referenced files (error-handler.mjs, agent-validator.mjs, token-tracker.mjs,
+> vcs-transaction.mjs, prompt-optimizer.mjs, execution-config.mjs) exist in the codebase yet.
+> Current Guardrails (Input/Runtime/Output layers) are shipped in `packages/core/lib/guardrails/`.
+> See `CHANGELOG.md` for shipped features.
+
 ## 📌 Executive Summary
 
 **6 mejoras críticas → 2 fases → 4 semanas → ~30 horas de desarrollo**

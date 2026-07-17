@@ -3,7 +3,7 @@
 [![CI](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/StaffForge/StaffForge-AI-Agent-Framework/actions/workflows/ci.yml)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](#requirements)
-[![Agents](https://img.shields.io/badge/agents-149-orange)](agents/)
+[![Agents](https://img.shields.io/badge/agents-150-orange)](agents/)
 [![Platforms](https://img.shields.io/badge/platforms-6-purple)](#installation-per-platform)
 
 Multi-provider agent framework. Write agents once, deploy anywhere.
@@ -226,7 +226,7 @@ node tools/export.mjs --platform copilot
 |--------|---------|
 | `.github/copilot-instructions.md` | All agents concatenated as instructions |
 
-Copilot reads `.github/copilot-instructions.md` automatically when it exists in the project. All 136 agents are included in a single file with `---` separators.
+Copilot reads `.github/copilot-instructions.md` automatically when it exists in the project. All 150 agents are included in a single file with `---` separators.
 
 Copy the output to your project root:
 
@@ -302,7 +302,7 @@ The installer asks five questions when run interactively:
 
 After selection, the installer:
 - Generates platform config files (`opencode.json`, `CLAUDE.md`, `.cursor/rules/`, etc.)
-- Copies all 149+ agent definitions to `agents/`
+- Copies all 150 agent definitions to `agents/`
 - Creates `.staffforge-vcs.json` with VCS configuration
 - Initializes a Git/Mercurial repository if needed
 
@@ -313,7 +313,7 @@ After selection, the installer:
 | **orchestrator** | ✓ default | ✓ | Full tools |
 | **build** | ✓ | ✓ | Full tools |
 | **plan** | ✓ | ✓ | Read-only |
-| 146 subagents | — | ✓ | Varies |
+| 147 subagents | — | ✓ | Varies |
 
 - **Tab** — Cycle: orchestrator → build → plan
 - **@name** — Invoke any subagent (e.g., `@security`, `@testing`, `@ci`, `@docker`, `@flask`, `@react`, `@postgres`)
@@ -322,7 +322,7 @@ After selection, the installer:
 ## Architecture
 
 - **Orchestrator** (default agent) — receives all requests, detects task type and technologies, creates git flow branches, routes pipelines, communicates with the user
-- **Subagents** (146) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, CI/CD, etc.)
+- **Subagents** (147) — specialized roles (language experts, frameworks, databases, infrastructure, testing, security, CI/CD, etc.)
 - **Only the orchestrator** may talk to the user, write files, or manage git
 - Subagents run in **parallel** when they have no dependency on each other (DAG-based execution)
 
@@ -421,7 +421,7 @@ Not committed to repo. Generate with `node install.mjs`, `node tools/export.mjs 
 
 The framework includes a Model Selection Layer for optimal model selection:
 
-- **22 model definitions** across 7 providers (OpenAI, Anthropic, Google, OpenRouter, Ollama, OpenCode)
+- **23 model definitions** across 7 providers (OpenAI, Anthropic, Google, OpenRouter, Ollama, OpenCode)
 - **8 task profiles** in `models/profiles.yaml` mapping task types to preferred model families
 - **Selection Engine**: weighted scoring (profile fit, capabilities, priority, cost, reasoning)
 - **Fallback Engine**: 4-level chain (primary → same-provider → other-provider → free)
@@ -447,17 +447,19 @@ npm run lint             # ESLint over tools/ and packages/
 npm run format           # Prettier check
 ```
 
-The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS, telemetry), integration tests (export, install, pipelines, VCS git+svn), and end-to-end tests (full agent lifecycle). Run `npm test` locally before opening a PR — CI runs the same suite on Node 22/24.
+The suite currently covers unit tests (registries, engines, DAG, scheduler, VCS, telemetry, guardrails), integration tests (export, install, pipelines, VCS git+svn), and end-to-end tests (full agent lifecycle). Run `npm test` locally before opening a PR — CI runs the same suite on Node 22/24.
 
 The **`@ci`** subagent enforces zero-tolerance for CI failures: invoked automatically before every merge, it inspects CI logs, fixes all failures (format, lint, test, validate, export, security), and iterates until every check passes. Invoke manually with `@ci` to debug a failing pipeline.
 
 ## Documentation
 
 | Document | Contents |
-|---|---|
-| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Full internal architecture, core libraries, and API reference |
+|---|---|---|
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Full internal architecture, core libraries, Guardrails, and API reference |
 | [`ORCHESTRATOR_MATRIX.md`](ORCHESTRATOR_MATRIX.md) | Task → pipeline mapping and parallel execution groups |
 | [`AGENTS.md`](AGENTS.md) | Conventions and structure for writing agent definitions |
+| [`AGENTS_ANEX.md`](AGENTS_ANEX.md) | Configuration annex — project-specific overrides and extensions |
+| [`SECURITY.md`](SECURITY.md) | Vulnerability reporting and security policy |
 | [`CHANGELOG.md`](CHANGELOG.md) | Release history |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to add agents, models, and adapters |
 

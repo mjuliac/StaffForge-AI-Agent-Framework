@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework — Architecture
 
-> Current state: RFC-002 (Model Selection Layer) + Phase 1 improvements.  
+> Current state: v2.6.0 — C.R.E.A.D.O. methodology + three-layer Guardrails + CapabilityEngine routing.  
 > Active branch: `develop`
 
 ---
@@ -10,7 +10,7 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    agents/*.md                           │
-│  137 agent definitions (YAML frontmatter + Markdown body)│
+│  150 agent definitions (YAML frontmatter + Markdown body)│
 └──────────────────────┬──────────────────────────────────┘
                        │
                        ▼
@@ -211,23 +211,49 @@ Shared programmatic APIs consumed by CLI tools and external consumers.
 
 ### 2.1 Agent Definitions (`agents/`)
 
-137 Markdown files, each with YAML frontmatter and a body.
+150 Markdown files, each with YAML frontmatter and a body.
 
 **Frontmatter schema** (`schemas/agent.schema.json`):
 
 ```json
 {
+  "id": "unique-kebab-id",
+  "name": "Title Case",
   "mode": "primary | subagent | all",
+  "category": "core | vcs | technology | domain | utility",
   "description": "One-line role summary",
   "tools": {
     "write": false,
     "bash": false,
     "edit": false
+  },
+  "input_schema": {
+    "type": "object",
+    "properties": { "task": { "type": "string" } },
+    "required": ["task"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "findings": { "type": "array", "items": { "type": "string" } },
+      "risks": { "type": "array", "items": { "type": "string" } },
+      "recommendations": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "guardrails": {
+    "max_iterations": 5,
+    "token_budget": 8000,
+    "input_sanitize": true,
+    "output_validate": true,
+    "output_dlp": false,
+    "hallucination_check": false
   }
 }
 ```
 
 **Body**: Free-form Markdown with `## Mission`, `## Mandatory Rules`, `## Deliverables`.
+
+**C.R.E.A.D.O. methodology**: All agents follow Contexto, Restricciones, Especificación, Audiencia, Datos de entrada, Output — ensuring consistent quality and Guardrails enforcement at every step.
 
 ### 2.2 Schema Validation (`schemas/agent.schema.json` + `tools/validate.mjs`)
 
@@ -250,16 +276,16 @@ Each exports a default function: `(agents[]) → [{path, content}]`
 | Platform | Output | Format |
 |---|---|---|
 | opencode | 1 file | `opencode.json` |
-| claude-code | 137 files | `CLAUDE.md` + `.claude/rules/*.md` |
-| cursor | 137 files | `.cursor/rules/*.mdc` |
+| claude-code | 150 files | `CLAUDE.md` + `.claude/rules/*.md` |
+| cursor | 150 files | `.cursor/rules/*.mdc` |
 | copilot | 1 file | `.github/copilot-instructions.md` |
 | aider | 1 file | `.aider.rules.md` |
-| gemini-cli | 137 files | `.gemini/*.md` |
+| gemini-cli | 150 files | `.gemini/*.md` |
 
 ### 2.5 Exporter (`tools/export.mjs`)
 
 - CLI: `node tools/export.mjs --platform <name> [--out <dir>]`
-- Loads all 137 agents
+- Loads all 150 agents
 - Dynamic imports adapter
 - Calls adapter.default(agents)
 - Writes output files
@@ -274,9 +300,11 @@ Each exports a default function: `(agents[]) → [{path, content}]`
 ### 2.7 Orchestrator (`agents/orchestrator.md`)
 
 - Default agent (Tab key in OpenCode)
-- Routes tasks to subagents based on task type
-- Contains hardcoded technology→agent mapping table
+- Routes tasks to subagents using `CapabilityEngine` intent analysis + `TaskMapper` pipeline resolution
+- Delegates all VCS operations to `@vcs` (never runs git directly)
+- Launches pipeline agents in DAG-based parallel levels
 - References `ORCHESTRATOR_MATRIX.md` for pipeline definitions
+- Enforces three-layer Guardrails at every delegation
 
 ### 2.8 Pipeline Matrix (`ORCHESTRATOR_MATRIX.md`)
 
@@ -297,7 +325,7 @@ Defines 6 task types with DAG pipelines:
 
 ```
 /
-├── agents/                 # 137 agent *.md files
+├── agents/                 # 150 agent *.md files
 ├── adapters/               # 6 platform adapters
 │   ├── opencode/index.mjs
 │   ├── claude-code/index.mjs
@@ -305,16 +333,24 @@ Defines 6 task types with DAG pipelines:
 │   ├── copilot/index.mjs
 │   ├── aider/index.mjs
 │   └── gemini-cli/index.mjs
-├── models/                  # Model definitions (22 YAML)
+├── models/                  # Model definitions (23 YAML)
 │   ├── profiles.yaml        # 8 task profiles
 │   ├── openai-gpt-4o.yaml   # Model example
 │   └── ...
+├── skills/                   # 4 skill definitions with YAML frontmatter
 ├── schemas/
 │   ├── agent.schema.json    # Current active schema
 │   ├── agent.schema.v0.json # Frozen pre-RFC schema
 │   └── model.schema.json    # Model manifest schema
 ├── templates/
 │   └── agent.md
+├── packages/                  # Monorepo packages
+│   ├── cli/                   # @staffforge/cli — universal installer
+│   ├── core/                  # @staffforge/core — Router, Guardrails, Pipeline
+│   ├── sdk/                   # @staffforge/sdk — public SDK
+│   ├── plugin-sdk/            # @staffforge/plugin-sdk — plugin API
+│   ├── dashboard/             # Community dashboard
+│   └── enterprise/            # Enterprise features (commercial)
 ├── tests/
 │   ├── unit/
 │   │   ├── dag.test.mjs           # DAG unit tests
@@ -358,9 +394,11 @@ Defines 6 task types with DAG pipelines:
 │   ├── init-agent.mjs       # Scaffolding tool
 │   ├── generate-docs.mjs    # Documentation generator
 │   └── install.mjs          # Platform installer
-├── install.mjs              # Root installer (alias to tools/install.mjs)
+├── install.mjs              # Root installer (alias to packages/cli/install.mjs)
 ├── ORCHESTRATOR_MATRIX.md   # Pipeline routing definitions
 ├── AGENTS.md                # Framework overview
+├── AGENTS_ANEX.md           # Configuration annex (project-specific overrides)
+├── PROJECT_RULES.md         # Dynamically generated project rules (by @project-rules)
 ├── README.md                # User documentation
 ```
 
@@ -374,30 +412,47 @@ User prompt
     ▼
 Orchestrator (agents/orchestrator.md)
     │
-    ├─ 1. Detect task type (feature/bugfix/refactor/security/deployment/hotfix)
-    ├─ 2. Detect technologies from prompt (python → @python, docker → @docker)
-    ├─ 3. Consult ORCHESTRATOR_MATRIX.md for pipeline
-    ├─ 4. Delegate to @git for branch creation
+    ├─ 0. Input Guardrails: sanitizeInput() — 18 injection patterns
+    ├─ 1. Detect task type via TaskMapper (feature/bugfix/refactor/security/deployment/hotfix)
+    ├─ 2. Detect technologies via CapabilityEngine (python → @python, docker → @docker)
+    ├─ 3. Resolve pipeline via Router from ORCHESTRATOR_MATRIX.md
+    ├─ 4. Delegate to @vcs for branch creation
     ├─ 5. Select optimal model via ModelSelector (MIL)
-    ├─ 6. Execute pipeline levels (parallel where possible, with fallback)
+    ├─ 6. Execute pipeline levels (parallel where possible, DAG-based)
+    │   ├─ Runtime Guardrails: max_iterations (10), token_budget (32K/session 128K)
+    │   ├─ Output Guardrails: schema validation, DLP secret scanning, hallucination check
+    │   └─ Levels: Requirements+Architect → Knowledge → Impact → Language+Sec+Test → Review+Doc
     ├─ 7. Record execution in LearningEngine + Telemetry
-    └─ 8. Delegate final merge/tag to @git
+    ├─ 8. CI gate (@ci watchdog — zero tolerance)
+    └─ 9. Delegate final merge/tag to @vcs
 ```
 
 ---
 
-## 5. Current Limitations (Pre-RFC-001)
+## 5. Current Limitations
 
-- **Flat agent model**: No categories, keywords, capabilities, versioning, or dependencies
-- **Hardcoded routing**: Orchestrator contains manual technology→agent mapping
-- **No canonical representation**: Adapters receive raw frontmatter, transform inline
-- **No discovery**: Adding an agent doesn't auto-register it anywhere
-- **No dependency engine**: Pipeline order is hardcoded in matrix, not machine-readable
-- **No scheduler**: Parallel execution is a documented strategy, not executable code
-- ~~**No tests**: Zero test infrastructure~~ ✅ 848 tests across 31 suites
-- ~~**No telemetry**: No metrics, no pipeline reports~~ ✅ TelemetryCollector + Storage + Reporter
-- ~~**No auto-documentation**: Catalogs, DAGs, and compatibility matrices are manual~~ ✅ DocumentationGenerator
-- **Single version**: Framework, agents, and adapters share one version
+- **Single version**: Framework, agents, adapters, and packages share one version — no independent versioning
+- **No live model API integration**: ModelSelector selects models but doesn't call LLM APIs — callers must supply their own execution logic
+- **No agent hot-reload**: Agent definitions are loaded at startup — adding a new agent requires re-export
+- **No plugin marketplace**: Plugin SDK exists but no discovery or distribution infrastructure beyond the registry
+- **No multi-tenancy**: Framework assumes a single project/team context
+
+### Resolved (v2.x evolution)
+
+| Limitation | Resolved In | Status |
+|------------|-------------|--------|
+| Flat agent model (no categories) | v1.1.0 | ✅ 5 categories (core/vcs/technology/domain/utility) |
+| Hardcoded routing | v2.0.0 | ✅ CapabilityEngine intent analysis + scoring |
+| No canonical agent representation | v1.0.0 | ✅ YAML frontmatter + structured Markdown body |
+| No agent discovery | v1.1.0 | ✅ AgentRegistry search/load/query |
+| No dependency engine | v1.3.0 | ✅ DAG with topological sort + cycle detection |
+| No pipeline scheduler | v1.3.0 | ✅ Scheduler with execution plans |
+| No test infrastructure | v1.1.0→v2.6.0 | ✅ 848 tests across 31 suites (unit/integration/e2e) |
+| No telemetry/metrics | v1.3.0 | ✅ TelemetryCollector + Storage + Reporter |
+| No auto-documentation | v1.1.0 | ✅ DocumentationGenerator (catalog, DAG, matrix) |
+| No security/guardrails | v2.6.0 | ✅ Three-layer Guardrails (Input/Runtime/Output) |
+| No VCS abstraction | v2.5.0 | ✅ 5 VCS providers via @vcs agent |
+| Agent template lacks schemas | v2.6.0 | ✅ input_schema + output_schema + guardrails in frontmatter |
 
 ---
 
@@ -408,14 +463,14 @@ Orchestrator (agents/orchestrator.md)
 
 | Check | Status |
 |---|---|
-| `node tools/validate.mjs` | ✅ 148/148 agents valid |
+| `node tools/validate.mjs` | ✅ 150/150 agents valid |
 | `node tools/export.mjs --all` | ✅ 6 platforms, all pass |
-| `node tools/export.mjs --platform opencode` | ✅ 1 file |
-| `node tools/export.mjs --platform claude-code` | ✅ 137 files |
-| `node tools/export.mjs --platform cursor` | ✅ 137 files |
+| `node tools/export.mjs --platform opencode` | ✅ 1 file (with OPENCODE_BUILTINS filter) |
+| `node tools/export.mjs --platform claude-code` | ✅ 150 files |
+| `node tools/export.mjs --platform cursor` | ✅ 150 files |
 | `node tools/export.mjs --platform copilot` | ✅ 1 file |
 | `node tools/export.mjs --platform aider` | ✅ 1 file |
-| `node tools/export.mjs --platform gemini-cli` | ✅ 137 files |
+| `node tools/export.mjs --platform gemini-cli` | ✅ 150 files |
 | `tools/lib/agent-registry.mjs` | ✅ AgentRegistry API (load, query, search, resolveDependencies) |
 | `tools/lib/adapter-registry.mjs` | ✅ AdapterRegistry API (lazy-load, export, exportToAll) |
 | `tools/lib/capability-engine.mjs` | ✅ CapabilityEngine (analyzeIntent, scoreAgent, findBestMatch) |
@@ -434,7 +489,7 @@ Orchestrator (agents/orchestrator.md)
 | `tests/unit/router/Router.test.mjs` | ✅ 16/16 passed |
 | `tests/integration/pipeline.test.mjs` | ✅ 22/22 passed |
 | `tests/integration/export.test.mjs` | ✅ 13/13 passed |
-| `tests/run-all.mjs` | ✅ 201/201 passed (9 suites) |
+| `tests/run-all.mjs` | ✅ 848/848 passed (31 suites) |
 | `tools/generate-docs.mjs` | ✅ DocumentationGenerator (catalog, capabilities, DAG, matrix, architecture) |
 | Tools/lib/logger.mjs | ✅ Logger (debug/info/warn/error, env config) |
 | `tools/lib/pipeline-executor.mjs` | ✅ PipelineExecutor (Router→Scheduler wiring) |
@@ -457,11 +512,14 @@ Orchestrator (agents/orchestrator.md)
 | `tests/integration/mil-pipeline.test.mjs` | ✅ 13/13 passed |
 | `tests/e2e/mil-lifecycle.test.mjs` | ✅ 35/35 passed |
 | `tests/run-all.mjs` | ✅ 848/848 passed (31 suites) |
-| Agent categories | ✅ core=8, technology=94, domain=23, utility=11 |
-| Models | ✅ 22 YAML files, 7 providers |
+| `packages/core/lib/guardrails/` — 3-layer system | ✅ Input (input-sanitizer), Runtime (guardrail-manager), Output (output-dlp, hallucination-check, schema-validator) |
+| Agent categories | ✅ core=9, technology=99, domain=23, utility=14, vcs=5 |
+| Models | ✅ 23 YAML files, 7 providers |
+| VCS abstraction | ✅ 5 provider agents: vcs-git, vcs-svn, vcs-hg, vcs-tfvc, vcs-perforce |
 | Git working tree | ✅ On `develop` |
+| Skills | ✅ 4 skill definitions in `skills/*.md` |
 
 ---
 
-*Generated at RFC-002 implementation (Model Selection Layer) + Phase 1 improvements.*
-*Last updated: 2026-07-08 (Phase 1: pipeline-executor, task-mapper, logger, 7 new models)*
+*Generated at v2.6.0 — C.R.E.A.D.O. methodology + three-layer Guardrails + CapabilityEngine routing.*
+*Last updated: 2026-07-17 (v2.6.0: Guardrails, OPENCODE_BUILTINS filter, AGENTS_ANEX.md v2.0)*

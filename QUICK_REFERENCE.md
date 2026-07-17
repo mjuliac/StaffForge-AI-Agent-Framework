@@ -1,5 +1,13 @@
 # StaffForge-AI: Quick Reference Checklist
 
+> **⚠️ PLANNED IMPROVEMENTS — NOT YET IMPLEMENTED**
+>
+> This document describes 6 planned enhancements for future releases.
+> The files referenced (error-handler.mjs, agent-validator.mjs, token-tracker.mjs,
+> vcs-transaction.mjs, prompt-optimizer.mjs, execution-config.mjs) **do not exist yet**
+> in the codebase. Current Guardrails implementation is in `packages/core/lib/guardrails/`.
+> See `CHANGELOG.md` for what's actually shipped.
+
 ## 🎯 At a Glance
 
 | Mejora | Archivos | Líneas | Tipo | Prioridad |
