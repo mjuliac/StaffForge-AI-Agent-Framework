@@ -232,6 +232,8 @@ function loadAgents(dir) {
 
 // ── Platform output generators ──
 
+const OPENCODE_BUILTINS = new Set(['build', 'plan', 'general', 'explore', 'title', 'summary', 'compaction']);
+
 function generateOpencode(agents, defaultAgent) {
   const mapPermission = (tools) => ({
     edit: tools?.edit ? 'allow' : 'deny',
@@ -239,9 +241,9 @@ function generateOpencode(agents, defaultAgent) {
   });
   const agentEntries = {};
   for (const a of agents) {
-    // Use lowercase keys to prevent overriding OpenCode built-in agents
-    // (build, plan, general, explore, compaction, summary, title)
     const key = a.name.toLowerCase();
+    // MUST skip OpenCode built-in agents to avoid breaking /build, /plan, /compact, etc.
+    if (OPENCODE_BUILTINS.has(key)) continue;
     agentEntries[key] = {
       description: a.frontmatter.description || '',
       mode: a.frontmatter.mode || 'subagent',
