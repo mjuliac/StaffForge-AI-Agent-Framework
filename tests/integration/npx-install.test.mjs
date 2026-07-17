@@ -133,9 +133,9 @@ function runInstall(repoDir, projectDir, args = []) {
   if (opencode && opencode.agent) {
     const agentNames = Object.keys(opencode.agent);
     assert(agentNames.length >= 148, `opencode.json has ${agentNames.length} agents`);
-    assert(opencode.agent.Orchestrator, 'opencode.json has Orchestrator agent');
-    assert(opencode.agent.Build, 'opencode.json has Build agent');
-    assert(opencode.agent['Plan'], 'opencode.json has Plan agent');
+    assert(opencode.agent.orchestrator, 'opencode.json has orchestrator agent');
+    assert(opencode.agent.build, 'opencode.json has build agent');
+    assert(opencode.agent.plan, 'opencode.json has plan agent');
   }
 
   // Verify agents/ folder content
