@@ -427,7 +427,6 @@ function structuralPass(section) {
 function technicalPass(data, changes) {
   const langs = lowerList(data.stack);
   const isPython = langs.some((l) => l.includes('python'));
-  const isNode = langs.some((l) => l.includes('node') || l.includes('javascript') || l.includes('typescript'));
 
   // §2.1 Python indentation override
   if (isPython) {
@@ -505,7 +504,6 @@ function syntaxPass(data, changes) {
     }
     // Empty sub-bullets / placeholder values
     const lines = txt.split('\n').map((l) => {
-      const t = l.trim();
       // bullet with empty/placeholder content
       const bm = l.match(/^(\s*[-*]\s+)(.*)$/);
       if (bm && EMPTY.includes(bm[2].trim().toLowerCase())) {
