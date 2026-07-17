@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework
 
-OpenCode multi-provider agent framework. Canonical agents in `agents/*.md`, skills in `skills/*.md`.
+Multi-provider agent framework. Canonical agents in `agents/*.md`, skills in `skills/*.md`.
 
 ## Structure
 
