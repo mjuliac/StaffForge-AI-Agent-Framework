@@ -239,7 +239,10 @@ function generateOpencode(agents, defaultAgent) {
   });
   const agentEntries = {};
   for (const a of agents) {
-    agentEntries[a.name] = {
+    // Use lowercase keys to prevent overriding OpenCode built-in agents
+    // (build, plan, general, explore, compaction, summary, title)
+    const key = a.name.toLowerCase();
+    agentEntries[key] = {
       description: a.frontmatter.description || '',
       mode: a.frontmatter.mode || 'subagent',
       permission: mapPermission(a.frontmatter.tools),

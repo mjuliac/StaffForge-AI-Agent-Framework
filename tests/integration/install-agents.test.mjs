@@ -41,13 +41,13 @@ function runInstallInProject(platform) {
   const json = JSON.parse(readFileSync(join(project, 'opencode.json'), 'utf-8'));
   assert(json.agent && typeof json.agent === 'object', 'opencode.json has agent map');
 
-  const a11y = json.agent.A11y;
-  assert(a11y && a11y.prompt, 'opencode A11y agent has prompt field');
-  assert(a11y.prompt.includes('# Accessibility'), 'opencode A11y prompt contains agent body (Mission)');
-  assert(a11y.prompt.includes('## Mandatory Rules'), 'opencode A11y prompt contains rules');
+  const a11y = json.agent.a11y;
+  assert(a11y && a11y.prompt, 'opencode a11y agent has prompt field');
+  assert(a11y.prompt.includes('# Accessibility'), 'opencode a11y prompt contains agent body (Mission)');
+  assert(a11y.prompt.includes('## Mandatory Rules'), 'opencode a11y prompt contains rules');
 
-  const orchestrator = json.agent.Orchestrator;
-  assert(orchestrator && orchestrator.prompt, 'opencode Orchestrator has prompt');
+  const orchestrator = json.agent.orchestrator;
+  assert(orchestrator && orchestrator.prompt, 'opencode orchestrator has prompt');
   assert(orchestrator.prompt.length > 100, 'opencode Orchestrator prompt is non-trivial');
 
   // No broken instructions reference to a missing AGENTS.md

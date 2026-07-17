@@ -1,7 +1,7 @@
 # 1 - AGENTS Configuration Annex
 **Version**: v1.0  
-**Created**: 2026-07-17 07:39:46 UTC  
-**Last Modified**: 2026-07-17 07:39:46 UTC  
+**Created**: 2026-07-17 10:23:56 UTC  
+**Last Modified**: 2026-07-17 10:23:56 UTC  
 **Extends**: AGENTS.md (v1.0)  
 **Status**: Active
 
@@ -43,24 +43,24 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 ## Enhanced Technology Stack
 
-- **Languages**: 1
-- **Web Framework**: 1
-- **Database(s)**: 1
-- **Architecture Pattern**: 1
-- **Testing Framework**: 1
-- **DevOps & Deployment**: 1
+- **Languages**: Node.js (JavaScript/TypeScript)
+- **Web Framework**: Express.js
+- **Database(s)**: Prisma
+- **Architecture Pattern**: Monolith
+- **Testing Framework**: Jest
+- **DevOps & Deployment**: GitHub Actions
 
 ---
 
 ## Additional Code Conventions
 
-- **Variable Naming**: 1 - project convention
-- **Class/Type Naming**: 1 - project convention
-- **File Naming**: 1 - consistent file naming
-- **Indentation**: 1 - consistent across all files
-- **Max Line Length**: 1 characters - enforced by linter
-- **Code Formatter**: 1
-- **Documentation Format**: 1 with mandatory coverage for public APIs
+- **Variable Naming**: camelCase - project convention
+- **Class/Type Naming**: PascalCase - project convention
+- **File Naming**: kebab-case - consistent file naming
+- **Indentation**: 2 spaces - consistent across all files
+- **Max Line Length**: 80 characters - enforced by formatter
+- **Code Formatter**: Prettier + ESLint
+- **Documentation Format**: JSDoc (JavaScript/TypeScript) with mandatory coverage for public APIs
 
 ---
 
@@ -68,22 +68,23 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 
 ### Forbidden Operations (NEVER)
-- 1: documented project constraint
+- Never run VCS outside orchestrator: documented project constraint
+- Never commit secrets: documented project constraint
 
 ### Required Approvals
-- 1: as defined by project process
+- PR review by maintainer: as defined by project process
 
 ### Performance Requirements
-- 1
+- None specified
 
 ### Security Constraints
-- 1
+- Never log secrets/tokens
 
 ### Data Handling Rules
-- 1
+- No PII in repo
 
 ### Deployment Rules
-- 1
+- Tagged releases only
 
 ---
 
@@ -91,9 +92,9 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 
 ### Version Control Strategy
-- **Branching Model**: 1 - project branching strategy
-- **Commit Message Format**: 1 - standardized format
-- **Versioning Scheme**: 1
+- **Branching Model**: Git Flow - project branching strategy
+- **Commit Message Format**: Conventional Commits - standardized format
+- **Versioning Scheme**: Semantic Versioning (SemVer)
 
 ### Code Review Process
 - **Minimum Reviewers**: 1
@@ -102,20 +103,20 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 - **Automated Checks**: CI validation + tests required
 
 ### Issue & Task Management
-- **Tool**: 1
+- **Tool**: GitHub Issues
 - **Issue Labeling**: feature / bug / refactor / security / docs
 - **Task Assignment**: Assignee on issue
 
 ### Release & Deployment Workflow
 - **Deployment Frequency**: Per release schedule
-- **Release Process**: 1
+- **Release Process**: Hybrid (CI build + manual tag)
 - **Rollback Procedure**: Manual revert of tagged commit
 - **Canary/Staged Deployment**: Per project decision
 
 ### Decision Making & Communication
-- **Decision Documentation**: ADRs / 1
+- **Decision Documentation**: ADRs / GitHub Discussions
 - **Architecture Review**: Required for contract changes
-- **Communication Channels**: 1
+- **Communication Channels**: GitHub Discussions
 
 ### Team Synchronization
 - **Standup Cadence**: Per team
@@ -127,17 +128,17 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 
 ### Documentation Scope & Coverage
-- **Architecture**: Required - 1
-- **API Specifications**: Required - 1
+- **Architecture**: Required - Architecture + API
+- **API Specifications**: Required - JSDoc / TypeScript (TSDoc)
 - **Deployment Guides**: Required - README + per-platform docs
 - **Operational Runbooks**: Optional
 - **Module READMEs**: Required sections
 
 ### Documentation Tools & Format
-- **Primary Format**: 1
+- **Primary Format**: Markdown in repo
 - **Location**: Repository
 - **Version Control**: In-repo
-- **Tool Stack**: Markdown + 1
+- **Tool Stack**: Markdown + JSDoc / TypeScript (TSDoc)
 
 ### Documentation Standards
 - **Code Comments**: Mandatory for public APIs
@@ -181,7 +182,7 @@ If AGENTS.md and AGENTS_ANEX.md specify conflicting rules:
 
 | Version | Date | Changes | Extends |
 |---------|------|---------|---------|
-| v1.0 | 2026-07-17 07:39:46 UTC | Initial annex creation | AGENTS.md v1.0 |
+| v1.0 | 2026-07-17 10:23:56 UTC | Initial annex creation | AGENTS.md v1.0 |
 
 ---
 

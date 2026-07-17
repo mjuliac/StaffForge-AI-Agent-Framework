@@ -151,7 +151,7 @@ async function main() {
     const opencode = JSON.parse(readFileSync(join(project, 'opencode.json'), 'utf-8'));
     const names = Object.keys(opencode.agent || {});
     assert(names.length >= MIN_AGENTS, `flags: opencode.json has ${names.length} agents`);
-    assert(opencode.agent.Orchestrator, 'flags: opencode.json has Orchestrator');
+    assert(opencode.agent.orchestrator, 'flags: opencode.json has Orchestrator');
   }
 
   // ── Type 3: npx re-run / "update to latest" — detects previous config ──
