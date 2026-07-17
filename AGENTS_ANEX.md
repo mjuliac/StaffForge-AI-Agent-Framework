@@ -1,7 +1,7 @@
 # 1 - AGENTS Configuration Annex
 **Version**: v1.0  
-**Created**: 2026-07-17 10:51:07 UTC  
-**Last Modified**: 2026-07-17 10:51:07 UTC  
+**Created**: 2026-07-17 11:00:46 UTC  
+**Last Modified**: 2026-07-17 11:00:46 UTC  
 **Extends**: AGENTS.md (v1.0)  
 **Status**: Active
 
@@ -182,7 +182,7 @@ If AGENTS.md and AGENTS_ANEX.md specify conflicting rules:
 
 | Version | Date | Changes | Extends |
 |---------|------|---------|---------|
-| v1.0 | 2026-07-17 10:51:07 UTC | Initial annex creation | AGENTS.md v1.0 |
+| v1.0 | 2026-07-17 11:00:46 UTC | Initial annex creation | AGENTS.md v1.0 |
 
 ---
 

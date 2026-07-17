@@ -1,7 +1,16 @@
 /**
  * OpenCode adapter — generates opencode.json + .opencode/skills/<name>.md.
  * Accepts skills as second parameter.
+ *
+ * CRITICAL: Must NOT override OpenCode built-in agents. Agents whose
+ * lowercased name matches an OpenCode built-in are excluded from the
+ * agent entries (they still exist for other platforms).
  */
+
+const OPENCODE_BUILTINS = new Set([
+  'build', 'plan', 'general', 'explore',
+  'title', 'summary', 'compaction',
+]);
 
 export default function opencodeAdapter(agents, skills = []) {
   const mapPermission = (tools) => ({
@@ -11,9 +20,9 @@ export default function opencodeAdapter(agents, skills = []) {
 
   const agentEntries = {};
   for (const a of agents) {
-    // Use lowercase keys to avoid duplicates with OpenCode built-in agents
-    // (build, plan, general, explore, title, summary, compaction)
     const key = a.name.toLowerCase();
+    // MUST skip OpenCode built-in agents to avoid breaking /build, /plan, /compact, etc.
+    if (OPENCODE_BUILTINS.has(key)) continue;
     agentEntries[key] = {
       description: a.frontmatter.description,
       mode: a.frontmatter.mode,
