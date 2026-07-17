@@ -4,3 +4,4 @@ opencode.json
 skills-lock.json
 adapters/*/output/
 .staffforge-*.json
+node_modules/
