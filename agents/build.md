@@ -1,7 +1,7 @@
 ---
 id: build
 name: Build
-mode: primary
+mode: subagent
 category: domain
 description: Build systems expert. Bash for compile/package only; no file write/edit or git. Token-optimized per @prompt-base standards.
 tools:

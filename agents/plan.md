@@ -1,7 +1,7 @@
 ---
 id: plan
 name: Plan
-mode: primary
+mode: subagent
 category: domain
 description: Creates execution plans and task breakdowns. Read-only mode. Token-optimized per @prompt-base standards.
 tools:

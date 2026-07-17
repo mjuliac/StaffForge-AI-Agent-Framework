@@ -24,7 +24,7 @@ Usage: node tools/install.mjs [options]
 
 Options:
   --help, -h             Show this help message
-  --agent <name>         Set default agent (orchestrator, build, or plan)
+  --agent <name>         Set default agent (orchestrator only; build/plan are @subagents)
   --platform <name>      Target platform (opencode, claude-code, cursor, copilot, aider, gemini-cli)
   --out <dir>            Output directory (default: project root)
 
@@ -33,7 +33,6 @@ Interactive mode:
 
 Non-interactive mode:
   node tools/install.mjs --agent orchestrator
-  node tools/install.mjs --agent build
   node tools/install.mjs --platform claude-code
   node tools/install.mjs --agent orchestrator --platform cursor
 `);
@@ -76,10 +75,9 @@ async function promptDefaultAgent() {
   console.log('\nStaffForge AI Agent Framework - Installer\n');
   console.log('Select the default agent mode:\n');
   console.log('  orchestrator  - Default agent. Coordinates work, manages Git Flow, routes tasks (recommended)');
-  console.log('  build         - Full tool access (edit, bash, write)');
-  console.log('  plan          - Read-only mode (analysis and planning)\n');
+  console.log('  (build and plan are now @subagents — accessible via @build/@plan)\n');
 
-  const answer = await question('? Default agent (orchestrator/build/plan) [orchestrator]: ');
+  const answer = await question('? Default agent [orchestrator]: ');
   return (answer || 'orchestrator').trim().toLowerCase();
 }
 

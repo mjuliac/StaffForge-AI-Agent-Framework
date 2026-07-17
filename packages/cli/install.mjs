@@ -42,7 +42,6 @@ const CWD = cwd();
 const CONFIG_FILE = join(CWD, '.staffforge-install.json');
 const VCS_CONFIG_FILE = join(CWD, '.staffforge-vcs.json');
 const VALID_PLATFORMS = ['opencode', 'claude-code', 'cursor', 'copilot', 'aider', 'gemini-cli'];
-const VALID_AGENTS = ['orchestrator', 'build', 'plan'];
 const VALID_VCS = ['git', 'svn', 'hg', 'tfvc', 'perforce', 'custom'];
 const VALID_WORKFLOWS = ['git-flow', 'github-flow', 'gitlab-flow', 'trunk-based', 'custom'];
 
@@ -58,7 +57,7 @@ USAGE
 OPTIONS
   --platform <name>   Target platform
                       (opencode, claude-code, cursor, copilot, aider, gemini-cli, all)
-  --agent <name>      Default agent (orchestrator, build, plan)
+  --agent <name>      Default agent (orchestrator only; build/plan are @subagents)
   --out <dir>         Output directory (default: current directory)
   --vcs <name>        VCS provider (git, svn, hg, tfvc, perforce, custom)
   --workflow <name>   Workflow preset (git-flow, github-flow, gitlab-flow, trunk-based, custom)
@@ -420,12 +419,10 @@ async function askPlatform() {
 }
 
 async function askAgent() {
-  console.log('\nDefault agent:');
-  console.log('  1) orchestrator  2) build  3) plan');
-  const c = (await ask('\n? [1]: ')).trim();
-  const m = { 2: 'build', 3: 'plan' };
-  const a = m[c] || c || 'orchestrator';
-  return VALID_AGENTS.includes(a) ? a : 'orchestrator';
+  console.log('\nDefault agent (primary — appears in Tab bar):');
+  console.log('  1) orchestrator (recommended — all agents available via @-mention)');
+  await ask('\n? [1]: ');
+  return 'orchestrator';
 }
 
 async function askLocation() {
