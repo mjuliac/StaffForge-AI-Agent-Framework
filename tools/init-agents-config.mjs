@@ -644,11 +644,20 @@ export async function generateAgentsConfig({ outDir = cwd(), yes = false, rl = n
   // Gather project name once
   if (!yes) {
     console.log('\n=== AGENTS Configuration Framework ===');
+    const scenarioLabel = exists ? 'AGENTS_ANEX.md' : 'AGENTS.md';
     console.log(
       exists
         ? 'AGENTS.md found → will generate AGENTS_ANEX.md (Scenario B, spec §2.1).'
         : 'No AGENTS.md → will generate AGENTS.md (Scenario A, spec §2.1).',
     );
+
+    // Allow skipping the entire wizard
+    const createAnswer = await ask(`Create ${scenarioLabel}?`, 'Y');
+    if (createAnswer.toLowerCase() === 'n' || createAnswer.toLowerCase() === 'no') {
+      console.log(`Skipped. You can generate it later via \`node tools/init-agents-config.mjs\`.\n`);
+      return null;
+    }
+
     data.projectName = await ask('Project name?', 'Project');
   } else {
     data.projectName = DEFAULTS.projectName;
@@ -686,6 +695,23 @@ export async function generateAgentsConfig({ outDir = cwd(), yes = false, rl = n
     content = renderAnex(tpl, data);
     outFile = join(target, 'AGENTS_ANEX.md');
     which = 'anex';
+
+    // Ensure AGENTS.md references AGENTS_ANEX.md (append if missing)
+    if (!base.includes('AGENTS_ANEX.md')) {
+      const ref = [
+        '',
+        '---',
+        '',
+        '## Annex Reference',
+        '',
+        'This project has an **AGENTS_ANEX.md** annex that extends or overrides parts of this configuration.',
+        'Agents **must** load `AGENTS_ANEX.md` after this file and apply its modifications.',
+        '',
+        '---',
+      ].join('\n');
+      writeFileSync(agentsMd, base.trimEnd() + ref + '\n', 'utf-8');
+      console.log('\n→ Annex reference appended to AGENTS.md');
+    }
   }
 
   // §6.2 validation + §5 checklist

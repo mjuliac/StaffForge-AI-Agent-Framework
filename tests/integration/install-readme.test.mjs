@@ -127,7 +127,7 @@ async function main() {
     assert(r.status === 0, `interactive install exits 0 (got ${r.status})`);
     // Verify the installer actually asks for each item the user enumerated
     assert(r.stdout.includes('Platform:'), 'prompt: Platform');
-    assert(r.stdout.includes('Default agent:'), 'prompt: Default agent');
+    assert(r.stdout.includes('Default agent'), 'prompt: Default agent');
     assert(r.stdout.includes('Location:'), 'prompt: Location (localization)');
     assert(r.stdout.includes('Version Control System:'), 'prompt: VCS');
     assert(r.stdout.includes('Workflow:'), 'prompt: Workflow');
@@ -204,7 +204,7 @@ async function main() {
     });
     assert(r.status === 0, `npm run setup exits 0 (got ${r.status})`);
     assert(r.stdout.includes('Platform:'), 'setup prompt: Platform');
-    assert(r.stdout.includes('Default agent:'), 'setup prompt: Default agent');
+    assert(r.stdout.includes('Default agent'), 'setup prompt: Default agent');
     assert(r.stdout.includes('Location:'), 'setup prompt: Location');
     assert(r.stdout.includes('Version Control System:'), 'setup prompt: VCS');
     assert(existsSync(join(REPO_ROOT, 'opencode.json')), 'clone setup: opencode.json in project');

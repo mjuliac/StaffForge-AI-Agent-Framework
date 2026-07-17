@@ -150,3 +150,11 @@ node install.mjs --platform <name>        # Install for a platform
 Not committed to repo. Generate with `npm run export:opencode` or `node tools/export.mjs --platform opencode`.
 When skills are present, the generated `opencode.json` includes `skills.paths: [".opencode/skills"]` and
 individual skill files are written to `.opencode/skills/<name>.md`.
+---
+
+## Annex Reference
+
+This project has an **AGENTS_ANEX.md** annex that extends or overrides parts of this configuration.
+Agents **must** load `AGENTS_ANEX.md` after this file and apply its modifications.
+
+---

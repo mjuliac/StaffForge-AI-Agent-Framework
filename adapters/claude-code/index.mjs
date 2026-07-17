@@ -16,7 +16,7 @@ export default function claudeCodeAdapter(agents, skills = []) {
     });
   }
 
-  for (const agent of agents.filter(a => a.name !== 'orchestrator')) {
+  for (const agent of agents.filter(a => a.name.toLowerCase() !== 'orchestrator')) {
     const tools = agent.frontmatter.tools || {};
     const toolList = ['read', 'write', 'bash', 'edit']
       .filter((t) => tools[t])

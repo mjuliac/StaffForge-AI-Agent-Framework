@@ -11,7 +11,10 @@ export default function opencodeAdapter(agents, skills = []) {
 
   const agentEntries = {};
   for (const a of agents) {
-    agentEntries[a.name] = {
+    // Use lowercase keys to avoid duplicates with OpenCode built-in agents
+    // (build, plan, general, explore, title, summary, compaction)
+    const key = a.name.toLowerCase();
+    agentEntries[key] = {
       description: a.frontmatter.description,
       mode: a.frontmatter.mode,
       permission: mapPermission(a.frontmatter.tools),
@@ -20,9 +23,7 @@ export default function opencodeAdapter(agents, skills = []) {
   }
 
   const orchestrator = agents.find(a => a.id === "orchestrator");
-  const defaultAgent = orchestrator?.name
-    || agents.find(a => a.frontmatter.mode === "primary")?.name
-    || "build";
+  const defaultAgent = (orchestrator?.name || agents.find(a => a.frontmatter.mode === "primary")?.name || "build").toLowerCase();
 
   const opencodeJson = {
     $schema: "https://opencode.ai/config.json",
