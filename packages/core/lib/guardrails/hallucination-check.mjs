@@ -123,7 +123,7 @@ export function crossReference(outputA, outputB) {
         fb.subject === factA.subject &&
         fb.sentiment !== factA.sentiment &&
         factA.confidence > 0.5 &&
-        fb.confidence > 0.5
+        fb.confidence > 0.5,
     );
     if (contradicting) {
       inconsistencies.push({
@@ -213,16 +213,12 @@ export function checkHallucinations(agentOutput, projectRoot = '') {
     const warnings = [];
 
     if (invalidRefs.length > 0) {
-      warnings.push(
-        `hallucination-check: ${invalidRefs.length} file reference(s) not found on disk`
-      );
+      warnings.push(`hallucination-check: ${invalidRefs.length} file reference(s) not found on disk`);
     }
 
     const lineInvalid = verified.filter((r) => r.lineValid === false);
     if (lineInvalid.length > 0) {
-      warnings.push(
-        `hallucination-check: ${lineInvalid.length} line reference(s) exceed file length`
-      );
+      warnings.push(`hallucination-check: ${lineInvalid.length} line reference(s) exceed file length`);
     }
 
     return {

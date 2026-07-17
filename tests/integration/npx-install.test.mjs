@@ -26,8 +26,12 @@ let passed = 0;
 let failed = 0;
 
 function assert(condition, name) {
-  if (condition) { passed++; }
-  else { console.error(`FAIL  ${name}`); failed++; }
+  if (condition) {
+    passed++;
+  } else {
+    console.error(`FAIL  ${name}`);
+    failed++;
+  }
 }
 
 const artifacts = [];
@@ -40,7 +44,9 @@ function makeTempDir(prefix = 'staff-npx') {
 
 function cleanup() {
   for (const d of artifacts) {
-    try { rmSync(d, { recursive: true, force: true }); } catch {}
+    try {
+      rmSync(d, { recursive: true, force: true });
+    } catch {}
   }
 }
 
@@ -90,7 +96,7 @@ function runInstall(repoDir, projectDir, args = []) {
   assert(existsSync(join(repoDir, 'tools', 'export.mjs')), 'cloned repo has tools/export.mjs');
   assert(existsSync(join(repoDir, 'tools', 'install.mjs')), 'cloned repo has tools/install.mjs');
   assert(existsSync(join(repoDir, 'agents', 'orchestrator.md')), 'cloned repo has agents');
-  const agentCount = readdirSync(join(repoDir, 'agents')).filter(f => f.endsWith('.md')).length;
+  const agentCount = readdirSync(join(repoDir, 'agents')).filter((f) => f.endsWith('.md')).length;
   assert(agentCount >= 148, `cloned repo has ${agentCount} agents (>= 148)`);
 }
 
@@ -106,11 +112,16 @@ function runInstall(repoDir, projectDir, args = []) {
 
   const result = runInstall(repoDir, projectDir, [
     '--yes',
-    '--platform', 'opencode',
-    '--agent', 'orchestrator',
-    '--out', join(projectDir, 'staffforge'),
-    '--vcs', 'git',
-    '--workflow', 'git-flow',
+    '--platform',
+    'opencode',
+    '--agent',
+    'orchestrator',
+    '--out',
+    join(projectDir, 'staffforge'),
+    '--vcs',
+    'git',
+    '--workflow',
+    'git-flow',
   ]);
 
   // Should exit successfully
@@ -126,20 +137,29 @@ function runInstall(repoDir, projectDir, args = []) {
   // Verify opencode.json is valid JSON with agent configs
   const opencodeRaw = readFileSync(join(projectDir, 'opencode.json'), 'utf-8');
   let opencode;
-  try { opencode = JSON.parse(opencodeRaw); assert(true, 'opencode.json valid JSON'); }
-  catch { assert(false, 'opencode.json valid JSON'); }
+  try {
+    opencode = JSON.parse(opencodeRaw);
+    assert(true, 'opencode.json valid JSON');
+  } catch {
+    assert(false, 'opencode.json valid JSON');
+  }
 
   // Verify agent count in opencode.json
   if (opencode && opencode.agent) {
     const agentNames = Object.keys(opencode.agent);
     assert(agentNames.length >= 148, `opencode.json has ${agentNames.length} agents`);
     assert(opencode.agent.orchestrator, 'opencode.json has orchestrator agent');
-    assert(opencode.agent.build, 'opencode.json has build agent');
-    assert(opencode.agent.plan, 'opencode.json has plan agent');
+    assert(!opencode.agent.build, 'opencode.json MUST NOT have build agent (OpenCode built-in)');
+    assert(!opencode.agent.plan, 'opencode.json MUST NOT have plan agent (OpenCode built-in)');
+    assert(!opencode.agent.compaction, 'opencode.json MUST NOT have compaction agent (OpenCode built-in)');
+    assert(!opencode.agent.general, 'opencode.json MUST NOT have general agent (OpenCode built-in)');
+    assert(!opencode.agent.explore, 'opencode.json MUST NOT have explore agent (OpenCode built-in)');
+    assert(!opencode.agent.title, 'opencode.json MUST NOT have title agent (OpenCode built-in)');
+    assert(!opencode.agent.summary, 'opencode.json MUST NOT have summary agent (OpenCode built-in)');
   }
 
   // Verify agents/ folder content
-  const agentFiles = readdirSync(join(projectDir, 'agents')).filter(f => f.endsWith('.md'));
+  const agentFiles = readdirSync(join(projectDir, 'agents')).filter((f) => f.endsWith('.md'));
   assert(agentFiles.length >= 148, `agents/ has ${agentFiles.length} .md files`);
   assert(agentFiles.includes('orchestrator.md'), 'agents/ has orchestrator.md');
   assert(agentFiles.includes('build.md'), 'agents/ has build.md');
@@ -167,11 +187,16 @@ function runInstall(repoDir, projectDir, args = []) {
 
   const result = runInstall(repoDir, projectDir, [
     '--yes',
-    '--platform', 'all',
-    '--agent', 'build',
-    '--out', join(projectDir, 'staffforge-all'),
-    '--vcs', 'git',
-    '--workflow', 'trunk-based',
+    '--platform',
+    'all',
+    '--agent',
+    'build',
+    '--out',
+    join(projectDir, 'staffforge-all'),
+    '--vcs',
+    'git',
+    '--workflow',
+    'trunk-based',
   ]);
   assert(result.status === 0, `all platforms install exits 0 (got ${result.status})`);
 
@@ -180,7 +205,7 @@ function runInstall(repoDir, projectDir, args = []) {
   // But agents/ and .staffforge-vcs.json should still be created
   assert(existsSync(join(projectDir, 'agents')), 'all: agents/ created');
   assert(existsSync(join(projectDir, '.staffforge-vcs.json')), 'all: .staffforge-vcs.json created');
-  const agentFiles = readdirSync(join(projectDir, 'agents')).filter(f => f.endsWith('.md'));
+  const agentFiles = readdirSync(join(projectDir, 'agents')).filter((f) => f.endsWith('.md'));
   assert(agentFiles.length >= 148, `all: agents/ has ${agentFiles.length} files`);
 
   // .staffforge-install.json should NOT exist when platform=all
@@ -201,11 +226,18 @@ function runInstall(repoDir, projectDir, args = []) {
   assert(existsSync(join(corePath, 'index.mjs')), 'after npm install --workspaces, @staffforge/core exists');
 
   // Verify the import works
-  const importResult = spawnSync('node', ['-e', `
+  const importResult = spawnSync(
+    'node',
+    [
+      '-e',
+      `
     import { getAgentRegistry } from '@staffforge/core';
     const count = getAgentRegistry().count();
     console.log('AGENTS:', count);
-  `], { cwd: repoDir, encoding: 'utf-8', timeout: 10000 });
+  `,
+    ],
+    { cwd: repoDir, encoding: 'utf-8', timeout: 10000 },
+  );
   assert(importResult.status === 0, `@staffforge/core importable (exit ${importResult.status})`);
   assert(importResult.stdout.includes('AGENTS:'), `@staffforge/core getAgentRegistry works`);
 }
@@ -220,9 +252,17 @@ function runInstall(repoDir, projectDir, args = []) {
   for (const platform of platforms) {
     const projectDir = makeTempDir(`adapter-${platform}`);
     const result = runInstall(repoDir, projectDir, [
-      '--yes', '--platform', platform, '--agent', 'orchestrator',
-      '--out', join(projectDir, 'staffforge'),
-      '--vcs', 'git', '--workflow', 'git-flow',
+      '--yes',
+      '--platform',
+      platform,
+      '--agent',
+      'orchestrator',
+      '--out',
+      join(projectDir, 'staffforge'),
+      '--vcs',
+      'git',
+      '--workflow',
+      'git-flow',
     ]);
     assert(result.status === 0, `${platform} install exits 0 (got ${result.status})`);
 
@@ -239,7 +279,10 @@ function runInstall(repoDir, projectDir, args = []) {
         assert(existsSync(join(projectDir, '.cursor', 'rules')), `${platform}: .cursor/rules/`);
         break;
       case 'copilot':
-        assert(existsSync(join(projectDir, '.github', 'copilot-instructions.md')), `${platform}: copilot-instructions.md`);
+        assert(
+          existsSync(join(projectDir, '.github', 'copilot-instructions.md')),
+          `${platform}: copilot-instructions.md`,
+        );
         break;
       case 'aider':
         assert(existsSync(join(projectDir, '.aider.rules.md')), `${platform}: .aider.rules.md`);
@@ -262,7 +305,10 @@ function runInstall(repoDir, projectDir, args = []) {
   execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
   // Run again - should not fail
   execSync('npm install --loglevel=warn --install-strategy=hoisted', { cwd: repoDir, stdio: 'pipe', timeout: 60000 });
-  assert(existsSync(join(repoDir, 'node_modules', '@staffforge', 'core', 'index.mjs')), 'idempotent npm install keeps @staffforge/core');
+  assert(
+    existsSync(join(repoDir, 'node_modules', '@staffforge', 'core', 'index.mjs')),
+    'idempotent npm install keeps @staffforge/core',
+  );
 }
 
 // ── Test 8: findFrameworkDir logic works ──
@@ -300,9 +346,12 @@ function runInstall(repoDir, projectDir, args = []) {
   });
   const stderrInfo = result.stderr ? ` stderr: ${result.stderr.slice(0, 200)}` : '';
   assert(result.status === 0, `validate.mjs exits 0 (got ${result.status})${stderrInfo}`);
-  const outputLines = result.stdout.split('\n').filter(l => l.trim());
-  const okCount = outputLines.filter(l => l.startsWith('OK')).length;
-  assert(okCount > 150, `validate.mjs reports ~150 valid items (got ${okCount} of ${outputLines.length} lines)${stderrInfo}`);
+  const outputLines = result.stdout.split('\n').filter((l) => l.trim());
+  const okCount = outputLines.filter((l) => l.startsWith('OK')).length;
+  assert(
+    okCount > 150,
+    `validate.mjs reports ~150 valid items (got ${okCount} of ${outputLines.length} lines)${stderrInfo}`,
+  );
 }
 
 // ── Cleanup ──

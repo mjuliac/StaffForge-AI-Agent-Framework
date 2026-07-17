@@ -25,21 +25,52 @@ const SECRET_PATTERNS = [
   { pattern: /ghu_[a-zA-Z0-9]{36}/g, type: 'github-user-token', severity: 'critical', entropy: true },
   { pattern: /xox[abpors]-[a-zA-Z0-9]{10,}/g, type: 'slack-token', severity: 'critical', entropy: true },
   { pattern: /AKIA[0-9A-Z]{16}/g, type: 'aws-access-key', severity: 'critical', entropy: true },
-  { pattern: /eyJ[a-zA-Z0-9_-]+\.eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/g, type: 'jwt-token', severity: 'high', entropy: true },
+  {
+    pattern: /eyJ[a-zA-Z0-9_-]+\.eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/g,
+    type: 'jwt-token',
+    severity: 'high',
+    entropy: true,
+  },
 
   // Private Keys — high confidence
-  { pattern: /-----BEGIN\s+(RSA|DSA|EC|OPENSSH|PGP)\s+PRIVATE\s+KEY-----[\s\S]*?-----END\s+(RSA|DSA|EC|OPENSSH|PGP)\s+PRIVATE\s+KEY-----/g, type: 'private-key', severity: 'critical', entropy: false },
-  { pattern: /-----BEGIN\s+CERTIFICATE-----[\s\S]*?-----END\s+CERTIFICATE-----/g, type: 'certificate', severity: 'high', entropy: false },
+  {
+    pattern:
+      /-----BEGIN\s+(RSA|DSA|EC|OPENSSH|PGP)\s+PRIVATE\s+KEY-----[\s\S]*?-----END\s+(RSA|DSA|EC|OPENSSH|PGP)\s+PRIVATE\s+KEY-----/g,
+    type: 'private-key',
+    severity: 'critical',
+    entropy: false,
+  },
+  {
+    pattern: /-----BEGIN\s+CERTIFICATE-----[\s\S]*?-----END\s+CERTIFICATE-----/g,
+    type: 'certificate',
+    severity: 'high',
+    entropy: false,
+  },
 
   // Connection Strings — high confidence
-  { pattern: /(?:postgres|postgresql|mysql|mongodb|redis|rediss):\/\/(?:[^\s:@\/]+)?(?::[^\s@\/]+)?@[^\s]+/g, type: 'database-connection-string', severity: 'critical', entropy: false },
-  { pattern: /(?:amqp|amqps):\/\/(?:[^\s:@\/]+)?(?::[^\s@\/]+)?@[^\s]+/g, type: 'message-broker-connection', severity: 'critical', entropy: false },
+  {
+    pattern: /(?:postgres|postgresql|mysql|mongodb|redis|rediss):\/\/(?:[^\s:@\/]+)?(?::[^\s@\/]+)?@[^\s]+/g,
+    type: 'database-connection-string',
+    severity: 'critical',
+    entropy: false,
+  },
+  {
+    pattern: /(?:amqp|amqps):\/\/(?:[^\s:@\/]+)?(?::[^\s@\/]+)?@[^\s]+/g,
+    type: 'message-broker-connection',
+    severity: 'critical',
+    entropy: false,
+  },
 
   // Generic High-Entropy Tokens — medium confidence (entropy heuristic)
   { pattern: /[A-Za-z0-9_-]{32,40}/g, type: 'high-entropy-token', severity: 'medium', entropy: true },
 
   // Password / Secret env vars — medium confidence
-  { pattern: /(?:password|passwd|pwd|secret|api[_-]?key|token)\s*[=:]\s*['"][^'"]{8,}['"]/gi, type: 'credential-assignment', severity: 'high', entropy: false },
+  {
+    pattern: /(?:password|passwd|pwd|secret|api[_-]?key|token)\s*[=:]\s*['"][^'"]{8,}['"]/gi,
+    type: 'credential-assignment',
+    severity: 'high',
+    entropy: false,
+  },
 
   // PII — medium confidence
   { pattern: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, type: 'email-address', severity: 'medium', entropy: false },

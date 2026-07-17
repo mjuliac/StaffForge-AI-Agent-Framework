@@ -14,12 +14,32 @@
 
 const INJECTION_PATTERNS = [
   // Direct instruction override
-  { pattern: /ignore\s+(all\s+)?(prior|previous|above)\s+(instructions|directives|commands|context)/gi, severity: 'critical', category: 'instruction-override' },
-  { pattern: /disregard\s+(all\s+)?(prior|previous|above)\s+(instructions|directives|commands|context)/gi, severity: 'critical', category: 'instruction-override' },
-  { pattern: /forget\s+(all\s+)?(prior|previous|above|everything)/gi, severity: 'high', category: 'instruction-override' },
+  {
+    pattern: /ignore\s+(all\s+)?(prior|previous|above)\s+(instructions|directives|commands|context)/gi,
+    severity: 'critical',
+    category: 'instruction-override',
+  },
+  {
+    pattern: /disregard\s+(all\s+)?(prior|previous|above)\s+(instructions|directives|commands|context)/gi,
+    severity: 'critical',
+    category: 'instruction-override',
+  },
+  {
+    pattern: /forget\s+(all\s+)?(prior|previous|above|everything)/gi,
+    severity: 'high',
+    category: 'instruction-override',
+  },
   { pattern: /discard\s+(all\s+)?(prior|previous|above)/gi, severity: 'high', category: 'instruction-override' },
-  { pattern: /do\s+not\s+follow\s+(the\s+)?(above|previous|earlier)\s+(instructions|directives)/gi, severity: 'critical', category: 'instruction-override' },
-  { pattern: /override\s+(all\s+)?(prior|previous|system)\s+(instructions|prompt|directives)/gi, severity: 'critical', category: 'instruction-override' },
+  {
+    pattern: /do\s+not\s+follow\s+(the\s+)?(above|previous|earlier)\s+(instructions|directives)/gi,
+    severity: 'critical',
+    category: 'instruction-override',
+  },
+  {
+    pattern: /override\s+(all\s+)?(prior|previous|system)\s+(instructions|prompt|directives)/gi,
+    severity: 'critical',
+    category: 'instruction-override',
+  },
 
   // System prompt / message override
   { pattern: /system\s+prompt(\s*:|\s+override|\s+instruction)/gi, severity: 'high', category: 'system-override' },
@@ -35,11 +55,23 @@ const INJECTION_PATTERNS = [
 
   // Meta-instruction extraction attempts
   { pattern: /print\s+(your|the)\s+(system\s+)?prompt/gi, severity: 'critical', category: 'prompt-extraction' },
-  { pattern: /reveal\s+(your|the)\s+(system\s+)?(prompt|instructions|directives)/gi, severity: 'critical', category: 'prompt-extraction' },
+  {
+    pattern: /reveal\s+(your|the)\s+(system\s+)?(prompt|instructions|directives)/gi,
+    severity: 'critical',
+    category: 'prompt-extraction',
+  },
   { pattern: /show\s+(me\s+)?(your|the)\s+(system\s+)?prompt/gi, severity: 'high', category: 'prompt-extraction' },
   { pattern: /output\s+(your|the)\s+(initial|system)\s+prompt/gi, severity: 'critical', category: 'prompt-extraction' },
-  { pattern: /what\s+(is|are)\s+(your|the)\s+(system\s+)?(prompt|instructions|directives)/gi, severity: 'high', category: 'prompt-extraction' },
-  { pattern: /repeat\s+(all|everything|the\s+above|the\s+text)\s+(above|below|before)/gi, severity: 'high', category: 'prompt-extraction' },
+  {
+    pattern: /what\s+(is|are)\s+(your|the)\s+(system\s+)?(prompt|instructions|directives)/gi,
+    severity: 'high',
+    category: 'prompt-extraction',
+  },
+  {
+    pattern: /repeat\s+(all|everything|the\s+above|the\s+text)\s+(above|below|before)/gi,
+    severity: 'high',
+    category: 'prompt-extraction',
+  },
 ];
 
 // ── Public API ─────────────────────────────────────────────────────────────
