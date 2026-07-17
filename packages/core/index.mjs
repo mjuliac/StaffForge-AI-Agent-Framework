@@ -45,6 +45,32 @@ export { RegistryClient, createRegistryClient } from './lib/registry-client.mjs'
 
 export { IPlugin } from './lib/interfaces/plugin.mjs';
 
+// ── Guardrails (three-layer security: Input/Runtime/Output) ──────────
+export {
+  // Input Guardrails
+  sanitizeInput,
+  isSafe,
+  getInjectionPatterns,
+  // Output Guardrails — DLP
+  scanSecrets,
+  redactSecrets,
+  isClean,
+  getSecretPatterns,
+  // Output Guardrails — Hallucination Check
+  extractFileReferences,
+  verifyFileReferences,
+  crossReference,
+  checkHallucinations,
+  // Output Guardrails — Schema Validation
+  validateAgainstSchema,
+  validateAgentOutput,
+  clearCache,
+  getValidator,
+  // Coordinator
+  GuardrailManager,
+  getGuardrailManager,
+} from './lib/guardrails/index.mjs';
+
 export {
   IVCSProvider,
   IVCSWorkflow,

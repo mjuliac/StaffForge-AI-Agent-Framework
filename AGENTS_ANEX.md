@@ -1,7 +1,7 @@
-# StaffForge AI Agent Framework - AGENTS Configuration Annex
+# 1 - AGENTS Configuration Annex
 **Version**: v1.0  
-**Created**: 2026-07-17 10:25:16 UTC  
-**Last Modified**: 2026-07-17 10:25:16 UTC  
+**Created**: 2026-07-17 10:51:07 UTC  
+**Last Modified**: 2026-07-17 10:51:07 UTC  
 **Extends**: AGENTS.md (v1.0)  
 **Status**: Active
 
@@ -43,24 +43,24 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 ## Enhanced Technology Stack
 
-- **Languages**: JavaScript (Node.js 20+, ESM), YAML (agent/skill config)
-- **Web Framework**: None as app framework — CLI/tooling (Node.js scripts, platform adapters)
-- **Database(s)**: None (file-based YAML/JSON configuration)
-- **Architecture Pattern**: Modular monorepo with platform adapter exporters
-- **Testing Framework**: Jest/Vitest (unit), custom test runner (tests/run-all.mjs)
-- **DevOps & Deployment**: npm scripts, GitHub Actions (CI), multi-platform export (opencode/claude-code/cursor/copilot/aider/gemini-cli)
+- **Languages**: Node.js (JavaScript/TypeScript)
+- **Web Framework**: Express.js
+- **Database(s)**: Prisma
+- **Architecture Pattern**: Monolith
+- **Testing Framework**: Jest
+- **DevOps & Deployment**: GitHub Actions
 
 ---
 
 ## Additional Code Conventions
 
-- **Variable Naming**: camelCase - JavaScript convention
-- **Class/Type Naming**: PascalCase - consistent across files
-- **File Naming**: kebab-case for files (e.g. init-agent.mjs), snake_case for modules
+- **Variable Naming**: camelCase - project convention
+- **Class/Type Naming**: PascalCase - project convention
+- **File Naming**: kebab-case - consistent file naming
 - **Indentation**: 2 spaces - consistent across all files
-- **Max Line Length**: 100 characters - enforced by Prettier
-- **Code Formatter**: Prettier (config: .prettierrc) + ESLint (config: .eslintrc.json)
-- **Documentation Format**: JSDoc-style block comments with mandatory coverage for public APIs
+- **Max Line Length**: 80 characters - enforced by formatter
+- **Code Formatter**: Prettier + ESLint
+- **Documentation Format**: JSDoc (JavaScript/TypeScript) with mandatory coverage for public APIs
 
 ---
 
@@ -68,29 +68,23 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 
 ### Forbidden Operations (NEVER)
-- Modify AGENTS.md directly: PROJECT_RULES.md is the append-only addendum - base conventions must stay stable
-- Run VCS commands outside the orchestrator: only @vcs/@git may manage branches/commits - prevents repo corruption
-- Generate code without an initialized VCS branch: every task starts on a dedicated branch - ensures traceability
+- Never run VCS outside orchestrator: documented project constraint
+- Never commit secrets: documented project constraint
 
 ### Required Approvals
-- Architecture changes: require @architect review before implementation
-- Production deployment: require release manager + security sign-off
+- PR review by maintainer: as defined by project process
 
 ### Performance Requirements
-- CLI startup: < 2s cold start for tool scripts
-- Validation suite (npm run validate): completes under CI timeout
+- None specified
 
 ### Security Constraints
-- Never log secrets or tokens: redact in all outputs
-- All agent frontmatter permissions explicit: no implicit full-access grants
+- Never log secrets/tokens
 
 ### Data Handling Rules
-- No PII stored in repo: configuration is code-only
-- Secrets via env vars: never committed
+- No PII in repo
 
 ### Deployment Rules
-- Only hotfix/* and release/* touch main: feature/bugfix merge to develop only
-- Rollback: tag-based revert via @vcs
+- Tagged releases only
 
 ---
 
@@ -98,35 +92,35 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 
 ### Version Control Strategy
-- **Branching Model**: Git Flow - feature/bugfix → develop; release/hotfix → main
-- **Commit Message Format**: Conventional Commits - "feat:", "fix:", "refactor:", "docs:"
-- **Versioning Scheme**: Semantic Versioning (MAJOR.MINOR.PATCH)
+- **Branching Model**: Git Flow - project branching strategy
+- **Commit Message Format**: Conventional Commits - standardized format
+- **Versioning Scheme**: Semantic Versioning (SemVer)
 
 ### Code Review Process
 - **Minimum Reviewers**: 1
-- **Approval Requirements**: At least 1 approval from a maintainer
-- **Review Timeline**: Within 3 business days
-- **Automated Checks**: npm run validate + npm test must pass in CI
+- **Approval Requirements**: At least 1 approval(s)
+- **Review Timeline**: Per project SLA
+- **Automated Checks**: CI validation + tests required
 
 ### Issue & Task Management
 - **Tool**: GitHub Issues
 - **Issue Labeling**: feature / bug / refactor / security / docs
-- **Task Assignment**: Assignee field on issue
+- **Task Assignment**: Assignee on issue
 
 ### Release & Deployment Workflow
-- **Deployment Frequency**: On-demand per release/*
+- **Deployment Frequency**: Per release schedule
 - **Release Process**: Hybrid (CI build + manual tag)
-- **Rollback Procedure**: Manual - git revert tagged commit
-- **Canary/Staged Deployment**: No
+- **Rollback Procedure**: Manual revert of tagged commit
+- **Canary/Staged Deployment**: Per project decision
 
 ### Decision Making & Communication
-- **Decision Documentation**: ADRs in repo (docs/adr/)
-- **Architecture Review**: Required for any cross-agent contract change
+- **Decision Documentation**: ADRs / GitHub Discussions
+- **Architecture Review**: Required for contract changes
 - **Communication Channels**: GitHub Discussions
 
 ### Team Synchronization
-- **Standup Cadence**: Not mandated (OSS)
-- **Team Review Meetings**: Weekly maintainer sync
+- **Standup Cadence**: Per team
+- **Team Review Meetings**: Per team
 
 ---
 
@@ -134,29 +128,28 @@ This document extends and enhances the base AGENTS.md configuration. When both f
 
 
 ### Documentation Scope & Coverage
-- **Architecture**: Required - ARCHITECTURE.md in repo
-- **API Specifications**: Required for published packages - JSDoc
-- **Deployment Guides**: Required - README.md + per-platform export docs
+- **Architecture**: Required - Architecture + API
+- **API Specifications**: Required - JSDoc / TypeScript (TSDoc)
+- **Deployment Guides**: Required - README + per-platform docs
 - **Operational Runbooks**: Optional
-- **Module READMEs**: Required sections for packages/ (name, usage, API)
+- **Module READMEs**: Required sections
 
 ### Documentation Tools & Format
 - **Primary Format**: Markdown in repo
-- **Location**: Repository (docs/ + root .md files)
+- **Location**: Repository
 - **Version Control**: In-repo
-- **Tool Stack**: Markdown + JSDoc (tools), OpenAPI where applicable
+- **Tool Stack**: Markdown + JSDoc / TypeScript (TSDoc)
 
 ### Documentation Standards
 - **Code Comments**: Mandatory for public APIs
-- **Change Logs**: Required - CHANGELOG.md (Keep a Changelog format)
-- **Deprecation Notice**: 1 minor release notice before removal
+- **Change Logs**: Required - CHANGELOG.md
+- **Deprecation Notice**: 1 release notice before removal
 - **Migration Guides**: Required for breaking changes
 
 ### Documentation Review
 - **Included in Code Review**: Yes
 - **Separate Review Process**: No
 - **Approval Required**: Yes (maintainer)
-- **SLA for Review**: Same as code review
 
 ---
 
@@ -189,7 +182,7 @@ If AGENTS.md and AGENTS_ANEX.md specify conflicting rules:
 
 | Version | Date | Changes | Extends |
 |---------|------|---------|---------|
-| v1.0 | 2026-07-17 10:25:16 UTC | Initial annex creation | AGENTS.md v1.0 |
+| v1.0 | 2026-07-17 10:51:07 UTC | Initial annex creation | AGENTS.md v1.0 |
 
 ---
 
