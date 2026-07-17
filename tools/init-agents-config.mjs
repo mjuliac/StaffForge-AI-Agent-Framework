@@ -299,7 +299,8 @@ async function moduleStack(yes) {
 
   // Step 1 — Runtime/Language (root of the graph)
   const runtimeNames = Object.keys(TECH_GRAPH);
-  const runtime = await askChoice('Runtime / Programming Language', runtimeNames, 1);
+  const runtimeOptions = [...runtimeNames, 'Other'];
+  const runtime = await askChoice('Runtime / Programming Language', runtimeOptions, 1);
   const rtKey = runtimeNames.find((k) => k === runtime) || runtime;
   const rtNode = TECH_GRAPH[rtKey];
 
@@ -323,11 +324,18 @@ async function moduleStack(yes) {
 
   // Step 2 — Framework (filtered by runtime)
   const fwNames = Object.keys(rtNode.frameworks);
-  const framework = await askChoice(`Web / App Framework (for ${rtKey})`, fwNames, fwNames.length);
-  const fwOrms = rtNode.frameworks[framework];
+  const fwOptions = [...fwNames, 'Other'];
+  const framework = await askChoice(`Web / App Framework (for ${rtKey})`, fwOptions, fwNames.length);
 
   // Step 3 — ORM / Persistence (filtered by runtime + framework)
-  const orm = await askChoice(`Database ORM / Persistencia (for ${rtKey} + ${framework})`, fwOrms, fwOrms.length);
+  let orm;
+  const fwOrms = rtNode.frameworks[framework];
+  if (fwOrms) {
+    orm = await askChoice(`Database ORM / Persistencia (for ${rtKey} + ${framework})`, fwOrms, fwOrms.length);
+  } else {
+    // Custom framework — ask for persistence directly
+    orm = await ask('Database ORM / Persistencia (for custom framework)', 'None');
+  }
 
   // Step 4 — Architecture pattern
   const archPatterns = [
