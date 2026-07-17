@@ -76,7 +76,6 @@ function parseArgs() {
 let _rl = null;
 let _ownRl = false;
 let ask = null;
-let askLines = null;
 
 function bindReadline(injected) {
   if (injected && injected.rl && injected.ask) {
@@ -91,11 +90,6 @@ function bindReadline(injected) {
         _rl.question(p, (a) => r(a.trim() || def));
       });
   }
-  askLines = async (intro, def = '') => {
-    console.log(intro);
-    const ans = await ask('  > (free text, one line; leave empty for default)', def);
-    return ans;
-  };
 }
 function closeReadlineIfOwn() {
   if (_ownRl && _rl) {
@@ -109,6 +103,66 @@ function nowStamp() {
   // spec §6.2 requires timestamp + version; ISO-ish, human readable
   return new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
 }
+
+// ── Technology Dependency Graph (spec §3.1) ──
+// Runtime → Framework → ORM/Persistence — strict coherence validation
+const TECH_GRAPH = {
+  'Node.js (JavaScript/TypeScript)': {
+    label: 'Node.js (JavaScript/TypeScript)',
+    frameworks: {
+      'Express.js': ['Prisma', 'TypeORM', 'Mongoose (MongoDB)', 'Knex.js', 'Drizzle ORM', 'Other'],
+      NestJS: ['Prisma', 'TypeORM', 'Mongoose (MongoDB)', 'Knex.js', 'Drizzle ORM', 'Other'],
+      Fastify: ['Prisma', 'TypeORM', 'Mongoose (MongoDB)', 'Knex.js', 'Drizzle ORM', 'Other'],
+      'Next.js (Full-stack)': ['Prisma', 'TypeORM', 'Drizzle ORM', 'Other'],
+      'None (CLI/Tooling)': ['None (file-based)', 'better-sqlite3', 'Other'],
+    },
+  },
+  '.NET (C#)': {
+    label: '.NET (C#)',
+    frameworks: {
+      'ASP.NET Core Web API': ['Entity Framework Core', 'Dapper', 'NHibernate', 'Other'],
+      Blazor: ['Entity Framework Core', 'Dapper', 'Other'],
+      'Minimal API': ['Entity Framework Core', 'Dapper', 'Other'],
+      'None (CLI/Library)': ['None (file-based)', 'Dapper', 'Other'],
+    },
+  },
+  Python: {
+    label: 'Python',
+    frameworks: {
+      FastAPI: ['SQLAlchemy', 'Tortoise ORM', 'Django ORM', 'Other'],
+      Django: ['Django ORM', 'SQLAlchemy (via django-extensions)', 'Other'],
+      Flask: ['SQLAlchemy', 'Tortoise ORM', 'Other'],
+      'None (CLI/Tooling)': ['None (file-based)', 'SQLite (sqlite3)', 'Other'],
+    },
+  },
+  Java: {
+    label: 'Java',
+    frameworks: {
+      'Spring Boot': ['Hibernate/JPA', 'MyBatis', 'jOOQ', 'Other'],
+      Quarkus: ['Hibernate/JPA', 'MyBatis', 'Other'],
+      Micronaut: ['Hibernate/JPA', 'jOOQ', 'Other'],
+      'None (CLI/Library)': ['None (file-based)', 'JDBC', 'Other'],
+    },
+  },
+  Go: {
+    label: 'Go',
+    frameworks: {
+      Gin: ['GORM', 'sqlx', 'ent', 'Other'],
+      Echo: ['GORM', 'sqlx', 'ent', 'Other'],
+      Fiber: ['GORM', 'sqlx', 'ent', 'Other'],
+      'None (CLI/Tooling)': ['None (file-based)', 'database/sql', 'Other'],
+    },
+  },
+};
+
+// Testing frameworks per runtime
+const TESTING_MAP = {
+  'Node.js (JavaScript/TypeScript)': ['Jest', 'Vitest', 'Mocha', 'Playwright (E2E)', 'Cypress (E2E)'],
+  '.NET (C#)': ['xUnit', 'NUnit', 'MSTest', 'Playwright (E2E)'],
+  Python: ['pytest', 'unittest', 'behave (BDD)', 'Playwright (E2E)', 'Other'],
+  Java: ['JUnit', 'TestNG', 'Mockito', 'Cucumber (BDD)', 'Other'],
+  Go: ['testing (go test)', 'Testify', 'Ginkgo', 'Other'],
+};
 
 // ── Default answers (framework self-description, used by --yes) ──
 const DEFAULTS = {
@@ -214,43 +268,145 @@ const DEFAULTS = {
 - **SLA for Review**: Same as code review`,
 };
 
+// ── Structured choice helper ──
+// Presents a numbered list of options, returns the selected value.
+// If the selected option is "Other" (case-insensitive), prompts for custom text.
+async function askChoice(prompt, options, defaultIdx = 1) {
+  console.log(`\n${prompt}:`);
+  for (let i = 0; i < options.length; i++) {
+    const mark = i + 1 === defaultIdx ? ' (default)' : '';
+    console.log(`  ${i + 1}) ${options[i]}${mark}`);
+  }
+  const raw = await ask(`? [${defaultIdx}]`, String(defaultIdx));
+  const num = parseInt(raw, 10);
+  if (num >= 1 && num <= options.length) {
+    const value = options[num - 1];
+    if (value.toLowerCase() === 'other') {
+      return await ask('  » Specify custom value', value);
+    }
+    return value;
+  }
+  // Free-text fallback: user typed something custom (not a number)
+  return raw || options[defaultIdx - 1];
+}
+
 // ── Module questionnaires (spec §3) ──
 // Each returns the populated body for its section.
 
 async function moduleStack(yes) {
   if (yes) return DEFAULTS.stack;
   console.log('\n=== Module 1: Technology Stack ===');
-  const languages = await askLines('Primary language(s)? e.g. Python, TypeScript, Go', 'JavaScript (Node.js)');
-  const framework = await askLines('Web/app framework? e.g. FastAPI, React, None', 'None (CLI/tooling)');
-  const db = await askLines('Database(s)/data stores? e.g. PostgreSQL, Redis, None', 'None (file-based)');
-  const arch = await askLines('Architecture pattern? e.g. Microservices, Monolith', 'Modular monorepo');
-  const testing = await askLines('Testing framework? e.g. pytest, Jest, Vitest', 'Jest/Vitest');
-  const devops = await askLines('DevOps/deployment? e.g. Docker, K8s, CI', 'npm + GitHub Actions');
+
+  // Step 1 — Runtime/Language (root of the graph)
+  const runtimeNames = Object.keys(TECH_GRAPH);
+  const runtime = await askChoice('Runtime / Programming Language', runtimeNames, 1);
+  const rtKey = runtimeNames.find((k) => k === runtime) || runtime;
+  const rtNode = TECH_GRAPH[rtKey];
+
+  if (!rtNode) {
+    // Custom runtime not in graph — generic fallback
+    const customFw = await ask('Web / App Framework', 'None');
+    const customDb = await ask('Database / Persistencia', 'None');
+    const arch = await askChoice(
+      'Architecture Pattern',
+      ['Monolith', 'Modular Monorepo', 'Microservices', 'Clean Architecture', 'Hexagonal (Ports & Adapters)', 'Other'],
+      2,
+    );
+    const test = await askChoice('Testing Framework', ['Jest', 'pytest', 'Vitest', 'Other'], 1);
+    const devops = await askChoice(
+      'DevOps / Deployment',
+      ['GitHub Actions', 'GitLab CI', 'Jenkins', 'Docker + docker-compose', 'Kubernetes', 'Other'],
+      1,
+    );
+    return `## Technology Stack\n- **Languages**: ${rtKey}\n- **Web Framework**: ${customFw}\n- **Database(s)**: ${customDb}\n- **Architecture Pattern**: ${arch}\n- **Testing Framework**: ${test}\n- **DevOps & Deployment**: ${devops}`;
+  }
+
+  // Step 2 — Framework (filtered by runtime)
+  const fwNames = Object.keys(rtNode.frameworks);
+  const framework = await askChoice(`Web / App Framework (for ${rtKey})`, fwNames, fwNames.length);
+  const fwOrms = rtNode.frameworks[framework];
+
+  // Step 3 — ORM / Persistence (filtered by runtime + framework)
+  const orm = await askChoice(`Database ORM / Persistencia (for ${rtKey} + ${framework})`, fwOrms, fwOrms.length);
+
+  // Step 4 — Architecture pattern
+  const archPatterns = [
+    'Monolith',
+    'Modular Monorepo',
+    'Microservices',
+    'Clean Architecture',
+    'Hexagonal (Ports & Adapters)',
+    'Other',
+  ];
+  const arch = await askChoice('Architecture Pattern', archPatterns, 2);
+
+  // Step 5 — Testing framework (based on runtime)
+  const testOpts = TESTING_MAP[rtKey] || ['Jest', 'pytest', 'Vitest', 'Other'];
+  const test = await askChoice('Testing Framework', testOpts, 1);
+
+  // Step 6 — DevOps / Deployment
+  const devOpsOpts = ['GitHub Actions', 'GitLab CI', 'Jenkins', 'Docker + docker-compose', 'Kubernetes', 'Other'];
+  const devops = await askChoice('DevOps / Deployment', devOpsOpts, 1);
+
   return `## Technology Stack
-- **Languages**: ${languages}
+- **Languages**: ${rtKey}
 - **Web Framework**: ${framework}
-- **Database(s)**: ${db}
+- **Database(s)**: ${orm}
 - **Architecture Pattern**: ${arch}
-- **Testing Framework**: ${testing}
+- **Testing Framework**: ${test}
 - **DevOps & Deployment**: ${devops}`;
 }
 
 async function moduleConventions(yes) {
   if (yes) return DEFAULTS.conventions;
   console.log('\n=== Module 2: Code Conventions & Standards ===');
-  const varN = await askLines('Variable/function naming? camelCase|snake_case|PascalCase', 'camelCase');
-  const classN = await askLines('Class/type naming? PascalCase|CONSTANT_CASE', 'PascalCase');
-  const fileN = await askLines('File naming? kebab-case|snake_case', 'kebab-case');
-  const indent = await askLines('Indentation? 2 spaces|4 spaces|tabs', '2 spaces');
-  const maxLine = await askLines('Max line length? 80|100|120', '100');
-  const fmt = await askLines('Formatter/linter? ESLint, Prettier, Black, Ruff', 'Prettier + ESLint');
-  const doc = await askLines('Documentation format? JSDoc|docstrings|comments', 'JSDoc');
+  const varN = await askChoice(
+    'Variable / Function naming convention',
+    ['camelCase', 'snake_case', 'PascalCase', 'kebab-case', 'Other'],
+    1,
+  );
+  const classN = await askChoice(
+    'Class / Type naming convention',
+    ['PascalCase', 'camelCase', 'CONSTANT_CASE', 'Other'],
+    1,
+  );
+  const fileN = await askChoice(
+    'File naming convention',
+    ['kebab-case', 'snake_case', 'camelCase', 'PascalCase', 'Other'],
+    1,
+  );
+  const indent = await askChoice('Indentation style', ['2 spaces', '4 spaces', 'tabs'], 1);
+  const maxLine = await askChoice('Max line length', ['80', '100', '120', 'Other'], 2);
+  const fmt = await askChoice(
+    'Code formatter / linter',
+    [
+      'Prettier + ESLint',
+      'Prettier + ESLint + TypeScript',
+      'Black + Ruff (Python)',
+      'rustfmt (Rust)',
+      'gofmt (Go)',
+      'Other',
+    ],
+    1,
+  );
+  const doc = await askChoice(
+    'Documentation format',
+    [
+      'JSDoc (JavaScript/TypeScript)',
+      'docstrings (Python)',
+      'XML Docs (.NET)',
+      'Rustdoc (Rust)',
+      'Go Doc (Go)',
+      'Other',
+    ],
+    1,
+  );
   return `## Code Conventions & Standards
 - **Variable Naming**: ${varN} - project convention
 - **Class/Type Naming**: ${classN} - project convention
 - **File Naming**: ${fileN} - consistent file naming
 - **Indentation**: ${indent} - consistent across all files
-- **Max Line Length**: ${maxLine} characters - enforced by linter
+- **Max Line Length**: ${maxLine} characters - enforced by formatter
 - **Code Formatter**: ${fmt}
 - **Documentation Format**: ${doc} with mandatory coverage for public APIs`;
 }
@@ -258,52 +414,140 @@ async function moduleConventions(yes) {
 async function moduleRules(yes) {
   if (yes) return DEFAULTS.rules;
   console.log('\n=== Module 3: Operational Rules & Constraints ===');
-  const forbidden = await askLines(
-    'Forbidden operations (NEVER do X)? Separate with " | ". Give 1-3.',
-    'Never run VCS outside orchestrator | Never commit secrets',
+  const forbidden = await askChoice(
+    'Forbidden operations (NEVER do X) — choose most critical',
+    [
+      'Never run VCS outside orchestrator | Never commit secrets',
+      'Never modify AGENTS.md directly | Never commit secrets',
+      'Never deploy to production without PR | Never run DB migrations blindly',
+      'Never use production data in dev | Never disable security checks',
+      'Custom (specify below)',
+    ],
+    1,
   );
-  const approvals = await askLines('Required approvals? e.g. PR review, security review', 'PR review by maintainer');
-  const perf = await askLines('Performance requirements? e.g. response SLA', 'None specified');
-  const sec = await askLines('Security constraints? e.g. never log secrets', 'Never log secrets/tokens');
-  const data = await askLines('Data handling rules? e.g. retention, privacy', 'No PII in repo');
-  const deploy = await askLines('Deployment rules? e.g. prod restrictions, rollback', 'Tagged releases only');
-  const forbiddenItems = forbidden
+  const approvals = await askChoice(
+    'Required approvals',
+    [
+      'PR review by maintainer',
+      'PR review + QA sign-off',
+      'PR review + security review + QA',
+      'Custom (specify below)',
+    ],
+    1,
+  );
+  const perf = await askChoice(
+    'Performance requirements',
+    [
+      'None specified',
+      'Response SLA < 500ms (P95)',
+      'Response SLA < 200ms (P95)',
+      'Throughput > 1000 req/s',
+      'Startup < 2s cold start',
+      'Custom (specify below)',
+    ],
+    1,
+  );
+  const sec = await askChoice(
+    'Security constraints',
+    [
+      'Never log secrets/tokens',
+      'Never log secrets + enforce input validation',
+      'Never log secrets + enforce auth on every endpoint',
+      'Custom (specify below)',
+    ],
+    1,
+  );
+  const data = await askChoice(
+    'Data handling rules',
+    ['No PII in repo', 'No PII + data retention policy', 'No PII + GDPR compliance required', 'Custom (specify below)'],
+    1,
+  );
+  const deploy = await askChoice(
+    'Deployment rules',
+    [
+      'Tagged releases only',
+      'Tagged releases + CI gate',
+      'Continuous deployment (CI/CD auto)',
+      'Blue-green deployments',
+      'Custom (specify below)',
+    ],
+    1,
+  );
+
+  // Resolve custom choices
+  const resolveCustom = async (v) =>
+    v.startsWith('Custom')
+      ? v.replace('Custom (specify below)', '').trim() || (await ask('  » Specify custom rules'))
+      : v;
+  const forbiddenResolved = await resolveCustom(forbidden);
+  const forbiddenItems = forbiddenResolved
     .split('|')
     .map((s) => s.trim())
     .filter(Boolean)
     .map((r) => `- ${r}: documented project constraint`)
     .join('\n');
+
   return `## Operational Rules & Constraints
 
 ### Forbidden Operations (NEVER)
 ${forbiddenItems || '- (none specified)'}
 
 ### Required Approvals
-- ${approvals}: as defined by project process
+- ${await resolveCustom(approvals)}: as defined by project process
 
 ### Performance Requirements
-- ${perf}
+- ${await resolveCustom(perf)}
 
 ### Security Constraints
-- ${sec}
+- ${await resolveCustom(sec)}
 
 ### Data Handling Rules
-- ${data}
+- ${await resolveCustom(data)}
 
 ### Deployment Rules
-- ${deploy}`;
+- ${await resolveCustom(deploy)}`;
 }
 
 async function moduleWorkflow(yes) {
   if (yes) return DEFAULTS.workflow;
   console.log('\n=== Module 4: Workflow & Process Definition ===');
-  const branching = await askLines('Branching model? Git Flow|GitHub Flow|trunk-based', 'Git Flow');
-  const commit = await askLines('Commit message format? Conventional Commits|custom', 'Conventional Commits');
-  const versioning = await askLines('Versioning scheme? SemVer|CalVer', 'Semantic Versioning');
-  const reviewers = await askLines('Minimum reviewers? number', '1');
-  const issues = await askLines('Issue/task tool? Jira|GitHub Issues|Linear', 'GitHub Issues');
-  const release = await askLines('Release/deploy workflow? automated|manual|hybrid', 'Hybrid');
-  const comms = await askLines('Decision comms channel? Slack|GitHub Discussions|ADR', 'GitHub Discussions');
+  const branching = await askChoice(
+    'Branching model',
+    ['Git Flow', 'GitHub Flow', 'GitLab Flow', 'Trunk-Based Development', 'Other'],
+    1,
+  );
+  const commit = await askChoice(
+    'Commit message format',
+    ['Conventional Commits', 'Angular Convention', 'Custom', 'Other'],
+    1,
+  );
+  const versioning = await askChoice(
+    'Versioning scheme',
+    ['Semantic Versioning (SemVer)', 'CalVer', 'ZeroVer', 'Custom', 'Other'],
+    1,
+  );
+  const reviewers = await askChoice('Minimum required reviewers', ['1', '2', '3', 'Other'], 1);
+  const issues = await askChoice(
+    'Issue / Task tracking tool',
+    ['GitHub Issues', 'GitLab Issues', 'Jira', 'Linear', 'Trello', 'Notion', 'Other'],
+    1,
+  );
+  const release = await askChoice(
+    'Release / Deploy workflow',
+    [
+      'Hybrid (CI build + manual tag)',
+      'Fully automated (CI/CD)',
+      'Manual (tag + deploy)',
+      'GitOps (ArgoCD / Flux)',
+      'Other',
+    ],
+    1,
+  );
+  const comms = await askChoice(
+    'Decision communication channel',
+    ['GitHub Discussions', 'Slack', 'Discord', 'ADR (docs/adr/)', 'Email', 'Other'],
+    1,
+  );
   return `## Workflow & Process Definition
 
 ### Version Control Strategy
@@ -341,25 +585,75 @@ async function moduleWorkflow(yes) {
 async function moduleDocs(yes) {
   if (yes) return DEFAULTS.docs;
   console.log('\n=== Module 5: Documentation Requirements ===');
-  const scope = await askLines('What must be documented? architecture, API, runbooks', 'Architecture + API');
-  const fmt = await askLines('Documentation format/tools? Markdown|Confluence|OpenAPI', 'Markdown in repo');
-  const review = await askLines('Documentation review? in code review|separate', 'In code review');
-  const api = await askLines('API doc standard? OpenAPI|JSDoc|none', 'JSDoc');
-  const readme = await askLines('Mandatory README per module? yes|no', 'yes');
+  const scope = await askChoice(
+    'What must be documented?',
+    [
+      'Architecture + API',
+      'Architecture + API + Deployment runbooks',
+      'Everything (Architecture + API + Runbooks + User guides)',
+      'Custom (specify below)',
+    ],
+    2,
+  );
+  const fmt = await askChoice(
+    'Documentation format / tools',
+    [
+      'Markdown in repo',
+      'Markdown + Confluence',
+      'OpenAPI + Markdown',
+      'Storybook + Markdown',
+      'Custom (specify below)',
+    ],
+    1,
+  );
+  const review = await askChoice(
+    'Documentation review process',
+    [
+      'In code review',
+      'Separate documentation review',
+      'In code review + automated docs check',
+      'Custom (specify below)',
+    ],
+    1,
+  );
+  const api = await askChoice(
+    'API documentation standard',
+    [
+      'JSDoc / TypeScript (TSDoc)',
+      'OpenAPI / Swagger',
+      'Sphinx (Python)',
+      'XML Docs (.NET)',
+      'None',
+      'Custom (specify below)',
+    ],
+    1,
+  );
+  const readme = await askChoice('Mandatory README per module?', ['yes', 'no'], 1);
+
+  const resolveCustom = async (v) =>
+    v.startsWith('Custom')
+      ? v.replace('Custom (specify below)', '').trim() || (await ask('  » Specify custom value'))
+      : v;
+
+  const scopeVal = await resolveCustom(scope);
+  const apiVal = await resolveCustom(api);
+  const fmtVal = await resolveCustom(fmt);
+  const reviewVal = await resolveCustom(review);
+
   return `## Documentation Requirements
 
 ### Documentation Scope & Coverage
-- **Architecture**: Required - ${scope}
-- **API Specifications**: Required - ${api}
+- **Architecture**: Required - ${scopeVal}
+- **API Specifications**: Required - ${apiVal}
 - **Deployment Guides**: Required - README + per-platform docs
 - **Operational Runbooks**: Optional
 - **Module READMEs**: ${readme === 'no' ? 'Optional' : 'Required sections'}
 
 ### Documentation Tools & Format
-- **Primary Format**: ${fmt}
+- **Primary Format**: ${fmtVal}
 - **Location**: Repository
 - **Version Control**: In-repo
-- **Tool Stack**: Markdown + ${api}
+- **Tool Stack**: Markdown + ${apiVal}
 
 ### Documentation Standards
 - **Code Comments**: Mandatory for public APIs
@@ -368,8 +662,8 @@ async function moduleDocs(yes) {
 - **Migration Guides**: Required for breaking changes
 
 ### Documentation Review
-- **Included in Code Review**: ${review.includes('separate') ? 'No' : 'Yes'}
-- **Separate Review Process**: ${review.includes('separate') ? 'Yes' : 'No'}
+- **Included in Code Review**: ${reviewVal.includes('separate') ? 'No' : 'Yes'}
+- **Separate Review Process**: ${reviewVal.includes('separate') ? 'Yes' : 'No'}
 - **Approval Required**: Yes (maintainer)`;
 }
 
