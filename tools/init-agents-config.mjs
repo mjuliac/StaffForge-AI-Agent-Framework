@@ -429,18 +429,13 @@ async function moduleRules(yes) {
       'Never modify AGENTS.md directly | Never commit secrets',
       'Never deploy to production without PR | Never run DB migrations blindly',
       'Never use production data in dev | Never disable security checks',
-      'Custom (specify below)',
+      'Other',
     ],
     1,
   );
   const approvals = await askChoice(
     'Required approvals',
-    [
-      'PR review by maintainer',
-      'PR review + QA sign-off',
-      'PR review + security review + QA',
-      'Custom (specify below)',
-    ],
+    ['PR review by maintainer', 'PR review + QA sign-off', 'PR review + security review + QA', 'Other'],
     1,
   );
   const perf = await askChoice(
@@ -451,7 +446,7 @@ async function moduleRules(yes) {
       'Response SLA < 200ms (P95)',
       'Throughput > 1000 req/s',
       'Startup < 2s cold start',
-      'Custom (specify below)',
+      'Other',
     ],
     1,
   );
@@ -461,13 +456,13 @@ async function moduleRules(yes) {
       'Never log secrets/tokens',
       'Never log secrets + enforce input validation',
       'Never log secrets + enforce auth on every endpoint',
-      'Custom (specify below)',
+      'Other',
     ],
     1,
   );
   const data = await askChoice(
     'Data handling rules',
-    ['No PII in repo', 'No PII + data retention policy', 'No PII + GDPR compliance required', 'Custom (specify below)'],
+    ['No PII in repo', 'No PII + data retention policy', 'No PII + GDPR compliance required', 'Other'],
     1,
   );
   const deploy = await askChoice(
@@ -477,18 +472,12 @@ async function moduleRules(yes) {
       'Tagged releases + CI gate',
       'Continuous deployment (CI/CD auto)',
       'Blue-green deployments',
-      'Custom (specify below)',
+      'Other',
     ],
     1,
   );
 
-  // Resolve custom choices
-  const resolveCustom = async (v) =>
-    v.startsWith('Custom')
-      ? v.replace('Custom (specify below)', '').trim() || (await ask('  » Specify custom rules'))
-      : v;
-  const forbiddenResolved = await resolveCustom(forbidden);
-  const forbiddenItems = forbiddenResolved
+  const forbiddenItems = forbidden
     .split('|')
     .map((s) => s.trim())
     .filter(Boolean)
@@ -501,19 +490,19 @@ async function moduleRules(yes) {
 ${forbiddenItems || '- (none specified)'}
 
 ### Required Approvals
-- ${await resolveCustom(approvals)}: as defined by project process
+- ${approvals}: as defined by project process
 
 ### Performance Requirements
-- ${await resolveCustom(perf)}
+- ${perf}
 
 ### Security Constraints
-- ${await resolveCustom(sec)}
+- ${sec}
 
 ### Data Handling Rules
-- ${await resolveCustom(data)}
+- ${data}
 
 ### Deployment Rules
-- ${await resolveCustom(deploy)}`;
+- ${deploy}`;
 }
 
 async function moduleWorkflow(yes) {
@@ -599,69 +588,41 @@ async function moduleDocs(yes) {
       'Architecture + API',
       'Architecture + API + Deployment runbooks',
       'Everything (Architecture + API + Runbooks + User guides)',
-      'Custom (specify below)',
+      'Other',
     ],
     2,
   );
   const fmt = await askChoice(
     'Documentation format / tools',
-    [
-      'Markdown in repo',
-      'Markdown + Confluence',
-      'OpenAPI + Markdown',
-      'Storybook + Markdown',
-      'Custom (specify below)',
-    ],
+    ['Markdown in repo', 'Markdown + Confluence', 'OpenAPI + Markdown', 'Storybook + Markdown', 'Other'],
     1,
   );
   const review = await askChoice(
     'Documentation review process',
-    [
-      'In code review',
-      'Separate documentation review',
-      'In code review + automated docs check',
-      'Custom (specify below)',
-    ],
+    ['In code review', 'Separate documentation review', 'In code review + automated docs check', 'Other'],
     1,
   );
   const api = await askChoice(
     'API documentation standard',
-    [
-      'JSDoc / TypeScript (TSDoc)',
-      'OpenAPI / Swagger',
-      'Sphinx (Python)',
-      'XML Docs (.NET)',
-      'None',
-      'Custom (specify below)',
-    ],
+    ['JSDoc / TypeScript (TSDoc)', 'OpenAPI / Swagger', 'Sphinx (Python)', 'XML Docs (.NET)', 'None', 'Other'],
     1,
   );
   const readme = await askChoice('Mandatory README per module?', ['yes', 'no'], 1);
 
-  const resolveCustom = async (v) =>
-    v.startsWith('Custom')
-      ? v.replace('Custom (specify below)', '').trim() || (await ask('  » Specify custom value'))
-      : v;
-
-  const scopeVal = await resolveCustom(scope);
-  const apiVal = await resolveCustom(api);
-  const fmtVal = await resolveCustom(fmt);
-  const reviewVal = await resolveCustom(review);
-
   return `## Documentation Requirements
 
 ### Documentation Scope & Coverage
-- **Architecture**: Required - ${scopeVal}
-- **API Specifications**: Required - ${apiVal}
+- **Architecture**: Required - ${scope}
+- **API Specifications**: Required - ${api}
 - **Deployment Guides**: Required - README + per-platform docs
 - **Operational Runbooks**: Optional
 - **Module READMEs**: ${readme === 'no' ? 'Optional' : 'Required sections'}
 
 ### Documentation Tools & Format
-- **Primary Format**: ${fmtVal}
+- **Primary Format**: ${fmt}
 - **Location**: Repository
 - **Version Control**: In-repo
-- **Tool Stack**: Markdown + ${apiVal}
+- **Tool Stack**: Markdown + ${api}
 
 ### Documentation Standards
 - **Code Comments**: Mandatory for public APIs
@@ -670,8 +631,8 @@ async function moduleDocs(yes) {
 - **Migration Guides**: Required for breaking changes
 
 ### Documentation Review
-- **Included in Code Review**: ${reviewVal.includes('separate') ? 'No' : 'Yes'}
-- **Separate Review Process**: ${reviewVal.includes('separate') ? 'Yes' : 'No'}
+- **Included in Code Review**: ${review.includes('separate') ? 'No' : 'Yes'}
+- **Separate Review Process**: ${review.includes('separate') ? 'Yes' : 'No'}
 - **Approval Required**: Yes (maintainer)`;
 }
 
@@ -823,6 +784,43 @@ function syntaxPass(data, changes) {
 }
 
 // Orchestrator entry
+// ── Project description summary ──
+function projectSummary(data) {
+  // Extract key facts from each section
+  const extract = (section, pattern) => {
+    const m = section.match(new RegExp(pattern));
+    return m ? m[1].trim() : '-';
+  };
+  const langs = extract(data.stack, /Languages\*\*:\s*([^\n]*)/);
+  const framework = extract(data.stack, /Web Framework\*\*:\s*([^\n]*)/);
+  const db = extract(data.stack, /Database\(s\)\*\*:\s*([^\n]*)/);
+  const arch = extract(data.stack, /Architecture Pattern\*\*:\s*([^\n]*)/);
+  const test = extract(data.stack, /Testing Framework\*\*:\s*([^\n]*)/);
+  const devops = extract(data.stack, /DevOps & Deployment\*\*:\s*([^\n]*)/);
+  const naming = extract(data.conventions, /Variable Naming\*\*:\s*([^\n]*)/);
+  const formatter = extract(data.conventions, /Code Formatter\*\*:\s*([^\n]*)/);
+  const indent = extract(data.conventions, /Indentation\*\*:\s*([^\n]*)/);
+  const branching = extract(data.workflow, /Branching Model\*\*:\s*([^\n]*)/);
+  const docScope = extract(data.docs, /Architecture\*\*:\s*Required\s*-\s*([^\n]*)/);
+
+  console.log('\n' + '='.repeat(56));
+  console.log('  PROJECT CONFIGURATION SUMMARY');
+  console.log('='.repeat(56));
+  console.log(`  Project         : ${data.projectName}`);
+  console.log(`  Language        : ${langs}`);
+  console.log(`  Framework       : ${framework}`);
+  console.log(`  Database        : ${db}`);
+  console.log(`  Architecture    : ${arch}`);
+  console.log(`  Testing         : ${test}`);
+  console.log(`  DevOps          : ${devops}`);
+  console.log(`  Naming          : ${naming}`);
+  console.log(`  Formatter       : ${formatter}`);
+  console.log(`  Indentation     : ${indent}`);
+  console.log(`  Branching       : ${branching}`);
+  console.log(`  Documentation   : ${docScope}`);
+  console.log('='.repeat(56));
+}
+
 export function sanitize(data) {
   const changes = [];
   // Stage 1 — structural dedupe on every section
@@ -978,6 +976,9 @@ export async function generateAgentsConfig({ outDir = cwd(), yes = false, rl = n
     console.log('\n→ Sanitization applied (coherence layer):');
     for (const c of changes) console.log('  • ' + c);
   }
+
+  // ── Project Summary ──
+  if (!yes) projectSummary(data);
 
   let content;
   let outFile;
