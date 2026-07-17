@@ -19,7 +19,12 @@ export { sanitizeInput, isSafe, getInjectionPatterns } from './input-sanitizer.m
 export { scanSecrets, redactSecrets, isClean, getSecretPatterns } from './output-dlp.mjs';
 
 // Output Guardrails (C) — Hallucination Check
-export { extractFileReferences, verifyFileReferences, crossReference, checkHallucinations } from './hallucination-check.mjs';
+export {
+  extractFileReferences,
+  verifyFileReferences,
+  crossReference,
+  checkHallucinations,
+} from './hallucination-check.mjs';
 
 // Output Guardrails (C) — Schema Validation
 export { validateAgainstSchema, validateAgentOutput, clearCache, getValidator } from './schema-validator.mjs';

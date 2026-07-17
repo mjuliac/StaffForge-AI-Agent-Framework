@@ -20,7 +20,7 @@ export class Router {
     if (sanitized.alerts.length > 0) {
       this._sanitizationCount++;
       this._log.warn(
-        `ROUTER [input-guardrail]: ${sanitized.alerts.length} injection pattern(s) detected in prompt (taskType=${taskType})`
+        `ROUTER [input-guardrail]: ${sanitized.alerts.length} injection pattern(s) detected in prompt (taskType=${taskType})`,
       );
       for (const alert of sanitized.alerts) {
         this._log.warn(`  [${alert.severity}] ${alert.category}: "${alert.match}"`);

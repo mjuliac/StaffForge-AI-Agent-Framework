@@ -6,10 +6,7 @@
  * agent entries (they still exist for other platforms).
  */
 
-const OPENCODE_BUILTINS = new Set([
-  'build', 'plan', 'general', 'explore',
-  'title', 'summary', 'compaction',
-]);
+const OPENCODE_BUILTINS = new Set(['build', 'plan', 'general', 'explore', 'title', 'summary', 'compaction']);
 
 export default function opencodeAdapter(agents) {
   const mapPermission = (tools) => ({

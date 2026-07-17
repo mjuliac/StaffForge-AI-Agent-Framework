@@ -22,19 +22,19 @@ import { getLogger } from '../logger.mjs';
 const DEFAULT_POLICY = {
   input: {
     enabled: true,
-    mode: 'reject',        // 'reject' | 'warn' | 'report'
+    mode: 'reject', // 'reject' | 'warn' | 'report'
     allowlist: [],
   },
   runtime: {
     maxIterations: 10,
-    tokenBudget: 32000,    // per agent call
+    tokenBudget: 32000, // per agent call
     sessionBudget: 128000, // per pipeline session
-    timeoutMs: 120000,     // per task call
+    timeoutMs: 120000, // per task call
     maxRetries: 3,
   },
   output: {
     dlpEnabled: true,
-    dlpMode: 'redact',     // 'scan' | 'redact'
+    dlpMode: 'redact', // 'scan' | 'redact'
     hallucinationCheck: true,
     schemaValidation: true,
     entropyThreshold: 4.0,
@@ -175,7 +175,9 @@ export class GuardrailManager {
           totalFindings: dlpResult.findings.length,
           criticalCount,
         });
-        this._log.warn(`GUARDRAIL [output]: DLP flagged ${dlpResult.findings.length} secret(s) (${criticalCount} critical)`);
+        this._log.warn(
+          `GUARDRAIL [output]: DLP flagged ${dlpResult.findings.length} secret(s) (${criticalCount} critical)`,
+        );
       }
     }
 
