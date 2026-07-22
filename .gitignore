@@ -9,3 +9,4 @@ adapters/*/output/
 .github/instructions/
 .github/copilot-instructions.md
 node_modules/
+.npmrc

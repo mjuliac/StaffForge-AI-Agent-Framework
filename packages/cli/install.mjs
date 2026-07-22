@@ -309,34 +309,36 @@ ${a.body}\n`,
 function generateCopilot(agents) {
   const files = [];
 
-  // copilot-instructions.md — orchestrator as default agent (always active)
-  const orch = agents.find((a) => a.name.toLowerCase() === 'orchestrator');
-  if (orch) {
-    files.push({
-      path: '.github/copilot-instructions.md',
-      content: `---\napplyTo: "**"\n---\n\nYou are the default agent acting as orchestrator. All user requests arrive through you first.\n${orch.body}\n`,
-    });
-  }
+  // ── 1. copilot-instructions.md — NEUTRAL project context ───────────────
+  // CRITICAL: This file has applyTo: "**" which applies to EVERY Copilot
+  // conversation. If we put "you are the orchestrator" here, it overrides
+  // @ask (default chat), @plan, and ALL built-in agents.
+  // This file MUST remain neutral — just project-level context.
+  files.push({
+    path: '.github/copilot-instructions.md',
+    content: `---\napplyTo: "**"\n---\n\nStaffForge AI Agent Framework — Multi-provider agent system.\nUse @orchestrator for multi-agent pipeline execution.\nTechnology agents (@python, @typescript, @react, etc.) are available via @mention.\n`,
+  });
 
-  // .github/agents/orchestrator.agent.md — ONLY orchestrator (NOT all 150+ agents)
-  // Generating .agent.md for ALL agents would override Copilot's native agents
-  // (@ask, @plan, @workspace) and make them disappear from the agent list.
-  if (orch) {
-    const t = orch.frontmatter.tools || {};
+  // ── 2. .github/agents/<name>.agent.md — ALL agents @mention-able ──────
+  // Every agent gets its own .agent.md so it can be @mentioned directly.
+  // Built-in Copilot agents (@ask, @plan, @workspace) remain available
+  // because we do NOT override copilot-instructions.md with agent identity.
+  for (const agent of agents) {
+    const t = agent.frontmatter.tools || {};
     const allowed = [];
     if (t.write || t.edit) allowed.push('read', 'edit');
     if (t.bash) allowed.push('execute');
     allowed.push('agent');
 
     const fm = ['---'];
-    fm.push(`name: ${orch.name}`);
-    if (orch.frontmatter.description) fm.push(`description: ${orch.frontmatter.description}`);
+    fm.push(`name: ${agent.name}`);
+    if (agent.frontmatter.description) fm.push(`description: ${agent.frontmatter.description}`);
     fm.push(`tools: [${allowed.map((x) => `'${x}'`).join(', ')}]`);
     fm.push('---');
 
     files.push({
-      path: `.github/agents/orchestrator.agent.md`,
-      content: fm.join('\n') + '\n\n' + orch.body + '\n',
+      path: `.github/agents/${agent.id}.agent.md`,
+      content: fm.join('\n') + '\n\n' + agent.body + '\n',
     });
   }
 
@@ -613,16 +615,30 @@ async function main() {
     console.log(`  ✓ ${count} file(s) → ${outRel}`);
   }
 
-  // ── Copy agents to CWD (always) ──
-  if (CWD !== fw) {
+  // ── Copy agents to CWD (skip for copilot — uses .github/agents/ instead) ──
+  // Agents are ONLY needed at the project root for OpenCode/Claude/Cursor.
+  // For Copilot, the source agents/ would clutter the project root unnecessarily.
+  if (!isAll && platform === 'copilot') {
+    if (existsSync(join(CWD, 'agents')) && resolve(join(CWD, 'agents')) !== agentsDir) {
+      rmSync(join(CWD, 'agents'), { recursive: true, force: true });
+    }
+    console.log('  ∟ agents/ skipped (Copilot uses .github/agents/)');
+  } else if (CWD !== fw) {
     copyAgents(agentsDir, CWD);
+    const agentFiles = readdirSync(join(CWD, 'agents')).filter((f) => f.endsWith('.md')).length;
+    console.log(`  ✓ agents/ → ./agents (${agentFiles} files)`);
   }
-  // Also copy agents to outDir when it differs from CWD (e.g. --out flag)
+  // Also copy agents to outDir when it differs from CWD (e.g. --out flag) — skip for copilot
   if (outDir !== CWD && outDir !== fw) {
-    copyAgents(agentsDir, outDir);
+    if (!isAll && platform === 'copilot') {
+      const outAgents = join(outDir, 'agents');
+      if (existsSync(outAgents)) {
+        rmSync(outAgents, { recursive: true, force: true });
+      }
+    } else {
+      copyAgents(agentsDir, outDir);
+    }
   }
-  const agentFiles = readdirSync(join(CWD, 'agents')).filter((f) => f.endsWith('.md')).length;
-  console.log(`  ✓ agents/ → ./agents (${agentFiles} files)`);
 
   // ── For single platform: copy platform files to CWD ──
   // (so opencode.json, CLAUDE.md etc appear in the project root)

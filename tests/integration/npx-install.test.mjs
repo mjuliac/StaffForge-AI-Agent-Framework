@@ -292,9 +292,17 @@ function runInstall(repoDir, projectDir, args = []) {
         break;
     }
 
-    // All platforms must have agents/ folder and .staffforge-vcs.json
-    assert(existsSync(join(projectDir, 'agents')), `${platform}: agents/`);
+    // All platforms must have .staffforge-vcs.json
     assert(existsSync(join(projectDir, '.staffforge-vcs.json')), `${platform}: .staffforge-vcs.json`);
+    // Copilot uses .github/agents/ instead of root agents/
+    if (platform === 'copilot') {
+      assert(
+        existsSync(join(projectDir, '.github', 'agents', 'orchestrator.agent.md')),
+        `${platform}: .github/agents/orchestrator.agent.md`,
+      );
+    } else {
+      assert(existsSync(join(projectDir, 'agents')), `${platform}: agents/`);
+    }
   }
 }
 
