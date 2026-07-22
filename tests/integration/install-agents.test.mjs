@@ -128,24 +128,22 @@ function runInstallInProject(platform) {
     assert(!content.includes('# Accessibility'), 'copilot-instructions.md does NOT include non-orchestrator bodies');
   }
 
-  // .github/agents/ directory with individual .agent.md files
+  // .github/agents/ directory with ONLY orchestrator.agent.md
+  // (NOT all 150+ agents — that would override Copilot's native @ask, @plan, @workspace)
   const agentsDir = join(project, '.github', 'agents');
   assert(existsSync(agentsDir), 'copilot creates .github/agents/');
   if (existsSync(agentsDir)) {
     const agentFiles = readdirSync(agentsDir).filter((f) => f.endsWith('.agent.md'));
-    assert(agentFiles.length >= 140, '.github/agents/ has ~141 .agent.md files (' + agentFiles.length + ')');
-    assert(agentFiles.includes('a11y.agent.md'), '.github/agents/ has a11y.agent.md');
-
-    // Verify agent file has proper YAML frontmatter + body
-    const a11y = readFileSync(join(agentsDir, 'a11y.agent.md'), 'utf-8');
-    assert(a11y.startsWith('---'), 'a11y.agent.md starts with frontmatter');
-    assert(a11y.includes('name: A11y'), 'a11y.agent.md frontmatter has name');
-    assert(a11y.includes('description: '), 'a11y.agent.md frontmatter has description');
-    assert(a11y.includes('# Accessibility'), 'a11y.agent.md contains agent body');
-    assert(a11y.includes('## Mandatory Rules'), 'a11y.agent.md contains rules');
-
-    // orchestrator is also in .github/agents/ as @mentionable agent
+    assert(agentFiles.length === 1, '.github/agents/ has exactly 1 .agent.md (orchestrator only), got ' + agentFiles.length);
     assert(agentFiles.includes('orchestrator.agent.md'), 'orchestrator IS in .github/agents/ as @mentionable');
+
+    // Verify orchestrator.agent.md has proper YAML frontmatter + body
+    const orchFile = readFileSync(join(agentsDir, 'orchestrator.agent.md'), 'utf-8');
+    assert(orchFile.startsWith('---'), 'orchestrator.agent.md starts with frontmatter');
+    assert(orchFile.includes('name: Orchestrator'), 'orchestrator.agent.md frontmatter has name');
+    assert(orchFile.includes('description: '), 'orchestrator.agent.md frontmatter has description');
+    assert(orchFile.includes('# Orchestrator'), 'orchestrator.agent.md contains orchestrator body');
+    assert(orchFile.includes('## Mandatory Rules'), 'orchestrator.agent.md contains rules');
   }
 
   rmSync(project, { recursive: true, force: true });

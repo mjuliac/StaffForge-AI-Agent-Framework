@@ -1,10 +1,14 @@
 /**
  * GitHub Copilot adapter — generates:
- *   .github/copilot-instructions.md     (orchestrator as default — always active)
- *   .github/agents/<id>.agent.md         (all agents @mentionable, including orchestrator)
- *   .github/instructions/<skill>.instructions.md (skills as topic-specific instructions)
+ *   .github/copilot-instructions.md              (orchestrator as default — always active)
+ *   .github/agents/orchestrator.agent.md          (only orchestrator @mention-able)
+ *   .github/instructions/<skill>.instructions.md  (skills as topic-specific instructions)
  *
  * Accepts skills as second parameter.
+ *
+ * IMPORTANT: Only orchestrator gets an .agent.md file. We do NOT generate
+ * .agent.md for every framework agent (150+) because that would OVERRIDE
+ * Copilot's native agents (@ask, @plan, @workspace) and make them disappear.
  *
  * Per GitHub Copilot conventions:
  * - copilot-instructions.md applies to EVERY conversation (default agent behavior)
@@ -56,12 +60,14 @@ ${orchestrator.body}
     });
   }
 
-  // ── 2. .github/agents/<id>.agent.md — all agents @mentionable ────────────
-  for (const agent of agents) {
-    const frontmatter = buildAgentFrontmatter(agent);
+  // ── 2. .github/agents/orchestrator.agent.md — ONLY orchestrator ────────
+  // We intentionally do NOT generate .agent.md for all 150+ agents because
+  // that would override Copilot's native agents (@ask, @plan, @workspace).
+  if (orchestrator) {
+    const frontmatter = buildAgentFrontmatter(orchestrator);
     files.push({
-      path: `.github/agents/${agent.id}.agent.md`,
-      content: `${frontmatter}\n\n${agent.body}\n`,
+      path: `.github/agents/${orchestrator.id}.agent.md`,
+      content: `${frontmatter}\n\n${orchestrator.body}\n`,
     });
   }
 
