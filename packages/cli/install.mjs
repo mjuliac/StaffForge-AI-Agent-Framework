@@ -318,24 +318,25 @@ function generateCopilot(agents) {
     });
   }
 
-  // .github/agents/<id>.agent.md — individual sub-agents
-  for (const a of agents) {
-    if (a.name.toLowerCase() === 'orchestrator') continue;
-    const tools = a.frontmatter.tools || {};
+  // .github/agents/orchestrator.agent.md — ONLY orchestrator (NOT all 150+ agents)
+  // Generating .agent.md for ALL agents would override Copilot's native agents
+  // (@ask, @plan, @workspace) and make them disappear from the agent list.
+  if (orch) {
+    const t = orch.frontmatter.tools || {};
     const allowed = [];
-    if (tools.write || tools.edit) allowed.push('read', 'edit');
-    if (tools.bash) allowed.push('execute');
+    if (t.write || t.edit) allowed.push('read', 'edit');
+    if (t.bash) allowed.push('execute');
     allowed.push('agent');
 
-    const fmLines = ['---'];
-    fmLines.push(`name: ${a.name}`);
-    if (a.frontmatter.description) fmLines.push(`description: ${a.frontmatter.description}`);
-    fmLines.push(`tools: [${allowed.map((t) => `'${t}'`).join(', ')}]`);
-    fmLines.push('---');
+    const fm = ['---'];
+    fm.push(`name: ${orch.name}`);
+    if (orch.frontmatter.description) fm.push(`description: ${orch.frontmatter.description}`);
+    fm.push(`tools: [${allowed.map((x) => `'${x}'`).join(', ')}]`);
+    fm.push('---');
 
     files.push({
-      path: `.github/agents/${a.id}.agent.md`,
-      content: fmLines.join('\n') + '\n\n' + a.body + '\n',
+      path: `.github/agents/orchestrator.agent.md`,
+      content: fm.join('\n') + '\n\n' + orch.body + '\n',
     });
   }
 
@@ -592,6 +593,20 @@ async function main() {
       continue;
     }
     console.log(`\n→ Exporting for ${pl}...`);
+    // Clean stale agent files before regenerating (avoids orphan .agent.md from prev installs)
+    if (pl === 'copilot') {
+      const agentsDir = join(outDir, '.github', 'agents');
+      const instrDir = join(outDir, '.github', 'instructions');
+      for (const dir of [agentsDir, instrDir]) {
+        if (existsSync(dir)) {
+          for (const f of readdirSync(dir)) {
+            if (f.endsWith('.agent.md') || f.endsWith('.instructions.md')) {
+              rmSync(join(dir, f), { force: true });
+            }
+          }
+        }
+      }
+    }
     const files = pl === 'opencode' ? gen(agents, agent) : gen(agents);
     const count = writeFiles(files, outDir);
     const outRel = outDir === CWD ? '.' : relative(CWD, outDir) || outDir;
