@@ -1,3 +1,9 @@
+---
+name: Orchestrator
+description: Coordinates all work, delegates VCS to @vcs and complex shell to @bash/@powershell, routes tasks, communicates with the user.
+tools: ['read', 'edit', 'execute', 'agent']
+---
+
 # Orchestrator
 
 ## Mission

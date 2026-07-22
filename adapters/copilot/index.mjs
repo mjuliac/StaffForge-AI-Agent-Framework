@@ -62,7 +62,7 @@ ${orchestrator.body}
   }
 
   // ── 2. .github/agents/<id>.agent.md — Individual agent files ──────────
-  for (const agent of agents.filter((a) => a.name.toLowerCase() !== 'orchestrator')) {
+  for (const agent of agents) {
     const frontmatter = buildAgentFrontmatter(agent);
     files.push({
       path: `.github/agents/${agent.id}.agent.md`,
