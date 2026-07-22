@@ -5,4 +5,7 @@ opencode.json
 skills-lock.json
 adapters/*/output/
 .staffforge-*.json
+.github/agents/
+.github/instructions/
+.github/copilot-instructions.md
 node_modules/
