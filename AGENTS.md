@@ -32,7 +32,8 @@ See `ORCHESTRATOR_MATRIX.md`.
 ## Conventions
 
 - **Orchestrator is the default agent** (Tab key). It receives all user requests first.
-- **Orchestrator creates the VCS branch** as its very first action for every task.
+- **🔴 BRANCH CREATION IS NOT OPTIONAL — Orchestrator creates the VCS branch as its very first action for every task.** Never work directly on develop/main. Any work done outside a task branch is REJECTED.
+- **🔴 VCS/git agents REFUSE commits, stages, and file operations on develop/main.** Only merges and tags permitted on protected branches.
 - Only the orchestrator communicates with the user or creates branches/commits.
 - No subagent may talk to the user or manage VCS.
 - Subagents get findings/risks/recommendations, never final output.
