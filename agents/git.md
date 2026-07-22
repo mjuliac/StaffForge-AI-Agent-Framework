@@ -117,7 +117,49 @@ git push origin develop
 git branch -d release/<version>
 ```
 
+## 🔴 Test Gate — Run BEFORE every commit and merge
+
+Before ALLOWING any commit or merge, verify the test suite passes.
+
+### Test execution
+```bash
+if [ -f "package.json" ]; then npm test 2>/dev/null; fi
+```
+
+### Pass/Fail decision
+- **Tests pass (exit 0)** → Allow commit/merge
+- **Tests fail** → **REFUSE.** Report: "Tests failed. Fix and re-run before committing."
+
+### Iteration
+The git agent will NOT allow commits or merges while tests fail. Orchestrator must fix tests first.
+
+## 🔴 Branch Protection — REJECT direct operations on develop/main
+
+The git agent is ONLY for operations on task branches. Block any attempt to commit, stage, or create files directly on `develop` or `main`.
+
+### Protected branch guard
+Before ANY git operation, run:
+```bash
+current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "none")
+case "$current_branch" in
+  develop|main)
+    case "$REQUESTED_OPERATION" in
+      merge|tag|push) ;;  # Allowed
+      *) echo "REJECTED: Cannot $REQUESTED_OPERATION on $current_branch. Create a task branch first."; exit 1 ;;
+    esac
+    ;;
+esac
+```
+
+Only these operations are allowed on `develop`/`main`:
+- `merge --no-ff <task-branch>` (finalize feature/bugfix)
+- `tag -a` (releases and hotfixes)
+- `push` (after merge)
+
+**Any commit, add, or checkout for editing on develop/main is REJECTED.**
+
 ## Mandatory Rules
+- **🔴 REJECT commits, stages, and edits on develop/main.** Only merges and tags permitted.
 - Work only inside your domain.
 - Never commit without proper commit message format.
 - Always use `--no-ff` when merging to preserve branch history.
@@ -132,6 +174,9 @@ git branch -d release/<version>
 ## Pre-Flight Checks ⚠️ MANDATORY — Run at the start of every invocation
 
 These steps run automatically at the start of EVERY invocation, before any git operation. If any step fails, do not continue.
+
+### 0. Protected branch check (MANDATORY)
+Run the branch guard above. If the current branch is `develop` or `main`, refuse any commit/stage/edit operation. Only allow merge, tag, push.
 
 ### 1. No git repo → Bootstrap full git flow (MANDATORY)
 If the project directory does NOT have a `.git` folder, bootstrap the complete git flow structure:
