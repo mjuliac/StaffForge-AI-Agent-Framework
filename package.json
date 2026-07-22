@@ -1,5 +1,8 @@
 {
-  "name": "staffforge-ai-agent-framework",
+  "name": "@staffforge/staffforge-ai-agent-framework",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "2.6.0",
   "license": "GPL-3.0-only",
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
