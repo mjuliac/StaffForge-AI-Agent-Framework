@@ -144,8 +144,8 @@ function runInstallInProject(platform) {
     assert(a11y.includes('# Accessibility'), 'a11y.agent.md contains agent body');
     assert(a11y.includes('## Mandatory Rules'), 'a11y.agent.md contains rules');
 
-    // Verify no orchestrator.agent.md (orchestrator lives in copilot-instructions.md)
-    assert(!agentFiles.includes('orchestrator.agent.md'), 'orchestrator NOT duplicated as .agent.md');
+    // orchestrator is also in .github/agents/ as @mentionable agent
+    assert(agentFiles.includes('orchestrator.agent.md'), 'orchestrator IS in .github/agents/ as @mentionable');
   }
 
   rmSync(project, { recursive: true, force: true });

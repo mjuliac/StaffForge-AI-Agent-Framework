@@ -318,9 +318,8 @@ function generateCopilot(agents) {
     });
   }
 
-  // .github/agents/<id>.agent.md — individual sub-agents
+  // .github/agents/<id>.agent.md — individual sub-agents (includes orchestrator for @mention)
   for (const a of agents) {
-    if (a.name.toLowerCase() === 'orchestrator') continue;
     const tools = a.frontmatter.tools || {};
     const allowed = [];
     if (tools.write || tools.edit) allowed.push('read', 'edit');
