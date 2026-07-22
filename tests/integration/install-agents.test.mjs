@@ -117,25 +117,32 @@ function runInstallInProject(platform) {
   const { project, result } = runInstallInProject('copilot');
   assert(result.status === 0, 'copilot install exits 0');
 
-  // copilot-instructions.md contains ONLY orchestrator body (default agent)
+  // copilot-instructions.md is NEUTRAL — must NOT contain orchestrator identity
+  // (applyTo: "**" means it applies to ALL conversations, so it must NOT
+  // override Copilot's built-in agents @ask, @plan, @workspace)
   const inst = join(project, '.github', 'copilot-instructions.md');
   assert(existsSync(inst), 'copilot creates .github/copilot-instructions.md');
   if (existsSync(inst)) {
     const content = readFileSync(inst, 'utf-8');
-    assert(content.includes('# Orchestrator'), 'copilot-instructions.md has orchestrator body');
-    assert(content.includes('## Mandatory Rules'), 'copilot-instructions.md has orchestrator rules');
+    assert(!content.includes('# Orchestrator'), 'copilot-instructions.md is NEUTRAL — no orchestrator body');
+    assert(!content.includes('## Mandatory Rules'), 'copilot-instructions.md is NEUTRAL — no orchestrator rules');
+    assert(content.includes('StaffForge AI Agent Framework'), 'copilot-instructions.md has project context');
+    assert(content.includes('@orchestrator'), 'copilot-instructions.md mentions @orchestrator as available agent');
     // Must NOT dump all agent bodies — those go in .github/agents/
-    assert(!content.includes('# Accessibility'), 'copilot-instructions.md does NOT include non-orchestrator bodies');
+    assert(!content.includes('# Accessibility'), 'copilot-instructions.md does NOT include agent bodies');
   }
 
-  // .github/agents/ directory with ONLY orchestrator.agent.md
-  // (NOT all 150+ agents — that would override Copilot's native @ask, @plan, @workspace)
+  // .github/agents/ directory with ALL agents as .agent.md
+  // Every agent gets its own .agent.md so it can be @mentioned directly.
+  // Built-in Copilot agents (@ask, @plan, @workspace) remain available
+  // because copilot-instructions.md is NEUTRAL (does NOT override agent identity).
   const agentsDir = join(project, '.github', 'agents');
   assert(existsSync(agentsDir), 'copilot creates .github/agents/');
   if (existsSync(agentsDir)) {
     const agentFiles = readdirSync(agentsDir).filter((f) => f.endsWith('.agent.md'));
-    assert(agentFiles.length === 1, '.github/agents/ has exactly 1 .agent.md (orchestrator only), got ' + agentFiles.length);
+    assert(agentFiles.length >= 140, '.github/agents/ has all ~141 agents, got ' + agentFiles.length);
     assert(agentFiles.includes('orchestrator.agent.md'), 'orchestrator IS in .github/agents/ as @mentionable');
+    assert(agentFiles.includes('a11y.agent.md'), 'sub-agents like a11y are also @mentionable');
 
     // Verify orchestrator.agent.md has proper YAML frontmatter + body
     const orchFile = readFileSync(join(agentsDir, 'orchestrator.agent.md'), 'utf-8');
@@ -144,6 +151,12 @@ function runInstallInProject(platform) {
     assert(orchFile.includes('description: '), 'orchestrator.agent.md frontmatter has description');
     assert(orchFile.includes('# Orchestrator'), 'orchestrator.agent.md contains orchestrator body');
     assert(orchFile.includes('## Mandatory Rules'), 'orchestrator.agent.md contains rules');
+
+    // Verify a sub-agent also has proper structure
+    const a11yFile = readFileSync(join(agentsDir, 'a11y.agent.md'), 'utf-8');
+    assert(a11yFile.startsWith('---'), 'a11y.agent.md starts with frontmatter');
+    assert(a11yFile.includes('name: A11y'), 'a11y.agent.md frontmatter has name');
+    assert(a11yFile.includes('# Accessibility'), 'a11y.agent.md contains agent body');
   }
 
   rmSync(project, { recursive: true, force: true });

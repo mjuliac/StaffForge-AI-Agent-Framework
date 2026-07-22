@@ -1,17 +1,19 @@
 /**
  * GitHub Copilot adapter — generates:
- *   .github/copilot-instructions.md              (orchestrator as default — always active)
- *   .github/agents/orchestrator.agent.md          (only orchestrator @mention-able)
+ *   .github/copilot-instructions.md              (neutral project context — does NOT override @ask/@plan)
+ *   .github/agents/*.agent.md                    (ALL agents @mention-able, including orchestrator)
  *   .github/instructions/<skill>.instructions.md  (skills as topic-specific instructions)
  *
  * Accepts skills as second parameter.
  *
- * IMPORTANT: Only orchestrator gets an .agent.md file. We do NOT generate
- * .agent.md for every framework agent (150+) because that would OVERRIDE
- * Copilot's native agents (@ask, @plan, @workspace) and make them disappear.
+ * IMPORTANT: copilot-instructions.md MUST remain NEUTRAL — it has applyTo: "**" which
+ * applies to ALL Copilot conversations. If it says "you are the orchestrator", it
+ * overrides @ask (default chat), @plan, and every other built-in agent.
+ * The orchestrator (and all other agents) exist ONLY as .agent.md files in
+ * .github/agents/ — they are @mention-able alongside @ask, @plan, and @workspace.
  *
  * Per GitHub Copilot conventions:
- * - copilot-instructions.md applies to EVERY conversation (default agent behavior)
+ * - copilot-instructions.md applies to EVERY conversation — keep it generic
  * - .github/agents/*.agent.md files create @mention-able custom agents
  * - .github/instructions/*.instructions.md files apply to matching file globs
  */
@@ -45,29 +47,32 @@ function buildAgentFrontmatter(agent) {
 export default function copilotAdapter(agents, skills = []) {
   const files = [];
 
-  // ── 1. copilot-instructions.md — orchestrator as default agent ─────────
-  const orchestrator = agents.find((a) => a.name.toLowerCase() === 'orchestrator');
-  if (orchestrator) {
-    files.push({
-      path: '.github/copilot-instructions.md',
-      content: `---
+  // ── 1. copilot-instructions.md — NEUTRAL project context ───────────────
+  // CRITICAL: This file has applyTo: "**" which applies to EVERY Copilot
+  // conversation. If we put "you are the orchestrator" here, it overrides
+  // @ask (default chat), @plan, and ALL built-in agents.
+  // This file MUST remain neutral — just project-level context.
+  files.push({
+    path: '.github/copilot-instructions.md',
+    content: `---
 applyTo: "**"
 ---
 
-You are the default agent acting as orchestrator. All user requests arrive through you first.
-${orchestrator.body}
+StaffForge AI Agent Framework — Multi-provider agent system.
+Use @orchestrator for multi-agent pipeline execution.
+Technology agents (@python, @typescript, @react, etc.) are available via @mention.
 `,
-    });
-  }
+  });
 
-  // ── 2. .github/agents/orchestrator.agent.md — ONLY orchestrator ────────
-  // We intentionally do NOT generate .agent.md for all 150+ agents because
-  // that would override Copilot's native agents (@ask, @plan, @workspace).
-  if (orchestrator) {
-    const frontmatter = buildAgentFrontmatter(orchestrator);
+  // ── 2. .github/agents/<name>.agent.md — ALL agents @mention-able ──────
+  // Every agent gets its own .agent.md so it can be @mentioned directly.
+  // Built-in Copilot agents (@ask, @plan, @workspace) remain available
+  // because we do NOT override copilot-instructions.md with agent identity.
+  for (const agent of agents) {
+    const frontmatter = buildAgentFrontmatter(agent);
     files.push({
-      path: `.github/agents/${orchestrator.id}.agent.md`,
-      content: `${frontmatter}\n\n${orchestrator.body}\n`,
+      path: `.github/agents/${agent.id}.agent.md`,
+      content: `${frontmatter}\n\n${agent.body}\n`,
     });
   }
 

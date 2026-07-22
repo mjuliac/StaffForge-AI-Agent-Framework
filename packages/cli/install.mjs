@@ -309,34 +309,36 @@ ${a.body}\n`,
 function generateCopilot(agents) {
   const files = [];
 
-  // copilot-instructions.md — orchestrator as default agent (always active)
-  const orch = agents.find((a) => a.name.toLowerCase() === 'orchestrator');
-  if (orch) {
-    files.push({
-      path: '.github/copilot-instructions.md',
-      content: `---\napplyTo: "**"\n---\n\nYou are the default agent acting as orchestrator. All user requests arrive through you first.\n${orch.body}\n`,
-    });
-  }
+  // ── 1. copilot-instructions.md — NEUTRAL project context ───────────────
+  // CRITICAL: This file has applyTo: "**" which applies to EVERY Copilot
+  // conversation. If we put "you are the orchestrator" here, it overrides
+  // @ask (default chat), @plan, and ALL built-in agents.
+  // This file MUST remain neutral — just project-level context.
+  files.push({
+    path: '.github/copilot-instructions.md',
+    content: `---\napplyTo: "**"\n---\n\nStaffForge AI Agent Framework — Multi-provider agent system.\nUse @orchestrator for multi-agent pipeline execution.\nTechnology agents (@python, @typescript, @react, etc.) are available via @mention.\n`,
+  });
 
-  // .github/agents/orchestrator.agent.md — ONLY orchestrator (NOT all 150+ agents)
-  // Generating .agent.md for ALL agents would override Copilot's native agents
-  // (@ask, @plan, @workspace) and make them disappear from the agent list.
-  if (orch) {
-    const t = orch.frontmatter.tools || {};
+  // ── 2. .github/agents/<name>.agent.md — ALL agents @mention-able ──────
+  // Every agent gets its own .agent.md so it can be @mentioned directly.
+  // Built-in Copilot agents (@ask, @plan, @workspace) remain available
+  // because we do NOT override copilot-instructions.md with agent identity.
+  for (const agent of agents) {
+    const t = agent.frontmatter.tools || {};
     const allowed = [];
     if (t.write || t.edit) allowed.push('read', 'edit');
     if (t.bash) allowed.push('execute');
     allowed.push('agent');
 
     const fm = ['---'];
-    fm.push(`name: ${orch.name}`);
-    if (orch.frontmatter.description) fm.push(`description: ${orch.frontmatter.description}`);
+    fm.push(`name: ${agent.name}`);
+    if (agent.frontmatter.description) fm.push(`description: ${agent.frontmatter.description}`);
     fm.push(`tools: [${allowed.map((x) => `'${x}'`).join(', ')}]`);
     fm.push('---');
 
     files.push({
-      path: `.github/agents/orchestrator.agent.md`,
-      content: fm.join('\n') + '\n\n' + orch.body + '\n',
+      path: `.github/agents/${agent.id}.agent.md`,
+      content: fm.join('\n') + '\n\n' + agent.body + '\n',
     });
   }
 

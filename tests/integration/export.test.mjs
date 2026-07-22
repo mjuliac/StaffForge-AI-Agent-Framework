@@ -64,9 +64,9 @@ const sampleAgent = {
   const results = await reg.exportToAll([sampleAgent]);
   assert(results.length >= 6, 'exportToAll all platforms');
   for (const r of results) {
-    // copilot generates 0 files when no orchestrator agent is present
+    // copilot always generates files: neutral copilot-instructions.md + .agent.md for all agents
     if (r.platform === 'copilot') {
-      assert(r.fileCount === 0, 'copilot exports 0 files (no orchestrator)');
+      assert(r.fileCount >= 1, 'copilot exports at least 1 file (neutral copilot-instructions.md + agent files)');
     } else {
       assert(r.fileCount >= 1, `${r.platform} exported at least 1 file`);
     }
