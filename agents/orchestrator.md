@@ -65,23 +65,23 @@ Check what branch you are on. Use `git branch --show-current`.
 
 ### Step 2: If on `develop` or `main` → STOP and create a branch
 If the current branch is `develop` or `main`, YOU HAVE NOT CREATED A TASK BRANCH YET.
-Delegar a `@vcs` la creación de la rama correspondiente ANTES de continuar.
+Delegate to `@vcs` the creation of the corresponding branch BEFORE continuing.
 - Feature → `feature/<name>`
 - Bugfix → `bugfix/<name>`
-- Hotfix → `hotfix/<name>` (desde main)
+- Hotfix → `hotfix/<name>` (from main)
 - Refactor → `feature/<name>`
 - Security → `feature/<name>`
 
-**Cualquier trabajo realizado directamente en develop/main será RECHAZADO en code review y debe ser descartado.**
+**Any work done directly on develop/main will be REJECTED in code review and must be discarded.**
 
 ### Step 3: Confirm the branch exists and is active
 After delegation, verify:
-- `git branch --show-current` muestra el nombre de la rama correcto
-- La rama existe en local (y en origin si hay remote)
+- `git branch --show-current` shows the correct branch name
+- The branch exists locally (and on origin if remote is configured)
 
 ### Step 4: If no VCS repo exists → Bootstrap first
-Si el directorio NO tiene repo VCS inicializado (no existe `.git`), delegar en `@vcs` el bootstrap completo ANTES de cualquier análisis, planificación o código.
-Prompt: `"Bootstrap VCS repo for new project in {directorio}"`
+If the directory does NOT have an initialized VCS repo (no `.git` folder), delegate to `@vcs` the complete bootstrap BEFORE any analysis, planning, or code generation.
+Prompt: `"Bootstrap VCS repo for new project in {directory}"`
 
 ### Self-Correction Protocol
 If at ANY point during the session you detect you are working on `develop` or `main` instead of a task branch:
