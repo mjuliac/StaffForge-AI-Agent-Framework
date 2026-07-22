@@ -114,6 +114,8 @@ function copyResult(platform, src, dest) {
       mkdirSync(join(dest, '.github'), { recursive: true });
       if (existsSync(join(src, '.github/copilot-instructions.md')))
         cp(join(src, '.github/copilot-instructions.md'), join(dest, '.github/copilot-instructions.md'));
+      if (existsSync(join(src, '.github/agents')))
+        cpSync(join(src, '.github/agents'), join(dest, '.github/agents'), { recursive: true });
       break;
     case 'aider':
       if (existsSync(join(src, '.aider.rules.md'))) cp(join(src, '.aider.rules.md'), join(dest, '.aider.rules.md'));
@@ -142,8 +144,9 @@ function setupPlatformSrc(platform) {
       writeFileSync(join(src, '.cursor', 'rules', 'core.md'), '# core');
       break;
     case 'copilot':
-      mkdirSync(join(src, '.github'), { recursive: true });
+      mkdirSync(join(src, '.github', 'agents'), { recursive: true });
       writeFileSync(join(src, '.github', 'copilot-instructions.md'), '# instructions');
+      writeFileSync(join(src, '.github', 'agents', 'a11y.agent.md'), '---\nname: A11y\ndescription: A11y expert\n---\n# Accessibility');
       break;
     case 'aider':
       writeFileSync(join(src, '.aider.rules.md'), '# rules');
@@ -190,11 +193,12 @@ function cleanupPlatform({ src, dest }) {
   cleanupPlatform({ src, dest });
 }
 
-// Test 9: copyResult copilot copies .github/copilot-instructions.md
+// Test 9: copyResult copilot copies .github/copilot-instructions.md + .github/agents/
 {
   const { src, dest } = setupPlatformSrc('copilot');
   copyResult('copilot', src, dest);
-  assert(existsSync(join(dest, '.github', 'copilot-instructions.md')), 'copilot: file exists');
+  assert(existsSync(join(dest, '.github', 'copilot-instructions.md')), 'copilot: copilot-instructions.md exists');
+  assert(existsSync(join(dest, '.github', 'agents', 'a11y.agent.md')), 'copilot: agents/a11y.agent.md exists');
   cleanupPlatform({ src, dest });
 }
 

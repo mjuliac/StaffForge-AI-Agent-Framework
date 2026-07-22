@@ -307,16 +307,39 @@ ${a.body}\n`,
 }
 
 function generateCopilot(agents) {
-  const parts = [];
-  for (const a of agents) {
-    parts.push(a.body, '', '---', '');
-  }
-  return [
-    {
+  const files = [];
+
+  // copilot-instructions.md — orchestrator as default agent (always active)
+  const orch = agents.find((a) => a.name.toLowerCase() === 'orchestrator');
+  if (orch) {
+    files.push({
       path: '.github/copilot-instructions.md',
-      content: parts.join('\n'),
-    },
-  ];
+      content: `---\napplyTo: "**"\n---\n\nYou are the default agent acting as orchestrator. All user requests arrive through you first.\n${orch.body}\n`,
+    });
+  }
+
+  // .github/agents/<id>.agent.md — individual sub-agents
+  for (const a of agents) {
+    if (a.name.toLowerCase() === 'orchestrator') continue;
+    const tools = a.frontmatter.tools || {};
+    const allowed = [];
+    if (tools.write || tools.edit) allowed.push('read', 'edit');
+    if (tools.bash) allowed.push('execute');
+    allowed.push('agent');
+
+    const fmLines = ['---'];
+    fmLines.push(`name: ${a.name}`);
+    if (a.frontmatter.description) fmLines.push(`description: ${a.frontmatter.description}`);
+    fmLines.push(`tools: [${allowed.map((t) => `'${t}'`).join(', ')}]`);
+    fmLines.push('---');
+
+    files.push({
+      path: `.github/agents/${a.id}.agent.md`,
+      content: fmLines.join('\n') + '\n\n' + a.body + '\n',
+    });
+  }
+
+  return files;
 }
 
 function generateAider(agents) {

@@ -283,6 +283,10 @@ function runInstall(repoDir, projectDir, args = []) {
           existsSync(join(projectDir, '.github', 'copilot-instructions.md')),
           `${platform}: copilot-instructions.md`,
         );
+        assert(
+          existsSync(join(projectDir, '.github', 'agents')),
+          `${platform}: .github/agents/`,
+        );
         break;
       case 'aider':
         assert(existsSync(join(projectDir, '.aider.rules.md')), `${platform}: .aider.rules.md`);

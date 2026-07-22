@@ -1,39 +1,87 @@
 /**
- * GitHub Copilot adapter — generates .github/copilot-instructions.md
- * with agent instructions and skill instructions.
+ * GitHub Copilot adapter — generates:
+ *   .github/copilot-instructions.md     (Orchestrator as default — always active)
+ *   .github/agents/<id>.agent.md         (Sub-agent definitions per Copilot spec)
+ *   .github/instructions/<skill>.instructions.md (Skills as topic-specific instructions)
  *
  * Accepts skills as second parameter.
+ *
+ * Per GitHub Copilot conventions:
+ * - copilot-instructions.md applies to EVERY conversation (default agent behavior)
+ * - .github/agents/*.agent.md files create @mention-able custom agents
+ * - .github/instructions/*.instructions.md files apply to matching file globs
  */
 
+function mapTools(frontmatter) {
+  const tools = frontmatter.tools || {};
+  const allowed = [];
+
+  // read/search are baseline — include when agent has any write/edit capability
+  if (tools.write || tools.edit) {
+    allowed.push('read', 'edit');
+  }
+  if (tools.bash) {
+    allowed.push('execute');
+  }
+  // agent tool allows invoking other custom agents
+  allowed.push('agent');
+
+  return allowed.length > 0 ? allowed : undefined;
+}
+
+function buildAgentFrontmatter(agent) {
+  const lines = ['---'];
+  lines.push(`name: ${agent.name}`);
+  const desc = agent.frontmatter.description || '';
+  if (desc) lines.push(`description: ${desc}`);
+
+  const tools = mapTools(agent.frontmatter);
+  if (tools) {
+    lines.push(`tools: [${tools.map((t) => `'${t}'`).join(', ')}]`);
+  }
+  lines.push('---');
+  return lines.join('\n');
+}
+
 export default function copilotAdapter(agents, skills = []) {
-  const lines = [];
+  const files = [];
 
-  // Agent instructions
-  for (const agent of agents) {
-    lines.push(agent.body);
-    lines.push('');
-    lines.push('---');
-    lines.push('');
+  // ── 1. copilot-instructions.md — Orchestrator as default agent ─────────
+  const orchestrator = agents.find((a) => a.name.toLowerCase() === 'orchestrator');
+  if (orchestrator) {
+    files.push({
+      path: '.github/copilot-instructions.md',
+      content: `---
+applyTo: "**"
+---
+
+You are the default agent acting as orchestrator. All user requests arrive through you first.
+${orchestrator.body}
+`,
+    });
   }
 
-  // Skill instructions (separated by type)
-  if (skills.length > 0) {
-    lines.push('# Skills');
-    lines.push('');
-    for (const skill of skills) {
-      lines.push(`## ${skill.title}: ${skill.frontmatter.description}`);
-      lines.push('');
-      lines.push(skill.body);
-      lines.push('');
-      lines.push('---');
-      lines.push('');
-    }
+  // ── 2. .github/agents/<id>.agent.md — Individual agent files ──────────
+  for (const agent of agents.filter((a) => a.name.toLowerCase() !== 'orchestrator')) {
+    const frontmatter = buildAgentFrontmatter(agent);
+    files.push({
+      path: `.github/agents/${agent.id}.agent.md`,
+      content: `${frontmatter}\n\n${agent.body}\n`,
+    });
   }
 
-  return [
-    {
-      path: ".github/copilot-instructions.md",
-      content: lines.join('\n'),
-    },
-  ];
+  // ── 3. .github/instructions/<skill>.instructions.md — Skills ───────────
+  for (const skill of skills) {
+    const globs = skill.frontmatter.globs?.length ? skill.frontmatter.globs.join(', ') : '**';
+    files.push({
+      path: `.github/instructions/${skill.name}.instructions.md`,
+      content: `---
+applyTo: "${globs}"
+---
+
+${skill.body}\n`,
+    });
+  }
+
+  return files;
 }

@@ -259,6 +259,7 @@ async function main() {
           break;
         case 'copilot':
           assert(existsSync(join(outDir, '.github', 'copilot-instructions.md')), `${p}: copilot-instructions.md`);
+          assert(existsSync(join(outDir, '.github', 'agents')), `${p}: .github/agents/`);
           break;
         case 'aider':
           assert(existsSync(join(outDir, '.aider.rules.md')), `${p}: .aider.rules.md`);
