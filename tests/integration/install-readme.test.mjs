@@ -127,7 +127,7 @@ async function main() {
     assert(r.status === 0, `interactive install exits 0 (got ${r.status})`);
     // Verify the installer actually asks for each item the user enumerated
     assert(r.stdout.includes('Platform:'), 'prompt: Platform');
-    assert(r.stdout.includes('Default agent:'), 'prompt: Default agent');
+    assert(r.stdout.includes('Default agent'), 'prompt: Default agent');
     assert(r.stdout.includes('Location:'), 'prompt: Location (localization)');
     assert(r.stdout.includes('Version Control System:'), 'prompt: VCS');
     assert(r.stdout.includes('Workflow:'), 'prompt: Workflow');
@@ -151,7 +151,7 @@ async function main() {
     const opencode = JSON.parse(readFileSync(join(project, 'opencode.json'), 'utf-8'));
     const names = Object.keys(opencode.agent || {});
     assert(names.length >= MIN_AGENTS, `flags: opencode.json has ${names.length} agents`);
-    assert(opencode.agent.Orchestrator, 'flags: opencode.json has Orchestrator');
+    assert(opencode.agent.orchestrator, 'flags: opencode.json has Orchestrator');
   }
 
   // ── Type 3: npx re-run / "update to latest" — detects previous config ──
@@ -204,7 +204,7 @@ async function main() {
     });
     assert(r.status === 0, `npm run setup exits 0 (got ${r.status})`);
     assert(r.stdout.includes('Platform:'), 'setup prompt: Platform');
-    assert(r.stdout.includes('Default agent:'), 'setup prompt: Default agent');
+    assert(r.stdout.includes('Default agent'), 'setup prompt: Default agent');
     assert(r.stdout.includes('Location:'), 'setup prompt: Location');
     assert(r.stdout.includes('Version Control System:'), 'setup prompt: VCS');
     assert(existsSync(join(REPO_ROOT, 'opencode.json')), 'clone setup: opencode.json in project');
@@ -259,6 +259,7 @@ async function main() {
           break;
         case 'copilot':
           assert(existsSync(join(outDir, '.github', 'copilot-instructions.md')), `${p}: copilot-instructions.md`);
+          assert(existsSync(join(outDir, '.github', 'agents')), `${p}: .github/agents/`);
           break;
         case 'aider':
           assert(existsSync(join(outDir, '.aider.rules.md')), `${p}: .aider.rules.md`);

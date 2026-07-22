@@ -1,6 +1,6 @@
 # StaffForge AI Agent Framework
 
-OpenCode multi-provider agent framework. Canonical agents in `agents/*.md`, skills in `skills/*.md`.
+Multi-provider agent framework. Canonical agents in `agents/*.md`, skills in `skills/*.md`.
 
 ## Structure
 
@@ -32,7 +32,8 @@ See `ORCHESTRATOR_MATRIX.md`.
 ## Conventions
 
 - **Orchestrator is the default agent** (Tab key). It receives all user requests first.
-- **Orchestrator creates the VCS branch** as its very first action for every task.
+- **🔴 BRANCH CREATION IS NOT OPTIONAL — Orchestrator creates the VCS branch as its very first action for every task.** Never work directly on develop/main. Any work done outside a task branch is REJECTED.
+- **🔴 VCS/git agents REFUSE commits, stages, and file operations on develop/main.** Only merges and tags permitted on protected branches.
 - Only the orchestrator communicates with the user or creates branches/commits.
 - No subagent may talk to the user or manage VCS.
 - Subagents get findings/risks/recommendations, never final output.
@@ -150,3 +151,11 @@ node install.mjs --platform <name>        # Install for a platform
 Not committed to repo. Generate with `npm run export:opencode` or `node tools/export.mjs --platform opencode`.
 When skills are present, the generated `opencode.json` includes `skills.paths: [".opencode/skills"]` and
 individual skill files are written to `.opencode/skills/<name>.md`.
+---
+
+## Annex Reference
+
+This project has an **AGENTS_ANEX.md** annex that extends or overrides parts of this configuration.
+Agents **must** load `AGENTS_ANEX.md` after this file and apply its modifications.
+
+---

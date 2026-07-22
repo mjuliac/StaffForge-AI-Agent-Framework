@@ -3,6 +3,7 @@ import { getCapabilityEngine } from './engines/capability-engine.mjs';
 import { getTaskMapper } from './task-mapper.mjs';
 import { getLogger } from './logger.mjs';
 import pipelineRegistry from './registries/pipeline-registry.mjs';
+import { sanitizeInput } from './guardrails/input-sanitizer.mjs';
 
 export class Router {
   constructor(agentRegistry = null, capabilityEngine = null, taskMapper = null) {
@@ -10,12 +11,30 @@ export class Router {
     this._engine = capabilityEngine || getCapabilityEngine(this._registry);
     this._taskMapper = taskMapper || getTaskMapper();
     this._log = getLogger();
+    this._sanitizationCount = 0;
   }
 
   resolveTask(taskType, prompt = '') {
+    // ── Input Guardrails: sanitize the user prompt before processing ────
+    const sanitized = sanitizeInput(prompt, { mode: 'warn' });
+    if (sanitized.alerts.length > 0) {
+      this._sanitizationCount++;
+      this._log.warn(
+        `ROUTER [input-guardrail]: ${sanitized.alerts.length} injection pattern(s) detected in prompt (taskType=${taskType})`,
+      );
+      for (const alert of sanitized.alerts) {
+        this._log.warn(`  [${alert.severity}] ${alert.category}: "${alert.match}"`);
+      }
+    }
+
     const template = pipelineRegistry.resolve(taskType);
     if (!template) {
-      return { taskType, agents: [], description: `Unknown task type: ${taskType}` };
+      return {
+        taskType,
+        agents: [],
+        description: `Unknown task type: ${taskType}`,
+        guardrails: { sanitizationCount: this._sanitizationCount, blocked: false },
+      };
     }
 
     const intent = this._engine.analyzeIntent(prompt);
@@ -27,9 +46,21 @@ export class Router {
       description: template.description,
       agents: this._resolveAgentList(template, intent),
       levels: this._resolveLevels(template, intent),
+      guardrails: {
+        sanitizationCount: this._sanitizationCount,
+        blocked: sanitized.blocked,
+        alerts: sanitized.alerts,
+      },
     };
 
     return pipeline;
+  }
+
+  /**
+   * Number of prompts intercepted by input guardrails since router creation.
+   */
+  getSanitizationCount() {
+    return this._sanitizationCount;
   }
 
   _resolveAgentList(template, intent) {

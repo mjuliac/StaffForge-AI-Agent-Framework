@@ -158,7 +158,7 @@ async function main() {
   const r = await runCli(cache, project, [], true);
   assert(r.status === 0, `installer exits 0 (got ${r.status})`);
   assert(r.stdout.includes('Platform:'), 'prompt: Platform');
-  assert(r.stdout.includes('Default agent:'), 'prompt: Default agent');
+  assert(r.stdout.includes('Default agent'), 'prompt: Default agent');
   assert(r.stdout.includes('Location:'), 'prompt: Location (localization)');
   assert(r.stdout.includes('Version Control System:'), 'prompt: VCS');
 

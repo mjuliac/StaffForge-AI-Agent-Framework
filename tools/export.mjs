@@ -1,6 +1,6 @@
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { getAgentRegistry, getAdapterRegistry } from '@staffforge/core';
 import { getSkillRegistry } from './skill-loader.mjs';
 

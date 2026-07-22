@@ -41,13 +41,13 @@ function runInstallInProject(platform) {
   const json = JSON.parse(readFileSync(join(project, 'opencode.json'), 'utf-8'));
   assert(json.agent && typeof json.agent === 'object', 'opencode.json has agent map');
 
-  const a11y = json.agent.A11y;
-  assert(a11y && a11y.prompt, 'opencode A11y agent has prompt field');
-  assert(a11y.prompt.includes('# Accessibility'), 'opencode A11y prompt contains agent body (Mission)');
-  assert(a11y.prompt.includes('## Mandatory Rules'), 'opencode A11y prompt contains rules');
+  const a11y = json.agent.a11y;
+  assert(a11y && a11y.prompt, 'opencode a11y agent has prompt field');
+  assert(a11y.prompt.includes('# Accessibility'), 'opencode a11y prompt contains agent body (Mission)');
+  assert(a11y.prompt.includes('## Mandatory Rules'), 'opencode a11y prompt contains rules');
 
-  const orchestrator = json.agent.Orchestrator;
-  assert(orchestrator && orchestrator.prompt, 'opencode Orchestrator has prompt');
+  const orchestrator = json.agent.orchestrator;
+  assert(orchestrator && orchestrator.prompt, 'opencode orchestrator has prompt');
   assert(orchestrator.prompt.length > 100, 'opencode Orchestrator prompt is non-trivial');
 
   // No broken instructions reference to a missing AGENTS.md
@@ -109,18 +109,45 @@ function runInstallInProject(platform) {
   rmSync(project, { recursive: true, force: true });
 }
 
-// ── Test 4: copilot instructions include agent bodies ──
+// ── Test 4: copilot generates correct structure ──
+//   .github/copilot-instructions.md  (orchestrator body — always active)
+//   .github/agents/*.agent.md         (individual sub-agents)
+//   .github/instructions/             (skills as instructions)
 {
   const { project, result } = runInstallInProject('copilot');
   assert(result.status === 0, 'copilot install exits 0');
 
+  // copilot-instructions.md contains ONLY orchestrator body (default agent)
   const inst = join(project, '.github', 'copilot-instructions.md');
   assert(existsSync(inst), 'copilot creates .github/copilot-instructions.md');
   if (existsSync(inst)) {
     const content = readFileSync(inst, 'utf-8');
-    assert(content.includes('# Accessibility'), 'copilot instructions include A11y body');
-    assert(content.includes('## Mandatory Rules'), 'copilot instructions include rules');
+    assert(content.includes('# Orchestrator'), 'copilot-instructions.md has orchestrator body');
+    assert(content.includes('## Mandatory Rules'), 'copilot-instructions.md has orchestrator rules');
+    // Must NOT dump all agent bodies — those go in .github/agents/
+    assert(!content.includes('# Accessibility'), 'copilot-instructions.md does NOT include non-orchestrator bodies');
   }
+
+  // .github/agents/ directory with individual .agent.md files
+  const agentsDir = join(project, '.github', 'agents');
+  assert(existsSync(agentsDir), 'copilot creates .github/agents/');
+  if (existsSync(agentsDir)) {
+    const agentFiles = readdirSync(agentsDir).filter((f) => f.endsWith('.agent.md'));
+    assert(agentFiles.length >= 140, '.github/agents/ has ~141 .agent.md files (' + agentFiles.length + ')');
+    assert(agentFiles.includes('a11y.agent.md'), '.github/agents/ has a11y.agent.md');
+
+    // Verify agent file has proper YAML frontmatter + body
+    const a11y = readFileSync(join(agentsDir, 'a11y.agent.md'), 'utf-8');
+    assert(a11y.startsWith('---'), 'a11y.agent.md starts with frontmatter');
+    assert(a11y.includes('name: A11y'), 'a11y.agent.md frontmatter has name');
+    assert(a11y.includes('description: '), 'a11y.agent.md frontmatter has description');
+    assert(a11y.includes('# Accessibility'), 'a11y.agent.md contains agent body');
+    assert(a11y.includes('## Mandatory Rules'), 'a11y.agent.md contains rules');
+
+    // Verify no orchestrator.agent.md (orchestrator lives in copilot-instructions.md)
+    assert(!agentFiles.includes('orchestrator.agent.md'), 'orchestrator NOT duplicated as .agent.md');
+  }
+
   rmSync(project, { recursive: true, force: true });
 }
 

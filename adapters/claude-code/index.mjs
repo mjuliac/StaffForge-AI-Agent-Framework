@@ -8,15 +8,15 @@
 export default function claudeCodeAdapter(agents, skills = []) {
   const files = [];
 
-  const orchestratorAgent = agents.find(a => a.name.toLowerCase() === 'orchestrator');
+  const orchestratorAgent = agents.find((a) => a.name.toLowerCase() === 'orchestrator');
   if (orchestratorAgent) {
     files.push({
-      path: "CLAUDE.md",
-      content: orchestratorAgent.body + "\n",
+      path: 'CLAUDE.md',
+      content: orchestratorAgent.body + '\n',
     });
   }
 
-  for (const agent of agents.filter(a => a.name !== 'orchestrator')) {
+  for (const agent of agents.filter((a) => a.name.toLowerCase() !== 'orchestrator')) {
     const tools = agent.frontmatter.tools || {};
     const toolList = ['read', 'write', 'bash', 'edit']
       .filter((t) => tools[t])
@@ -28,7 +28,9 @@ export default function claudeCodeAdapter(agents, skills = []) {
       `description: ${agent.frontmatter.description}`,
       toolList ? `tools: ${toolList}` : null,
       '---',
-    ].filter(Boolean).join('\n');
+    ]
+      .filter(Boolean)
+      .join('\n');
 
     files.push({
       path: `.claude/agents/${agent.name}.md`,
