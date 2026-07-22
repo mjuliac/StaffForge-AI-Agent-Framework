@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "2.6.1",
+  "version": "2.6.2",
   "license": "GPL-3.0-only",
   "description": "Multi-provider AI agent framework. Write agents once, deploy anywhere.",
   "type": "module",
