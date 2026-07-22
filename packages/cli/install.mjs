@@ -613,16 +613,30 @@ async function main() {
     console.log(`  ✓ ${count} file(s) → ${outRel}`);
   }
 
-  // ── Copy agents to CWD (always) ──
-  if (CWD !== fw) {
+  // ── Copy agents to CWD (skip for copilot — uses .github/agents/ instead) ──
+  // Agents are ONLY needed at the project root for OpenCode/Claude/Cursor.
+  // For Copilot, the source agents/ would clutter the project root unnecessarily.
+  if (!isAll && platform === 'copilot') {
+    if (existsSync(join(CWD, 'agents')) && resolve(join(CWD, 'agents')) !== agentsDir) {
+      rmSync(join(CWD, 'agents'), { recursive: true, force: true });
+    }
+    console.log('  ∟ agents/ skipped (Copilot uses .github/agents/)');
+  } else if (CWD !== fw) {
     copyAgents(agentsDir, CWD);
+    const agentFiles = readdirSync(join(CWD, 'agents')).filter((f) => f.endsWith('.md')).length;
+    console.log(`  ✓ agents/ → ./agents (${agentFiles} files)`);
   }
-  // Also copy agents to outDir when it differs from CWD (e.g. --out flag)
+  // Also copy agents to outDir when it differs from CWD (e.g. --out flag) — skip for copilot
   if (outDir !== CWD && outDir !== fw) {
-    copyAgents(agentsDir, outDir);
+    if (!isAll && platform === 'copilot') {
+      const outAgents = join(outDir, 'agents');
+      if (existsSync(outAgents)) {
+        rmSync(outAgents, { recursive: true, force: true });
+      }
+    } else {
+      copyAgents(agentsDir, outDir);
+    }
   }
-  const agentFiles = readdirSync(join(CWD, 'agents')).filter((f) => f.endsWith('.md')).length;
-  console.log(`  ✓ agents/ → ./agents (${agentFiles} files)`);
 
   // ── For single platform: copy platform files to CWD ──
   // (so opencode.json, CLAUDE.md etc appear in the project root)
