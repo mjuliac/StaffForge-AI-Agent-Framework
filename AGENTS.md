@@ -151,8 +151,45 @@ node install.mjs --platform <name>        # Install for a platform
 Not committed to repo. Generate with `npm run export:opencode` or `node tools/export.mjs --platform opencode`.
 When skills are present, the generated `opencode.json` includes `skills.paths: [".opencode/skills"]` and
 individual skill files are written to `.opencode/skills/<name>.md`.
----
 
+## Platform Output Architecture
+
+Each platform adapter generates platform-specific configuration files from the canonical agent/skill sources:
+
+| Platform | File(s) | Purpose |
+|----------|---------|---------|
+| **opencode** | `opencode.json` | Agent definitions + default agent config |
+| **claude-code** | `CLAUDE.md` + `.claude/agents/*.md` | Orchestrator as default + all agents @mentionable |
+| **cursor** | `.cursor/rules/*.mdc` | All agents as always-on rules |
+| **copilot** | `.github/copilot-instructions.md` + `.github/agents/*.agent.md` + `.github/instructions/*.instructions.md` | See Copilot Architecture below |
+| **aider** | `.aider.rules.md` | All agents concatenated as rules |
+| **gemini-cli** | `.gemini/*.md` | All agents as individual files |
+
+### Copilot Architecture
+
+Three layers with distinct scopes:
+
+**Layer 1 — `.github/copilot-instructions.md` (default agent)**
+- Contains the **orchestrator's full prompt** — makes `@orchestrator` the default chat experience
+- Has `applyTo: "**"` → applies to ALL Copilot conversations (including `@ask`, `@plan`)
+- Built-in agents (`@ask`, `@plan`, `@workspace`) **remain in the dropdown** — they are NOT removed, but they will read the orchestrator context as base instructions
+- Tradeoff accepted: default = orchestrator, at the cost of @ask/@plan sharing the same base context
+
+**Layer 2 — `.github/agents/*.agent.md` (all agents @mentionable)**
+- **Every** agent gets its own `.agent.md` file — all are available via `@mention`
+- This includes `@orchestrator` (also available via @mention) plus `@python`, `@typescript`, `@react`, etc.
+- Built-in agents (`@ask`, `@plan`, `@workspace`) coexist with custom agents in the @mention dropdown
+- Only agents in `.github/agents/` appear in the @mention list; the 150+ files do NOT override built-in agents
+
+**Layer 3 — `.github/instructions/*.instructions.md` (skills)**
+- Skills load conditionally based on file glob patterns in `applyTo`
+- No effect on agent selection or behavior beyond providing context for matching files
+
+**Key decisions:**
+- Agents/ folder is NOT copied to project root for Copilot (avoids clutter — `.github/agents/` is the canonical location)
+- All stale `.agent.md` files are cleaned before regeneration (avoids orphan artifacts from previous versions)
+- No `opencode.json` equivalent — Copilot uses the file-based convention natively
+---
 ## Annex Reference
 
 This project has an **AGENTS_ANEX.md** annex that extends or overrides parts of this configuration.
